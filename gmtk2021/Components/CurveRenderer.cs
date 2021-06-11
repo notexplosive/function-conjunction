@@ -40,15 +40,25 @@ namespace gmtk2021.Components
             for (int i = 1; i < this.points.Length; i++)
             {
                 spriteBatch.DrawLine(prevPoint.WorldPosition, this.points[i].WorldPosition, Color.Red, 1f, transform.Depth);
+                prevPoint = this.points[i];
+            }
+        }
+
+        public void OnFunctionUpdated(Func<float, float> function)
+        {
+            for (int i = 0; i < this.points.Length; i++)
+            {
+                this.points[i].SetY((int) (function(this.points[i].x / 100f) * this.boundingRect.Height / 2));
             }
         }
 
         private struct CurvePoint
         {
-            private readonly int x;
+            public readonly int x;
+
+            private int y;
             private readonly Transform parent;
             private readonly BoundingRect boundingRect;
-            private int y;
 
             public CurvePoint(Transform parent, BoundingRect rect, int x)
             {
@@ -60,6 +70,12 @@ namespace gmtk2021.Components
 
             public Vector2 LocalPosition => new Vector2(this.x, this.y + this.boundingRect.Height / 2);
             public Vector2 WorldPosition => parent.Position + LocalPosition;
+
+            public void SetY(int val)
+            {
+                // Flip value because y is facing down
+                this.y = -val;
+            }
         }
     }
 }

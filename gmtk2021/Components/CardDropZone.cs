@@ -19,6 +19,11 @@ namespace gmtk2021.Components
         private readonly TweenChain tween = new TweenChain();
         public Rectangle Rect => this.boundingRect.Rect;
 
+        public List<Card> OwnedCards => this.ownedCards;
+
+        public event Action CardGain;
+        public event Action CardLost;
+
         public CardDropZone(Actor actor) : base(actor)
         {
             this.boundingRect = RequireComponent<BoundingRect>();
@@ -49,12 +54,14 @@ namespace gmtk2021.Components
             this.ownedCards.Remove(card);
             this.ownedCards.Add(card);
             ComputeLayout(skipAnimation);
+            CardGain?.Invoke();
         }
 
         public void Detach(Card card)
         {
             this.ownedCards.Remove(card);
             ComputeLayout();
+            CardLost?.Invoke();
         }
 
         public void ComputeLayout(bool skipAnimation = false)
