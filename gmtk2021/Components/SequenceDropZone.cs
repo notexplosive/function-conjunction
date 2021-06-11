@@ -1,4 +1,5 @@
-﻿using Machina.Components;
+﻿using gmtk2021.Data;
+using Machina.Components;
 using Machina.Engine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
@@ -25,21 +26,6 @@ namespace gmtk2021.Components
             BuildFunction();
         }
 
-        private float NoOp(float i)
-        {
-            return i;
-        }
-
-        private float Flat(float i)
-        {
-            return 0;
-        }
-
-        private float Sin(float i)
-        {
-            return MathF.Sin(i);
-        }
-
         private void OnCardGain()
         {
             BuildFunction();
@@ -47,17 +33,17 @@ namespace gmtk2021.Components
 
         private void BuildFunction()
         {
-            Func<float, float> function = NoOp;
+            Func<float, float> function = Functions.NoOp;
 
             if (this.dropZone.OwnedCards.Count == 0)
             {
-                function = Flat;
+                function = Functions.Flat;
             }
 
             foreach (var card in this.dropZone.OwnedCards)
             {
                 var innerFunction = function;
-                function = (i) => Sin(innerFunction(i));
+                function = (i) => Functions.Sin(innerFunction(i));
             }
 
             FunctionUpdated?.Invoke(function);

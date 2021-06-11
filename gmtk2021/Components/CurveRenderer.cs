@@ -39,7 +39,7 @@ namespace gmtk2021.Components
             var prevPoint = this.points[0];
             for (int i = 1; i < this.points.Length; i++)
             {
-                spriteBatch.DrawLine(prevPoint.WorldPosition, this.points[i].WorldPosition, Color.Red, 1f, transform.Depth);
+                spriteBatch.DrawLine(prevPoint.WorldPosition, this.points[i].WorldPosition, Color.Orange, 3f, transform.Depth);
                 prevPoint = this.points[i];
             }
         }
@@ -48,7 +48,7 @@ namespace gmtk2021.Components
         {
             for (int i = 0; i < this.points.Length; i++)
             {
-                this.points[i].SetY((int) (function(this.points[i].x / 100f) * this.boundingRect.Height / 2));
+                this.points[i].SetY((int) (function(this.points[i].x / 50f) * this.boundingRect.Height / 2));
             }
         }
 
