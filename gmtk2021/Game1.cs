@@ -1,52 +1,28 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Machina.Components;
+using Machina.Engine;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System;
 
 namespace gmtk2021
 {
-    public class Game1 : Game
+    public class Game1 : MachinaGame
     {
-        private GraphicsDeviceManager _graphics;
-        private SpriteBatch _spriteBatch;
-
-        public Game1()
+        public Game1(string[] args) : base("Nested Function", args, new Point(1600, 900), new Point(1600, 900), ResizeBehavior.FillContent)
         {
-            _graphics = new GraphicsDeviceManager(this);
-            Content.RootDirectory = "Content";
-            IsMouseVisible = true;
         }
 
-        protected override void Initialize()
+        protected override void OnGameLoad()
         {
-            // TODO: Add your initialization logic here
+            SceneLayers.BackgroundColor = Color.Black;
 
-            base.Initialize();
+            CreateCard();
         }
 
-        protected override void LoadContent()
+        public void CreateCard()
         {
-            _spriteBatch = new SpriteBatch(GraphicsDevice);
-
-            // TODO: use this.Content to load your game content here
-        }
-
-        protected override void Update(GameTime gameTime)
-        {
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
-                Exit();
-
-            // TODO: Add your update logic here
-
-            base.Update(gameTime);
-        }
-
-        protected override void Draw(GameTime gameTime)
-        {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-
-            // TODO: Add your drawing code here
-
-            base.Draw(gameTime);
+            new BoundingRect();
         }
     }
 }

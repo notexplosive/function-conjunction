@@ -30,4 +30,5 @@
   <ItemGroup>
     <ProjectReference Include="..\machina\Machina\Machina.csproj" />
   </ItemGroup>
+  <Import Project="..\machina\MachinaAssets\MachinaAssets.projitems" Label="Shared" />
 </Project>
