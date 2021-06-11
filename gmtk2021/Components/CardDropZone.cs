@@ -44,11 +44,11 @@ namespace gmtk2021.Components
             this.slots.Add(new Slot(actor));
         }
 
-        public void Consume(Card card)
+        public void Consume(Card card, bool skipAnimation = false)
         {
             this.ownedCards.Remove(card);
             this.ownedCards.Add(card);
-            ComputeLayout();
+            ComputeLayout(skipAnimation);
         }
 
         public void Detach(Card card)
@@ -57,7 +57,7 @@ namespace gmtk2021.Components
             ComputeLayout();
         }
 
-        public void ComputeLayout()
+        public void ComputeLayout(bool skipAnimation = false)
         {
             this.tween.SkipToEnd();
             var multi = this.tween.AppendMulticastTween();
@@ -69,10 +69,21 @@ namespace gmtk2021.Components
                     var channel = multi.AddChannel();
                     // We need to set `card` as its own variable so we don't mess up the captures
                     var card = this.ownedCards[i];
+                    var slot = this.slots[i];
                     var pos = new TweenAccessors<Vector2>(() => card.transform.Position, val => card.transform.Position = val);
-                    channel.AppendVectorTween(this.slots[i].Position, 0.25f, EaseFuncs.CubicEaseOut, pos);
+                    channel.AppendVectorTween(slot.Position, 0.25f, EaseFuncs.CubicEaseOut, pos);
+
+                    if (skipAnimation)
+                    {
+                        card.transform.Position = slot.Position;
+                    }
                 }
             }
+        }
+
+        public bool OwnsThisCard(Card card)
+        {
+            return this.ownedCards.Contains(card);
         }
 
         private class Slot

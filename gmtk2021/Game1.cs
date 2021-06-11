@@ -5,12 +5,13 @@ using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using System;
+using System.Collections.Generic;
 
 namespace gmtk2021
 {
     public class Game1 : MachinaGame
     {
-        public Point CardSize = new Point(256, 128);
+        public Point CardSize = new Point(250, 136);
 
         public Game1(string[] args) : base("Nested Functions", args, new Point(1600, 900), new Point(1600, 900), ResizeBehavior.MaintainDesiredResolution)
         {
@@ -22,26 +23,45 @@ namespace gmtk2021
             SceneLayers.BackgroundColor = Color.Black;
             var gameScene = SceneLayers.AddNewScene();
 
-            CardDropZone dropZone = null;
+            var dropZones = new List<CardDropZone>();
+            CardDropZone startingDropZone = null;
 
             var gameLayoutActor = gameScene.AddActor("GameLayout");
             new BoundingRect(gameLayoutActor, SceneLayers.gameCanvas.ViewportSize);
             new LayoutGroup(gameLayoutActor, Orientation.Horizontal)
-                .AddVerticallyStretchedElement("LeftColumn", 256, leftColumnActor =>
+                .AddVerticallyStretchedElement("LeftColumn", CardSize.X + 20, leftColumnActor =>
                 {
+                    new LayoutGroup(leftColumnActor, Orientation.Vertical)
+                        .AddBothStretchedElement("Extra CardDropZone", extraDropZoneActor =>
+                        {
+                            var dropZone = new CardDropZone(extraDropZoneActor);
+                            startingDropZone = dropZone;
+                            dropZones.Add(dropZone);
+                            var group = new LayoutGroup(extraDropZoneActor, Orientation.Vertical)
+                                .SetMargin(10)
+                                .SetPaddingBetweenElements(10);
 
+                            for (int i = 0; i < 6; i++)
+                            {
+                                group.AddElement("CardSlot", CardSize, cardSlotActor =>
+                                {
+                                    dropZone.AddCardSlot(cardSlotActor);
+                                });
+                            }
+                        })
+                        .SetPaddingBetweenElements(8);
                 })
                 .AddBothStretchedElement("RightColumn", rightColumnActor =>
                 {
                     new LayoutGroup(rightColumnActor, Orientation.Vertical)
-                        .SetMargin(8)
                         .VerticallyStretchedSpacer()
-                        .AddHorizontallyStretchedElement("CardDropZone", CardSize.Y + 20, dropZoneActor =>
+                        .AddHorizontallyStretchedElement("Chain CardDropZone", CardSize.Y + 20, dropZoneActor =>
                         {
-                            dropZone = new CardDropZone(dropZoneActor);
+                            var dropZone = new CardDropZone(dropZoneActor);
+                            dropZones.Add(dropZone);
                             var group = new LayoutGroup(dropZoneActor, Orientation.Horizontal)
-                                .SetMargin(10);
-                            group.SetPaddingBetweenElements(10);
+                                .SetMargin(10)
+                                .SetPaddingBetweenElements(10);
                             for (int i = 0; i < 5; i++)
                             {
                                 group.AddElement("CardSlot", CardSize, cardSlotActor =>
@@ -51,16 +71,17 @@ namespace gmtk2021
                             }
                         })
                         .SetPaddingBetweenElements(8);
-                });
+                })
+                .SetMargin(8)
+                .transform.FlushBuffers(); // HACKY AF
 
 
-
-            CreateCard(gameScene, dropZone, "Card 1");
-            CreateCard(gameScene, dropZone, "Card 2");
-            CreateCard(gameScene, dropZone, "Card 3");
+            startingDropZone.Consume(CreateCard(gameScene, dropZones, "Card 1"), true);
+            startingDropZone.Consume(CreateCard(gameScene, dropZones, "Card 2"), true);
+            startingDropZone.Consume(CreateCard(gameScene, dropZones, "Card 3"), true);
         }
 
-        public void CreateCard(Scene scene, CardDropZone dropZone, string text)
+        public Card CreateCard(Scene scene, List<CardDropZone> dropZones, string text)
         {
             var actor = scene.AddActor("Card");
             new BoundingRect(actor, CardSize);
@@ -69,7 +90,6 @@ namespace gmtk2021
             new Draggable(actor);
             new MoveOnDrag(actor);
             new CardBackgroundRenderer(actor);
-            new Card(actor, dropZone);
 
             var font = MachinaGame.Assets.GetSpriteFont("CardFont");
 
@@ -88,6 +108,7 @@ namespace gmtk2021
                 })
                 .PixelSpacer(8);
 
+            return new Card(actor, dropZones);
         }
     }
 }
