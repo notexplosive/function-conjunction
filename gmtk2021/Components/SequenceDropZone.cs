@@ -21,6 +21,11 @@ namespace gmtk2021.Components
             this.dropZone.CardLost += OnCardLost;
         }
 
+        public override void Start()
+        {
+            BuildFunction();
+        }
+
         private void OnCardLost()
         {
             BuildFunction();
@@ -37,13 +42,13 @@ namespace gmtk2021.Components
 
             if (this.dropZone.OwnedCards.Count == 0)
             {
-                function = Functions.Flat;
+                // function = Functions.Flat;
             }
 
             foreach (var card in this.dropZone.OwnedCards)
             {
                 var innerFunction = function;
-                function = (i) => Functions.Sin(innerFunction(i));
+                function = (i) => card.function.func(innerFunction(i));
             }
 
             FunctionUpdated?.Invoke(function);

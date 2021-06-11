@@ -1,4 +1,5 @@
-﻿using Machina.Components;
+﻿using gmtk2021.Data;
+using Machina.Components;
 using Machina.Data;
 using Machina.Engine;
 using Microsoft.Xna.Framework;
@@ -13,9 +14,10 @@ namespace gmtk2021.Components
     {
         private readonly List<CardDropZone> dropZones;
         private readonly BoundingRect boundingRect;
-        private Depth startingDepth;
+        private readonly Depth startingDepth;
+        public readonly Function function;
 
-        public Card(Actor actor, List<CardDropZone> dropZones) : base(actor)
+        public Card(Actor actor, List<CardDropZone> dropZones, Function function) : base(actor)
         {
             this.dropZones = dropZones;
             this.boundingRect = RequireComponent<BoundingRect>();
@@ -24,6 +26,7 @@ namespace gmtk2021.Components
             draggable.DragStart += OnDragStart;
 
             this.startingDepth = transform.Depth;
+            this.function = function;
         }
 
         private CardDropZone FindOwner()

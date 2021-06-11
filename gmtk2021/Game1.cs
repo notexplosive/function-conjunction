@@ -1,4 +1,5 @@
 ﻿using gmtk2021.Components;
+using gmtk2021.Data;
 using Machina.Components;
 using Machina.Engine;
 using Microsoft.Xna.Framework;
@@ -85,12 +86,15 @@ namespace gmtk2021
                 .transform.FlushBuffers(); // HACKY AF
 
 
-            startingDropZone.Consume(CreateCard(gameScene, dropZones, "Card 1"), true);
-            startingDropZone.Consume(CreateCard(gameScene, dropZones, "Card 2"), true);
-            startingDropZone.Consume(CreateCard(gameScene, dropZones, "Card 3"), true);
+            startingDropZone.Consume(CreateCard(gameScene, dropZones, Functions.Sin), true);
+            startingDropZone.Consume(CreateCard(gameScene, dropZones, Functions.Cos), true);
+            startingDropZone.Consume(CreateCard(gameScene, dropZones, Functions.Abs), true);
+            startingDropZone.Consume(CreateCard(gameScene, dropZones, Functions.AddConstant(2)), true);
+            startingDropZone.Consume(CreateCard(gameScene, dropZones, Functions.TimeConstant(2)), true);
+            startingDropZone.Consume(CreateCard(gameScene, dropZones, Functions.TimesFraction(1, 2)), true);
         }
 
-        public Card CreateCard(Scene scene, List<CardDropZone> dropZones, string text)
+        public Card CreateCard(Scene scene, List<CardDropZone> dropZones, Function function)
         {
             var actor = scene.AddActor("Card");
             new BoundingRect(actor, CardSize);
@@ -110,14 +114,14 @@ namespace gmtk2021
                         .PixelSpacer(8)
                         .AddBothStretchedElement("CardText", cardTextActor =>
                         {
-                            new BoundedTextRenderer(cardTextActor, text, font, Color.White, HorizontalAlignment.Center, VerticalAlignment.Center, Overflow.Ignore)
+                            new BoundedTextRenderer(cardTextActor, function.name, font, Color.White, HorizontalAlignment.Center, VerticalAlignment.Center, Overflow.Ignore)
                                 .EnableDropShadow(Color.Black);
                         })
                         .PixelSpacer(8);
                 })
                 .PixelSpacer(8);
 
-            return new Card(actor, dropZones);
+            return new Card(actor, dropZones, function);
         }
     }
 }

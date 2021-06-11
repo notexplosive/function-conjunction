@@ -1,5 +1,7 @@
 ﻿using Machina.Components;
+using Machina.Data;
 using Machina.Engine;
+using Machina.ThirdParty;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame.Extended;
@@ -12,6 +14,7 @@ namespace gmtk2021.Components
     class CurveRenderer : BaseComponent
     {
         private readonly BoundingRect boundingRect;
+        private readonly TweenChain tween = new TweenChain();
         private CurvePoint[] points;
 
         public CurveRenderer(Actor actor) : base(actor)
@@ -31,7 +34,7 @@ namespace gmtk2021.Components
 
         public override void Update(float dt)
         {
-
+            this.tween.Update(dt);
         }
 
         public override void Draw(SpriteBatch spriteBatch)
@@ -39,24 +42,40 @@ namespace gmtk2021.Components
             var prevPoint = this.points[0];
             for (int i = 1; i < this.points.Length; i++)
             {
-                spriteBatch.DrawLine(prevPoint.WorldPosition, this.points[i].WorldPosition, Color.Orange, 3f, transform.Depth);
+                var adjustedPoint = Adjusted(this.points[i].WorldPosition);
+                var adjustedPrevPoint = Adjusted(prevPoint.WorldPosition);
+                bool outOfBounds = (this.points[i].WorldPosition != adjustedPoint);
+                spriteBatch.DrawLine(adjustedPrevPoint, adjustedPoint, outOfBounds ? Color.OrangeRed : Color.Orange, 3f, transform.Depth);
                 prevPoint = this.points[i];
             }
         }
 
+        private Vector2 Adjusted(Vector2 vec)
+        {
+            return new Vector2(vec.X, Math.Clamp(vec.Y, transform.Position.Y, transform.Position.Y + this.boundingRect.Height));
+        }
+
         public void OnFunctionUpdated(Func<float, float> function)
         {
+            this.tween.SkipToEnd();
+            this.tween.Clear();
+            var multiTween = this.tween.AppendMulticastTween();
             for (int i = 0; i < this.points.Length; i++)
             {
-                this.points[i].SetY((int) (function(this.points[i].x / 50f) * this.boundingRect.Height / 2));
+                // Flip value because y is facing down
+
+                var targetVal = -(int) (function(this.points[i].x / 50f) * this.boundingRect.Height / 2);
+                var point = this.points[i];
+                var accessors = new TweenAccessors<int>(() => point.y, val => point.y = val);
+                multiTween.AddChannel().AppendIntTween(targetVal, 0.25f, EaseFuncs.CubicEaseOut, accessors);
             }
         }
 
-        private struct CurvePoint
+        private class CurvePoint
         {
             public readonly int x;
 
-            private int y;
+            public int y;
             private readonly Transform parent;
             private readonly BoundingRect boundingRect;
 
@@ -70,12 +89,6 @@ namespace gmtk2021.Components
 
             public Vector2 LocalPosition => new Vector2(this.x, this.y + this.boundingRect.Height / 2);
             public Vector2 WorldPosition => parent.Position + LocalPosition;
-
-            public void SetY(int val)
-            {
-                // Flip value because y is facing down
-                this.y = -val;
-            }
         }
     }
 }
