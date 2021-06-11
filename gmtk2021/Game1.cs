@@ -54,7 +54,11 @@ namespace gmtk2021
                 .AddBothStretchedElement("RightColumn", rightColumnActor =>
                 {
                     new LayoutGroup(rightColumnActor, Orientation.Vertical)
-                        .VerticallyStretchedSpacer()
+                        .AddBothStretchedElement("CurveWindow", curveWindowActor =>
+                        {
+                            curveWindowActor.transform.Depth += 5;
+                            new CurveRenderer(curveWindowActor);
+                        })
                         .AddHorizontallyStretchedElement("Chain CardDropZone", CardSize.Y + 20, dropZoneActor =>
                         {
                             var dropZone = new CardDropZone(dropZoneActor);
