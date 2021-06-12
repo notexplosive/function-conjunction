@@ -25,6 +25,8 @@ namespace gmtk2021.Data
         public Vector2 LocalPosition => new Vector2(this.x, this.y + this.boundingRect.Height / 2);
         public Vector2 WorldPosition => parent.Position + LocalPosition;
 
+        public float Percent => Math.Clamp((float) this.y / this.boundingRect.Height * 2, -1, 1);
+
         public override string ToString()
         {
             return "y: " + this.y;

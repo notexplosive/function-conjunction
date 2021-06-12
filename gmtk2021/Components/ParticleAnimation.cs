@@ -45,8 +45,8 @@ namespace gmtk2021.Components
 
         public override void Update(float dt)
         {
-            var heightPercent = (float) this.points[this.x].y / this.curveBoundingRect.Height;
-            this.travelSound.Pitch = Math.Clamp(heightPercent * 2, -1f, 1f);
+            var heightPercent = this.points[this.x].Percent;
+            this.travelSound.Pitch = Math.Clamp(heightPercent, -1f, 1f);
             this.tween.Update(dt);
         }
 

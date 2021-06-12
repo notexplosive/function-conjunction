@@ -4,6 +4,7 @@ using Machina.Data;
 using Machina.Engine;
 using Machina.ThirdParty;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
@@ -18,6 +19,8 @@ namespace gmtk2021.Components
         private readonly BoundingRect boundingRect;
         private readonly DomainRange domain;
         private readonly Func<float, float> objectiveFunction;
+        private readonly SoundEffectInstance objectiveTravelSound;
+        private readonly SoundEffectInstance primaryTravelSound;
         private readonly TweenChain tween = new TweenChain();
         private readonly TweenChain introTween = new TweenChain();
         private CurvePoint[] points;
@@ -30,6 +33,12 @@ namespace gmtk2021.Components
             this.boundingRect = RequireComponent<BoundingRect>();
             this.domain = curveData;
             this.objectiveFunction = Functions.Fold(objective);
+
+            this.objectiveTravelSound = MachinaGame.Assets.CreateSoundEffectInstance("particle_travel");
+            this.objectiveTravelSound.IsLooped = true;
+
+            this.primaryTravelSound = MachinaGame.Assets.CreateSoundEffectInstance("particle_travel");
+            this.primaryTravelSound.IsLooped = true;
 
             this.objectiveLastDrawIndex = 0;
             this.primaryLastDrawIndex = 0;
@@ -51,17 +60,33 @@ namespace gmtk2021.Components
                 this.objectivePoints[i].y = ApplyFunction(this.objectiveFunction, this.objectivePoints[i].x, this.domain, this.boundingRect);
             }
 
+            this.introTween.Clear();
             this.introTween
                 .AppendWaitTween(0.25f)
-                .AppendIntTween(this.objectivePoints.Length, 2, EaseFuncs.QuadraticEaseIn, new TweenAccessors<int>(() => this.objectiveLastDrawIndex, val => this.objectiveLastDrawIndex = val))
+                .AppendCallback(() => { this.objectiveTravelSound.Play(); })
+                .AppendIntTween(this.objectivePoints.Length - 1, 1, EaseFuncs.Linear, new TweenAccessors<int>(() => this.objectiveLastDrawIndex, val => this.objectiveLastDrawIndex = val))
+                .AppendCallback(() => { this.objectiveTravelSound.Stop(); })
                 .AppendWaitTween(0.25f)
-                .AppendIntTween(this.points.Length, 1, EaseFuncs.Linear, new TweenAccessors<int>(() => this.primaryLastDrawIndex, val => this.primaryLastDrawIndex = val));
+                .AppendCallback(() => { this.primaryTravelSound.Play(); })
+                .AppendIntTween(this.points.Length - 1, 1, EaseFuncs.Linear, new TweenAccessors<int>(() => this.primaryLastDrawIndex, val => this.primaryLastDrawIndex = val))
+                .AppendCallback(() => { this.primaryTravelSound.Stop(); })
+                ;
         }
 
         public override void Update(float dt)
         {
             this.introTween.Update(dt);
             this.tween.Update(dt);
+
+            if (this.objectiveTravelSound.State == SoundState.Playing)
+            {
+                this.objectiveTravelSound.Pitch = this.objectivePoints[this.objectiveLastDrawIndex].Percent;
+            }
+
+            if (this.primaryTravelSound.State == SoundState.Playing)
+            {
+                this.primaryTravelSound.Pitch = this.points[this.primaryLastDrawIndex].Percent;
+            }
         }
 
         public bool IsDoneTweening => this.tween.IsDone();
