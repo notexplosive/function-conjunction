@@ -156,8 +156,6 @@ namespace gmtk2021.Components
                     this.defaultDropZone.TweenCardsToLayout();
                 }
 
-
-
                 this.targetDropZone = null;
             }
         }
