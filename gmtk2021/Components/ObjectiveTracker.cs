@@ -22,7 +22,7 @@ namespace gmtk2021.Components
             this.curve = RequireComponent<PrimaryCurve>();
             this.transition = transition;
 
-            this.transition.SetGameScene(this.actor.scene);
+            this.transition.SetGameScene(this.actor.scene, this.curve);
         }
 
         public override void Update(float dt)

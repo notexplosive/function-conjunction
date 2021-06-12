@@ -13,7 +13,7 @@ using System.Text;
 
 namespace gmtk2021.Components
 {
-    class PrimaryCurve : BaseComponent
+    public class PrimaryCurve : BaseComponent
     {
         private readonly BoundingRect boundingRect;
         private readonly DomainRange domain;
@@ -88,6 +88,12 @@ namespace gmtk2021.Components
                 spriteBatch.DrawLine(adjustedPrevPoint + sizzle, adjustedPoint + sizzle, outOfBounds ? offColor : onColor, thickness, depth);
                 prevPoint = curvePoints[i];
             }
+        }
+
+        public Func<bool> StartParticleAnimation()
+        {
+            var particle = new ParticleAnimation(this.actor.scene.AddActor("ParticleActor"), this.points);
+            return particle.IsDone;
         }
 
         private static Vector2 Adjusted(Vector2 vec, Transform transform, BoundingRect boundingRect)

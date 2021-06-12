@@ -18,6 +18,7 @@ namespace gmtk2021.Components
         private bool clickDown;
         private Scene gameScene;
         private int currentLevelIndex = 0;
+        private PrimaryCurve primaryCurve;
         private readonly Level[] levels =
         new Level[]
         {
@@ -55,7 +56,6 @@ namespace gmtk2021.Components
 
         public LevelTransition(Actor actor) : base(actor)
         {
-
         }
 
         public override void Update(float dt)
@@ -94,9 +94,10 @@ namespace gmtk2021.Components
             return this.clickDown;
         }
 
-        public void SetGameScene(Scene scene)
+        public void SetGameScene(Scene scene, PrimaryCurve primaryCurve)
         {
             this.gameScene = scene;
+            this.primaryCurve = primaryCurve;
         }
 
         private IEnumerator<ICoroutineAction> EndLevelCoroutine()
@@ -104,7 +105,8 @@ namespace gmtk2021.Components
             var camera = this.actor.scene.camera;
             var camPos = new TweenAccessors<Point>(() => camera.ScaledPosition, val => camera.ScaledPosition = val);
 
-            yield return new WaitSeconds(1);
+            var isDone = this.primaryCurve.StartParticleAnimation();
+            yield return new WaitUntil(isDone);
 
             var fade = new Fade(this.gameScene.AddActor("FadeOut"), true).Activate();
             var isFadeFinished = false;
