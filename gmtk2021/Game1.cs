@@ -161,9 +161,10 @@ namespace gmtk2021
                         .AddHorizontallyStretchedElement("TitleBar", 64, titleBarActor =>
                          {
                              new LayoutGroup(titleBarActor, Orientation.Horizontal)
+                                .PixelSpacer(64)
                                 .AddBothStretchedElement("Title", titleActor =>
                                 {
-                                    new BoundedTextRenderer(titleBarActor, "Level " + (levelTransition.CurrentLevelIndex + 1) +
+                                    new BoundedTextRenderer(titleActor, "Level " + (levelTransition.CurrentLevelIndex + 1) +
                                         (currentLevel.Title != null ? ": " + currentLevel.Title : ""),
                                         titleFont, Color.White);
                                 })
