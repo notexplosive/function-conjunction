@@ -35,10 +35,17 @@ namespace gmtk2021.Components
                 Domain = 3,
             },
 
+            new Level("Multiple Ways To Skin A Cat")
+            {
+                // The idea of this level: There would be more solutions if you had more slots
+                Solution = new Function[] { Functions.MultiplyFraction(1,2), Functions.ModConstant(2) },
+                CardFunctions = new Function[] { Functions.ModConstant(1), Functions.MultiplyConstant(2), Functions.ModConstant(2), Functions.MultiplyFraction(1,2) },
+            },
+
             new Level(null)
             {
                 Solution = new Function[] { Functions.MultiplyConstant(2), Functions.Sin },
-                CardFunctions = new Function[] {Functions.ModConstant(1), Functions.MultiplyConstant(2) },
+                CardFunctions = new Function[] { Functions.ModConstant(1), Functions.MultiplyConstant(2) },
             },
         };
 
@@ -62,6 +69,15 @@ namespace gmtk2021.Components
             if (key == Keys.Space && modifiers.None)
             {
                 this.clickDown = state == ButtonState.Pressed;
+            }
+
+            if (Game1.DebugLevel >= DebugLevel.Passive && state == ButtonState.Pressed)
+            {
+                if (key == Keys.W)
+                {
+                    this.FinishLevel();
+                    MachinaGame.Print("DBG: Skip Level");
+                }
             }
         }
 
@@ -99,7 +115,7 @@ namespace gmtk2021.Components
 
             yield return new WaitUntil(HasClicked);
             IncrementLevel();
-            if (HasLevel())
+            if (HasNextLevel())
             {
                 Game1.BuildGameScene(this.gameScene, this);
 
@@ -114,7 +130,7 @@ namespace gmtk2021.Components
             yield return null;
         }
 
-        public void LevelEnd()
+        public void FinishLevel()
         {
             this.actor.scene.StartCoroutine(EndLevelCoroutine());
         }
@@ -124,7 +140,7 @@ namespace gmtk2021.Components
             this.currentLevelIndex++;
         }
 
-        public bool HasLevel()
+        public bool HasNextLevel()
         {
             return this.currentLevelIndex < this.levels.Length;
         }

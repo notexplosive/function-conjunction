@@ -32,7 +32,7 @@ namespace gmtk2021.Components
             if (this.curve.IsDoneTweening && this.curve.MatchWithObjective() && !this.isWon)
             {
                 this.isWon = true;
-                this.transition.LevelEnd();
+                this.transition.FinishLevel();
             }
         }
     }

@@ -103,9 +103,13 @@ namespace gmtk2021.Components
 
         public override void OnKey(Keys key, ButtonState state, ModifierKeys modifiers)
         {
-            if (key == Keys.Q && Game1.DebugLevel >= DebugLevel.Passive && state == ButtonState.Pressed)
+            if (Game1.DebugLevel >= DebugLevel.Passive && state == ButtonState.Pressed)
             {
-                OnFunctionUpdated((i) => i);
+                if (key == Keys.Q)
+                {
+                    OnFunctionUpdated((i) => i);
+                    MachinaGame.Print("DBG: Curve reset");
+                }
             }
         }
 
