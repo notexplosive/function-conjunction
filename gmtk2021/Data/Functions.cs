@@ -38,7 +38,7 @@ namespace gmtk2021.Data
 
         public static Function TimeConstant(int constant)
         {
-            return new Function("* " + constant, (i) => i * constant);
+            return new Function(constant > 0 ? "* " + constant : "* (" + constant + ")", (i) => i * constant);
         }
 
         public static Function TimesFraction(int numerator, int denominator)

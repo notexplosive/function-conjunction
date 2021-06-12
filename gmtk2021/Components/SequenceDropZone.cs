@@ -40,28 +40,14 @@ namespace gmtk2021.Components
         {
             Func<float, float> function = Functions.NoOp;
 
-            if (this.dropZone.OwnedCards.Count == 0)
-            {
-                // function = Functions.Flat;
-            }
-
-            foreach (var card in this.dropZone.OwnedCards)
+            var cards = this.dropZone.OwnedCards;
+            foreach (var card in cards)
             {
                 var innerFunction = function;
                 function = (i) => card.function.func(innerFunction(i));
             }
 
             FunctionUpdated?.Invoke(function);
-        }
-
-        public override void Update(float dt)
-        {
-
-        }
-
-        public override void Draw(SpriteBatch spriteBatch)
-        {
-
         }
     }
 }

@@ -39,13 +39,17 @@ namespace gmtk2021.Components
 
         public override void Draw(SpriteBatch spriteBatch)
         {
+            // I'm doing this clever trick and I wanna write it down:
+            // Intuitively you'd go for each point draw a line from prevPoint -> currPoint
+            // Instead I do foreach point draw a line from prevPoint -> nextPoint
+            // This is the same number of line segments as the former but draws a "fuller" line
             var prevPoint = this.points[0];
-            for (int i = 1; i < this.points.Length; i++)
+            for (int i = 1; i < this.points.Length - 1; i++)
             {
-                var adjustedPoint = Adjusted(this.points[i].WorldPosition);
+                var adjustedPoint = Adjusted(this.points[i + 1].WorldPosition);
                 var adjustedPrevPoint = Adjusted(prevPoint.WorldPosition);
-                bool outOfBounds = (this.points[i].WorldPosition != adjustedPoint);
-                spriteBatch.DrawLine(adjustedPrevPoint, adjustedPoint, outOfBounds ? Color.OrangeRed : Color.Orange, 3f, transform.Depth);
+                bool outOfBounds = (this.points[i + 1].WorldPosition != adjustedPoint);
+                spriteBatch.DrawLine(adjustedPrevPoint, adjustedPoint, outOfBounds ? Color.OrangeRed : Color.Orange, 5f, transform.Depth);
                 prevPoint = this.points[i];
             }
         }
@@ -57,6 +61,11 @@ namespace gmtk2021.Components
 
         public void OnFunctionUpdated(Func<float, float> function)
         {
+            if (this.points == null)
+            {
+                return;
+            }
+
             this.tween.SkipToEnd();
             this.tween.Clear();
             var multiTween = this.tween.AppendMulticastTween();
@@ -64,11 +73,23 @@ namespace gmtk2021.Components
             {
                 // Flip value because y is facing down
 
-                var targetVal = -(int) (function(this.points[i].x / 50f) * this.boundingRect.Height / 2);
+                var targetVal = ApplyFunction(function, this.points[i].x);
                 var point = this.points[i];
                 var accessors = new TweenAccessors<int>(() => point.y, val => point.y = val);
                 multiTween.AddChannel().AppendIntTween(targetVal, 0.25f, EaseFuncs.CubicEaseOut, accessors);
             }
+        }
+
+        public int ApplyFunction(Func<float, float> function, int x)
+        {
+            float heightDomain = 2;
+            float widthDomain = MathF.PI * 2;
+
+            return -(int) (
+                    function(
+                        ((float) x / this.boundingRect.Width - 0.5f) * widthDomain * 2
+                    )
+                    * this.boundingRect.Height / 2 / heightDomain);
         }
 
         private class CurvePoint

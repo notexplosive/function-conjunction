@@ -12,7 +12,7 @@ namespace gmtk2021
 {
     public class Game1 : MachinaGame
     {
-        public Point CardSize = new Point(250, 136);
+        public Point CardSize = new Point(150, 100);
 
         public Game1(string[] args) : base("Nested Functions", args, new Point(1600, 900), new Point(1600, 900), ResizeBehavior.MaintainDesiredResolution)
         {
@@ -20,7 +20,6 @@ namespace gmtk2021
 
         protected override void OnGameLoad()
         {
-
             SceneLayers.BackgroundColor = Color.Black;
             var gameScene = SceneLayers.AddNewScene();
 
@@ -55,11 +54,32 @@ namespace gmtk2021
                 })
                 .AddBothStretchedElement("RightColumn", rightColumnActor =>
                 {
+                    int rangeBarThickness = 64;
                     new LayoutGroup(rightColumnActor, Orientation.Vertical)
                         .AddBothStretchedElement("CurveWindow", curveWindowActor =>
                         {
                             curveWindowActor.transform.Depth += 5;
-                            curve = new CurveRenderer(curveWindowActor);
+
+
+
+                            new LayoutGroup(curveWindowActor, Orientation.Horizontal)
+                                .AddVerticallyStretchedElement("Range", rangeBarThickness, rangeActor =>
+                                {
+                                    new BoundingBoxFill(rangeActor, Color.White);
+                                })
+                                .AddBothStretchedElement("Curve", curveActor =>
+                                {
+                                    curve = new CurveRenderer(curveActor);
+                                });
+                        })
+                        .AddHorizontallyStretchedElement("DomainContainer", 32, domainContainerActor =>
+                        {
+                            new LayoutGroup(domainContainerActor, Orientation.Horizontal)
+                                .PixelSpacer(rangeBarThickness)
+                                .AddBothStretchedElement("Domain", domainActor =>
+                                {
+                                    new BoundingBoxFill(domainActor, Color.White);
+                                });
                         })
                         .AddHorizontallyStretchedElement("Chain CardDropZone", CardSize.Y + 20, dropZoneActor =>
                         {
@@ -79,18 +99,17 @@ namespace gmtk2021
 
                             var sequenceDropZone = new SequenceDropZone(dropZoneActor);
                             sequenceDropZone.FunctionUpdated += curve.OnFunctionUpdated;
-                        })
-                        .SetPaddingBetweenElements(8);
+                        });
                 })
                 .SetMargin(8)
                 .transform.FlushBuffers(); // HACKY AF
 
 
             startingDropZone.Consume(CreateCard(gameScene, dropZones, Functions.Sin), true);
-            startingDropZone.Consume(CreateCard(gameScene, dropZones, Functions.Cos), true);
+            startingDropZone.Consume(CreateCard(gameScene, dropZones, Functions.Sin), true);
             startingDropZone.Consume(CreateCard(gameScene, dropZones, Functions.Abs), true);
             startingDropZone.Consume(CreateCard(gameScene, dropZones, Functions.AddConstant(2)), true);
-            startingDropZone.Consume(CreateCard(gameScene, dropZones, Functions.TimeConstant(2)), true);
+            startingDropZone.Consume(CreateCard(gameScene, dropZones, Functions.TimeConstant(-1)), true);
             startingDropZone.Consume(CreateCard(gameScene, dropZones, Functions.TimesFraction(1, 2)), true);
         }
 

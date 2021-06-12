@@ -19,7 +19,7 @@ namespace gmtk2021.Components
         private readonly TweenChain tween = new TweenChain();
         public Rectangle Rect => this.boundingRect.Rect;
 
-        public List<Card> OwnedCards => this.ownedCards;
+        public List<Card> OwnedCards => new List<Card>(this.ownedCards);
 
         public event Action CardGain;
         public event Action CardLost;
