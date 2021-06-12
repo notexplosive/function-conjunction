@@ -60,6 +60,7 @@ namespace gmtk2021
             var currentLevel = levelTransition.CurrentLevel;
             var dropZones = new List<CardDropZone>();
             CardDropZone startingDropZone = null;
+            CardDropZone destinationZone = null;
             CurveData curveData = new CurveData(currentLevel.Domain, currentLevel.Range);
             PrimaryCurve curve = null;
 
@@ -135,6 +136,7 @@ namespace gmtk2021
                         .AddHorizontallyStretchedElement("Chain CardDropZone", CardSize.Y + 20, dropZoneActor =>
                         {
                             var dropZone = new CardDropZone(dropZoneActor);
+                            destinationZone = dropZone;
                             dropZones.Add(dropZone);
 
                             var group = new LayoutGroup(dropZoneActor, Orientation.Horizontal)
@@ -164,16 +166,17 @@ namespace gmtk2021
 
             foreach (var function in currentLevel.CardFunctions)
             {
-                CreateCard(gameScene, dropZones, function, startingDropZone);
+                CreateCard(gameScene, dropZones, function, startingDropZone, destinationZone);
             }
         }
 
-        public static Card CreateCard(Scene scene, List<CardDropZone> dropZones, Function function, CardDropZone startingDropZone)
+        public static Card CreateCard(Scene scene, List<CardDropZone> dropZones, Function function, CardDropZone startingDropZone, CardDropZone destinationZone)
         {
             var actor = scene.AddActor("Card");
             new BoundingRect(actor, CardSize);
             new Hoverable(actor);
             new Clickable(actor);
+            new DoubleClickable(actor);
             new Draggable(actor);
             new MoveOnDrag(actor);
             new CardBackgroundRenderer(actor);
@@ -195,7 +198,7 @@ namespace gmtk2021
                 })
                 .PixelSpacer(8);
 
-            return new Card(actor, dropZones, function, startingDropZone);
+            return new Card(actor, dropZones, function, startingDropZone, destinationZone);
         }
     }
 }
