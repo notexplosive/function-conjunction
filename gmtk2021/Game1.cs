@@ -28,6 +28,10 @@ namespace gmtk2021
 
             var font = MachinaGame.Assets.GetSpriteFont("UIFont");
 
+            var atmos = MachinaGame.Assets.GetSoundEffectInstance("static_atmos");
+            atmos.IsLooped = true;
+            atmos.Play();
+
             var viewSize = bgScene.camera.UnscaledViewportSize;
             var bgRoot = bgScene.AddActor("BGRoot", new Vector2(0, -viewSize.Y));
             new BoundingRect(bgRoot, viewSize.X, viewSize.Y * 2);

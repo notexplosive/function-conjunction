@@ -34,3 +34,15 @@
 /processorParam:TextureFormat=Compressed
 /build:fonts/UIFont.spritefont
 
+#begin sounds/menu_click.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/menu_click.ogg
+
+#begin sounds/static_atmos.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/static_atmos.ogg
+
