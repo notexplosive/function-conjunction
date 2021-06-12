@@ -15,6 +15,15 @@ namespace gmtk2021.Components
         private readonly DomainRange domain;
         private readonly Func<float, float> composedFunction;
         private CurvePoint[] points;
+        public Color OnColor
+        {
+            get; set;
+        }
+
+        public Color OffColor
+        {
+            get; set;
+        }
 
         public StaticCurveRenderer(Actor actor, Function function) : base(actor)
         {
@@ -40,7 +49,7 @@ namespace gmtk2021.Components
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            PrimaryCurve.DrawPoints(spriteBatch, this.points, Color.Black, Color.Gray, transform.Depth - 1, transform, this.boundingRect, 3f, 1, this.points.Length);
+            PrimaryCurve.DrawPoints(spriteBatch, this.points, OnColor, OffColor, transform.Depth - 1, transform, this.boundingRect, 3f, 1, this.points.Length);
         }
     }
 }

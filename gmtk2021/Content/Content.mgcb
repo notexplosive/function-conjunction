@@ -74,6 +74,42 @@
 /processorParam:Quality=Best
 /build:sounds/menu_click.ogg
 
+#begin sounds/middlebend1.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/middlebend1.ogg
+
+#begin sounds/middlebend2.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/middlebend2.ogg
+
+#begin sounds/middlebend3.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/middlebend3.ogg
+
+#begin sounds/particle_appear.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/particle_appear.ogg
+
+#begin sounds/particle_disappear.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/particle_disappear.ogg
+
+#begin sounds/particle_travel.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/particle_travel.ogg
+
 #begin sounds/pickup.ogg
 /importer:OggImporter
 /processor:SoundEffectProcessor
@@ -85,6 +121,24 @@
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:sounds/static_atmos.ogg
+
+#begin sounds/static_atmos2.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/static_atmos2.ogg
+
+#begin sounds/static_atmos3.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/static_atmos3.ogg
+
+#begin sounds/static_atmos4.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/static_atmos4.ogg
 
 #begin sounds/upbend1.ogg
 /importer:OggImporter

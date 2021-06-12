@@ -243,9 +243,10 @@ namespace gmtk2021
             new DoubleClickable(actor);
             new Draggable(actor);
             new MoveOnDrag(actor);
-            new CardBackgroundRenderer(actor);
+
 
             var font = MachinaGame.Assets.GetSpriteFont("CardFont");
+            StaticCurveRenderer curveRenderer = null;
 
             new LayoutGroup(actor, Orientation.Horizontal)
                 .PixelSpacer(8)
@@ -255,13 +256,16 @@ namespace gmtk2021
                         .PixelSpacer(8)
                         .AddBothStretchedElement("CardText", cardTextActor =>
                         {
-                            new StaticCurveRenderer(cardTextActor, function);
+                            curveRenderer = new StaticCurveRenderer(cardTextActor, function);
                         })
                         .PixelSpacer(8);
                 })
                 .PixelSpacer(8);
 
-            return new Card(actor, dropZones, function, startingDropZone, destinationZone);
+            var card = new Card(actor, dropZones, function, startingDropZone, destinationZone);
+            new CardBackgroundRenderer(actor, curveRenderer);
+
+            return card;
         }
     }
 }
