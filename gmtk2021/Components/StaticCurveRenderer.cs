@@ -50,8 +50,19 @@ namespace gmtk2021.Components
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            PrimaryCurve.DrawPoints(spriteBatch, this.points, OnColor, OffColor, transform.Depth - 5, transform, this.boundingRect, 3f, 1, this.points.Length);
+            // draw curve
+            var prevPoint = this.points[1];
+            for (int i = 2; i < this.points.Length - 2; i++)
+            {
+                var adjustedPoint = PrimaryCurve.Adjusted(this.points[i + 1].WorldPosition, transform, boundingRect);
+                var adjustedPrevPoint = PrimaryCurve.Adjusted(prevPoint.WorldPosition, transform, boundingRect);
+                bool outOfBounds = (this.points[i + 1].WorldPosition != adjustedPoint);
 
+                spriteBatch.DrawLine(adjustedPrevPoint, adjustedPoint, outOfBounds ? OffColor : OnColor, 3f, transform.Depth - 10);
+                prevPoint = this.points[i];
+            }
+
+            // draw axis lines
             var center = this.boundingRect.TopLeft + this.boundingRect.Size.ToVector2() / 2;
             var topLeft = this.boundingRect.TopLeft;
             var lineColor = new Color(Color.Black, 0.5f);

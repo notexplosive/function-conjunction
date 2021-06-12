@@ -136,7 +136,7 @@ namespace gmtk2021.Components
             return particle.IsDone;
         }
 
-        private static Vector2 Adjusted(Vector2 vec, Transform transform, BoundingRect boundingRect)
+        public static Vector2 Adjusted(Vector2 vec, Transform transform, BoundingRect boundingRect)
         {
             return new Vector2(vec.X, Math.Clamp(vec.Y, transform.Position.Y, transform.Position.Y + boundingRect.Height));
         }

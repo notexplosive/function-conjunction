@@ -68,7 +68,7 @@ namespace gmtk2021.Data
 
         public static Function ModConstant(int constant)
         {
-            return new Function("Mod " + constant, (i) => MathF.IEEERemainder(i, constant), new DomainRange(constant * 2, constant));
+            return new Function("Mod " + constant, (i) => MathF.IEEERemainder(i, constant), new DomainRange(constant * 2, 2));
         }
 
         public static Func<float, float> Fold(Function[] functions)
