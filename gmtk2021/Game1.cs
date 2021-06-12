@@ -21,7 +21,12 @@ namespace gmtk2021
         protected override void OnGameLoad()
         {
             SceneLayers.BackgroundColor = Color.Black;
+            var bgScene = SceneLayers.AddNewScene();
             var gameScene = SceneLayers.AddNewScene();
+
+            var bgRoot = bgScene.AddActor("BGRoot");
+            new BoundingRect(bgRoot, bgScene.camera.ScaledViewportSize.ToPoint());
+            // new LayoutGroup();
 
             var dropZones = new List<CardDropZone>();
             CardDropZone startingDropZone = null;
@@ -69,6 +74,7 @@ namespace gmtk2021
                                 .AddBothStretchedElement("Curve", curveActor =>
                                 {
                                     curve = new PrimaryCurve(curveActor, curveData, new Function[] { Functions.ModConstant(1), Functions.Abs });
+                                    new ObjectiveTracker(curveActor);
                                 });
                         })
                         .AddHorizontallyStretchedElement("DomainContainer", 32, domainContainerActor =>
@@ -107,6 +113,7 @@ namespace gmtk2021
             startingDropZone.Consume(CreateCard(gameScene, dropZones, Functions.Ceiling), true);
             startingDropZone.Consume(CreateCard(gameScene, dropZones, Functions.ModConstant(1)), true);
             startingDropZone.Consume(CreateCard(gameScene, dropZones, Functions.MultiplyConstant(2)), true);
+            startingDropZone.Consume(CreateCard(gameScene, dropZones, Functions.Sin), true);
         }
 
         public Card CreateCard(Scene scene, List<CardDropZone> dropZones, Function function)

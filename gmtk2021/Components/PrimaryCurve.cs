@@ -17,7 +17,6 @@ namespace gmtk2021.Components
     {
         private readonly BoundingRect boundingRect;
         private readonly CurveData curveData;
-        private readonly Function[] objective;
         private readonly Func<float, float> objectiveFunction;
         private readonly TweenChain tween = new TweenChain();
         private CurvePoint[] points;
@@ -27,7 +26,6 @@ namespace gmtk2021.Components
         {
             this.boundingRect = RequireComponent<BoundingRect>();
             this.curveData = curveData;
-            this.objective = objective;
             this.objectiveFunction = Functions.Fold(objective);
         }
 
@@ -53,6 +51,8 @@ namespace gmtk2021.Components
             this.tween.Update(dt);
         }
 
+        public bool IsDoneTweening => this.tween.IsFinished;
+
         public override void Draw(SpriteBatch spriteBatch)
         {
             DrawPoints(spriteBatch, this.points, Color.Orange, Color.OrangeRed, transform.Depth);
@@ -77,7 +77,9 @@ namespace gmtk2021.Components
                 var adjustedPoint = Adjusted(curvePoints[i + 1].WorldPosition);
                 var adjustedPrevPoint = Adjusted(prevPoint.WorldPosition);
                 bool outOfBounds = (curvePoints[i + 1].WorldPosition != adjustedPoint);
-                spriteBatch.DrawLine(adjustedPrevPoint, adjustedPoint, outOfBounds ? offColor : onColor, 5f, depth);
+                var sizzle = i % 2 == 0 ? new Vector2(MachinaGame.Random.DirtyRandom.Next(-20, 20), 0) / 10 : Vector2.Zero;
+
+                spriteBatch.DrawLine(adjustedPrevPoint + sizzle, adjustedPoint + sizzle, outOfBounds ? offColor : onColor, 8f, depth);
                 prevPoint = curvePoints[i];
             }
         }
@@ -85,6 +87,18 @@ namespace gmtk2021.Components
         private Vector2 Adjusted(Vector2 vec)
         {
             return new Vector2(vec.X, Math.Clamp(vec.Y, transform.Position.Y, transform.Position.Y + this.boundingRect.Height));
+        }
+
+        public bool MatchWithObjective()
+        {
+            for (int i = 0; i < this.points.Length; i++)
+            {
+                if (this.points[i].y != this.objectivePoints[i].y)
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         public override void OnKey(Keys key, ButtonState state, ModifierKeys modifiers)
