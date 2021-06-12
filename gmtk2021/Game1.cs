@@ -25,6 +25,7 @@ namespace gmtk2021
 
             var dropZones = new List<CardDropZone>();
             CardDropZone startingDropZone = null;
+            CurveData curveData = new CurveData();
             CurveRenderer curve = null;
 
             var gameLayoutActor = gameScene.AddActor("GameLayout");
@@ -60,16 +61,14 @@ namespace gmtk2021
                         {
                             curveWindowActor.transform.Depth += 5;
 
-
-
                             new LayoutGroup(curveWindowActor, Orientation.Horizontal)
                                 .AddVerticallyStretchedElement("Range", rangeBarThickness, rangeActor =>
                                 {
-                                    new BoundingBoxFill(rangeActor, Color.White);
+                                    new DomainRenderer(rangeActor, curveData, Orientation.Vertical);
                                 })
                                 .AddBothStretchedElement("Curve", curveActor =>
                                 {
-                                    curve = new CurveRenderer(curveActor);
+                                    curve = new CurveRenderer(curveActor, curveData);
                                 });
                         })
                         .AddHorizontallyStretchedElement("DomainContainer", 32, domainContainerActor =>
@@ -78,7 +77,7 @@ namespace gmtk2021
                                 .PixelSpacer(rangeBarThickness)
                                 .AddBothStretchedElement("Domain", domainActor =>
                                 {
-                                    new BoundingBoxFill(domainActor, Color.White);
+                                    new DomainRenderer(domainActor, curveData, Orientation.Horizontal);
                                 });
                         })
                         .AddHorizontallyStretchedElement("Chain CardDropZone", CardSize.Y + 20, dropZoneActor =>

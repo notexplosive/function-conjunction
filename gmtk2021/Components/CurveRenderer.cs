@@ -1,4 +1,5 @@
-﻿using Machina.Components;
+﻿using gmtk2021.Data;
+using Machina.Components;
 using Machina.Data;
 using Machina.Engine;
 using Machina.ThirdParty;
@@ -14,12 +15,14 @@ namespace gmtk2021.Components
     class CurveRenderer : BaseComponent
     {
         private readonly BoundingRect boundingRect;
+        private readonly CurveData curveData;
         private readonly TweenChain tween = new TweenChain();
         private CurvePoint[] points;
 
-        public CurveRenderer(Actor actor) : base(actor)
+        public CurveRenderer(Actor actor, CurveData curveData) : base(actor)
         {
             this.boundingRect = RequireComponent<BoundingRect>();
+            this.curveData = curveData;
         }
 
         public override void Start()
@@ -52,6 +55,12 @@ namespace gmtk2021.Components
                 spriteBatch.DrawLine(adjustedPrevPoint, adjustedPoint, outOfBounds ? Color.OrangeRed : Color.Orange, 5f, transform.Depth);
                 prevPoint = this.points[i];
             }
+
+            // Draw zero lines
+            var guidelineColor = new Color(100, 100, 100);
+            var center = transform.Position + this.boundingRect.Rect.Size.ToVector2() / 2;
+            spriteBatch.DrawLine(new Vector2(center.X, transform.Position.Y), new Vector2(center.X, transform.Position.Y + this.boundingRect.Height), guidelineColor, 1f, transform.Depth + 10);
+            spriteBatch.DrawLine(new Vector2(transform.Position.X, center.Y), new Vector2(transform.Position.X + this.boundingRect.Width, center.Y), guidelineColor, 1f, transform.Depth + 10);
         }
 
         private Vector2 Adjusted(Vector2 vec)
@@ -82,14 +91,11 @@ namespace gmtk2021.Components
 
         public int ApplyFunction(Func<float, float> function, int x)
         {
-            float heightDomain = 2;
-            float widthDomain = MathF.PI * 2;
-
             return -(int) (
                     function(
-                        ((float) x / this.boundingRect.Width - 0.5f) * widthDomain * 2
+                        ((float) x / this.boundingRect.Width - 0.5f) * this.curveData.widthDomain * 2
                     )
-                    * this.boundingRect.Height / 2 / heightDomain);
+                    * this.boundingRect.Height / 2 / this.curveData.heightDomain);
         }
 
         private class CurvePoint

@@ -20,3 +20,10 @@
 /processorParam:TextureFormat=Compressed
 /build:fonts/CardFont.spritefont
 
+#begin fonts/DomainFont.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:fonts/DomainFont.spritefont
+
