@@ -69,7 +69,15 @@ namespace gmtk2021
                                     new Clickable(startGameButton).onClick += (mouseButton) => { if (mouseButton == MouseButton.Left) fade.Activate(); };
                                     new ButtonRenderer(startGameButton);
                                     new BoundedTextRenderer(startGameButton, "Start", uiFont, Color.Black, HorizontalAlignment.Center, VerticalAlignment.Center, Overflow.Ignore, new Machina.Data.Depth(-3)).EnableDropShadow(Color.OrangeRed);
-                                });
+                                })
+                                .PixelSpacer(16)
+                                .AddHorizontallyStretchedElement("FullscreenButton", 64, fullscreenButton =>
+                                 {
+                                     new Hoverable(fullscreenButton);
+                                     new Clickable(fullscreenButton).onClick += (mouseButton) => { Fullscreen = !Fullscreen; };
+                                     new ButtonRenderer(fullscreenButton);
+                                     new BoundedTextRenderer(fullscreenButton, "Toggle Fullscreen", uiFont, Color.Black, HorizontalAlignment.Center, VerticalAlignment.Center, Overflow.Ignore, new Machina.Data.Depth(-3)).EnableDropShadow(Color.OrangeRed);
+                                 });
                         })
                         .VerticallyStretchedSpacer();
                 })
