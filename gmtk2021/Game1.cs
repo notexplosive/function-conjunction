@@ -12,7 +12,7 @@ namespace gmtk2021
 {
     public class Game1 : MachinaGame
     {
-        public Point CardSize = new Point(150, 100);
+        public static Point CardSize = new Point(150, 100);
 
         public Game1(string[] args) : base("Nested Functions", args, new Point(1920, 1080), new Point(1600, 900), ResizeBehavior.MaintainDesiredResolution)
         {
@@ -25,11 +25,33 @@ namespace gmtk2021
 
             SceneLayers.BackgroundColor = Color.Black;
             var bgScene = SceneLayers.AddNewScene();
-            var gameScene = SceneLayers.AddNewScene();
 
-            var bgRoot = bgScene.AddActor("BGRoot");
-            new BoundingRect(bgRoot, bgScene.camera.ScaledViewportSize.ToPoint());
-            // new LayoutGroup();
+            var font = MachinaGame.Assets.GetSpriteFont("UIFont");
+
+            var viewSize = bgScene.camera.UnscaledViewportSize;
+            var bgRoot = bgScene.AddActor("BGRoot", new Vector2(0, -viewSize.Y));
+            new BoundingRect(bgRoot, viewSize.X, viewSize.Y * 2);
+            new LayoutGroup(bgRoot, Orientation.Vertical)
+                .AddBothStretchedElement("BGTop", bgTopActor =>
+                {
+                    new BoundedTextRenderer(bgTopActor, "Level Complete!", font, Color.White, HorizontalAlignment.Center, VerticalAlignment.Center, Overflow.Ignore);
+                })
+                .VerticallyStretchedSpacer();
+            var levelTransition = new LevelTransition(bgRoot);
+
+            if (DebugLevel >= DebugLevel.Passive)
+                new PanAndZoomCamera(bgRoot, Keys.LeftControl);
+
+            var gameScene = SceneLayers.AddNewScene();
+            BuildGameScene(gameScene, levelTransition);
+        }
+
+        public static void BuildGameScene(Scene gameScene, LevelTransition levelTransition)
+        {
+            foreach (var actor in gameScene.GetAllActors())
+            {
+                actor.Delete();
+            }
 
             var dropZones = new List<CardDropZone>();
             CardDropZone startingDropZone = null;
@@ -37,7 +59,7 @@ namespace gmtk2021
             PrimaryCurve curve = null;
 
             var gameLayoutActor = gameScene.AddActor("GameLayout");
-            new BoundingRect(gameLayoutActor, SceneLayers.gameCanvas.ViewportSize);
+            new BoundingRect(gameLayoutActor, gameScene.camera.UnscaledViewportSize);
             new LayoutGroup(gameLayoutActor, Orientation.Horizontal)
                 .AddVerticallyStretchedElement("LeftColumn", CardSize.X + 20, leftColumnActor =>
                 {
@@ -76,8 +98,8 @@ namespace gmtk2021
                                 })
                                 .AddBothStretchedElement("Curve", curveActor =>
                                 {
-                                    curve = new PrimaryCurve(curveActor, curveData, new Function[] { Functions.ModConstant(1), Functions.Abs });
-                                    new ObjectiveTracker(curveActor);
+                                    curve = new PrimaryCurve(curveActor, curveData, levelTransition.CurrentLevel.Solution);
+                                    new ObjectiveTracker(curveActor, levelTransition);
                                 });
                         })
                         .AddHorizontallyStretchedElement("DomainContainer", 32, domainContainerActor =>
@@ -119,7 +141,7 @@ namespace gmtk2021
             startingDropZone.Consume(CreateCard(gameScene, dropZones, Functions.Sin), true);
         }
 
-        public Card CreateCard(Scene scene, List<CardDropZone> dropZones, Function function)
+        public static Card CreateCard(Scene scene, List<CardDropZone> dropZones, Function function)
         {
             var actor = scene.AddActor("Card");
             new BoundingRect(actor, CardSize);

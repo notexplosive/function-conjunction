@@ -27,3 +27,10 @@
 /processorParam:TextureFormat=Compressed
 /build:fonts/DomainFont.spritefont
 
+#begin fonts/UIFont.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:fonts/UIFont.spritefont
+

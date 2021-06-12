@@ -51,7 +51,7 @@ namespace gmtk2021.Components
             this.tween.Update(dt);
         }
 
-        public bool IsDoneTweening => this.tween.IsFinished;
+        public bool IsDoneTweening => this.tween.IsDone();
 
         public override void Draw(SpriteBatch spriteBatch)
         {
