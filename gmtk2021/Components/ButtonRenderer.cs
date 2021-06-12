@@ -31,6 +31,7 @@ namespace gmtk2021.Components
             {
                 var sfx = MachinaGame.Assets.GetSoundEffectInstance("menu_click");
                 sfx.Pitch = 0f;
+                sfx.Volume = 0.5f;
                 sfx.Stop();
                 sfx.Play();
             }
@@ -40,6 +41,7 @@ namespace gmtk2021.Components
         {
             var sfx = MachinaGame.Assets.GetSoundEffectInstance("menu_click");
             sfx.Pitch = 0.5f;
+            sfx.Volume = 0.5f;
             sfx.Stop();
             sfx.Play();
         }

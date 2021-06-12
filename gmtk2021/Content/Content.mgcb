@@ -116,6 +116,24 @@
 /processorParam:Quality=Best
 /build:sounds/pickup.ogg
 
+#begin sounds/saw.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/saw.ogg
+
+#begin sounds/sin.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/sin.ogg
+
+#begin sounds/square.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/square.ogg
+
 #begin sounds/static_atmos.ogg
 /importer:OggImporter
 /processor:SoundEffectProcessor

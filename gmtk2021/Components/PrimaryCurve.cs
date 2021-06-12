@@ -34,10 +34,12 @@ namespace gmtk2021.Components
             this.domain = curveData;
             this.objectiveFunction = Functions.Fold(objective);
 
-            this.objectiveTravelSound = MachinaGame.Assets.CreateSoundEffectInstance("particle_travel");
+            this.objectiveTravelSound = MachinaGame.Assets.GetSoundEffectInstance("sin");
+            this.objectiveTravelSound.Volume = 0.75f;
             this.objectiveTravelSound.IsLooped = true;
 
-            this.primaryTravelSound = MachinaGame.Assets.CreateSoundEffectInstance("particle_travel");
+            this.primaryTravelSound = MachinaGame.Assets.GetSoundEffectInstance("saw");
+            this.primaryTravelSound.Volume = 0.25f;
             this.primaryTravelSound.IsLooped = true;
 
             this.objectiveLastDrawIndex = 0;
