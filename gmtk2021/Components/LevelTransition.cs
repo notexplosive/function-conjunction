@@ -21,7 +21,7 @@ namespace gmtk2021.Components
         private readonly Level[] levels =
         new Level[]
         {
-            new Level("Absolute")
+            new Level("Absolute Value")
             {
                 Solution = new Function[] { Functions.ModConstant(1), Functions.Abs },
                 CardFunctions = new Function[] { Functions.ModConstant(1), Functions.Abs },
@@ -106,14 +106,12 @@ namespace gmtk2021.Components
 
             yield return new WaitSeconds(1);
 
-            this.tween.AppendVectorTween(
-                new Point(0, -camera.UnscaledViewportSize.Y),
-                1f, EaseFuncs.EaseInOutBack,
-                camPos);
+            var fade = new Fade(this.gameScene.AddActor("FadeOut"), true).Activate();
+            var isFadeFinished = false;
+            fade.Finish += () => { isFadeFinished = true; };
 
-            yield return new WaitUntil(this.tween.IsDone);
+            yield return new WaitUntil(() => isFadeFinished);
 
-            yield return new WaitUntil(HasClicked);
             IncrementLevel();
             if (HasNextLevel())
             {
