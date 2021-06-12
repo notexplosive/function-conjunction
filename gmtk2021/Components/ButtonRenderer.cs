@@ -11,21 +11,23 @@ namespace gmtk2021.Components
 {
     class ButtonRenderer : BaseComponent
     {
+        private readonly Hoverable hoverable;
         private readonly BoundingRect boundingRect;
 
         public ButtonRenderer(Actor actor) : base(actor)
         {
+            this.hoverable = RequireComponent<Hoverable>();
             this.boundingRect = RequireComponent<BoundingRect>();
         }
 
         public override void Update(float dt)
         {
-
         }
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.FillRectangle(this.boundingRect.Rect, Color.Orange, transform.Depth);
+            spriteBatch.FillRectangle(this.boundingRect.Rect, this.hoverable.IsHovered ? Color.LightBlue : Color.Orange, transform.Depth);
+            spriteBatch.DrawRectangle(this.boundingRect.Rect, this.hoverable.IsHovered ? Color.Teal : Color.OrangeRed, this.hoverable.IsHovered ? 2f : 4f, transform.Depth - 1);
         }
     }
 }
