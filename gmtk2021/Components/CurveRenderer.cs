@@ -46,8 +46,8 @@ namespace gmtk2021.Components
             // Intuitively you'd go for each point draw a line from prevPoint -> currPoint
             // Instead I do foreach point draw a line from prevPoint -> nextPoint
             // This is the same number of line segments as the former but draws a "fuller" line
-            var prevPoint = this.points[0];
-            for (int i = 1; i < this.points.Length - 1; i++)
+            var prevPoint = this.points[1];
+            for (int i = 2; i < this.points.Length - 2; i++)
             {
                 var adjustedPoint = Adjusted(this.points[i + 1].WorldPosition);
                 var adjustedPrevPoint = Adjusted(prevPoint.WorldPosition);
@@ -80,8 +80,6 @@ namespace gmtk2021.Components
             var multiTween = this.tween.AppendMulticastTween();
             for (int i = 0; i < this.points.Length; i++)
             {
-                // Flip value because y is facing down
-
                 var targetVal = ApplyFunction(function, this.points[i].x);
                 var point = this.points[i];
                 var accessors = new TweenAccessors<int>(() => point.y, val => point.y = val);
@@ -91,6 +89,7 @@ namespace gmtk2021.Components
 
         public int ApplyFunction(Func<float, float> function, int x)
         {
+            // Flip value because y is facing down
             return -(int) (
                     function(
                         ((float) x / this.boundingRect.Width - 0.5f) * this.curveData.widthDomain * 2
