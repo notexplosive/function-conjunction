@@ -28,12 +28,14 @@ namespace gmtk2021.Components
 
         private void OnCardLost()
         {
+            MachinaGame.Assets.GetSoundEffectInstance("downbend" + MachinaGame.Random.DirtyRandom.Next(1, 4)).Play();
             BuildFunction();
         }
 
         private void OnCardGain()
         {
             BuildFunction();
+            MachinaGame.Assets.GetSoundEffectInstance("upbend" + MachinaGame.Random.DirtyRandom.Next(1, 4)).Play();
         }
 
         private void BuildFunction()

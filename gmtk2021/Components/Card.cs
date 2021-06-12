@@ -43,11 +43,13 @@ namespace gmtk2021.Components
 
         private void OnDragStart(Vector2 obj)
         {
+            MachinaGame.Assets.GetSoundEffectInstance("pickup").Play();
             transform.Depth = this.startingDepth - 50;
         }
 
         private void OnDragEnd(Vector2 finalMousePosition)
         {
+            MachinaGame.Assets.GetSoundEffectInstance("drop").Play();
             transform.Depth = this.startingDepth;
             var wasConsumed = false;
             var originalOwner = FindOwner();

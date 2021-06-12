@@ -34,15 +34,63 @@
 /processorParam:TextureFormat=Compressed
 /build:fonts/UIFont.spritefont
 
+#begin sounds/downbend1.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/downbend1.ogg
+
+#begin sounds/downbend2.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/downbend2.ogg
+
+#begin sounds/downbend3.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/downbend3.ogg
+
+#begin sounds/drop.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/drop.ogg
+
 #begin sounds/menu_click.ogg
 /importer:OggImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:sounds/menu_click.ogg
 
+#begin sounds/pickup.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/pickup.ogg
+
 #begin sounds/static_atmos.ogg
 /importer:OggImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
 /build:sounds/static_atmos.ogg
+
+#begin sounds/upbend1.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/upbend1.ogg
+
+#begin sounds/upbend2.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/upbend2.ogg
+
+#begin sounds/upbend3.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/upbend3.ogg
 

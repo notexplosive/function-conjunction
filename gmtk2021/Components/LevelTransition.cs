@@ -22,12 +22,20 @@ namespace gmtk2021.Components
         {
             new Level
             {
-                Solution = new Function[] { Functions.ModConstant(1), Functions.Abs }
+                Solution = new Function[] { Functions.ModConstant(1), Functions.Abs },
+                CardFunctions = new Function[] { Functions.ModConstant(1), Functions.Abs }
             },
 
             new Level
             {
-                Solution = new Function[] { Functions.ModConstant(1) }
+                Solution = new Function[] { Functions.ModConstant(2) },
+                CardFunctions = new Function[] {Functions.ModConstant(1), Functions.MultiplyConstant(2), Functions.MultiplyFraction(1,2) }
+            },
+
+            new Level
+            {
+                Solution = new Function[] { Functions.MultiplyConstant(2), Functions.Sin },
+                CardFunctions = new Function[] {Functions.ModConstant(1), Functions.MultiplyConstant(2) }
             },
         };
 

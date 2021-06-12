@@ -57,6 +57,7 @@ namespace gmtk2021
                 actor.Delete();
             }
 
+            var currentLevel = levelTransition.CurrentLevel;
             var dropZones = new List<CardDropZone>();
             CardDropZone startingDropZone = null;
             CurveData curveData = new CurveData(MathF.PI * 2, 2);
@@ -152,11 +153,11 @@ namespace gmtk2021
                 .SetMargin(8)
                 .transform.FlushBuffers(); // HACKY AF
 
-            startingDropZone.Consume(CreateCard(gameScene, dropZones, Functions.Abs), true);
-            startingDropZone.Consume(CreateCard(gameScene, dropZones, Functions.Ceiling), true);
-            startingDropZone.Consume(CreateCard(gameScene, dropZones, Functions.ModConstant(1)), true);
-            startingDropZone.Consume(CreateCard(gameScene, dropZones, Functions.MultiplyConstant(2)), true);
-            startingDropZone.Consume(CreateCard(gameScene, dropZones, Functions.Sin), true);
+
+            foreach (var function in currentLevel.CardFunctions)
+            {
+                startingDropZone.Consume(CreateCard(gameScene, dropZones, function), true);
+            }
         }
 
         public static Card CreateCard(Scene scene, List<CardDropZone> dropZones, Function function)
