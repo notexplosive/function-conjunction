@@ -25,7 +25,7 @@ namespace gmtk2021
 
             var dropZones = new List<CardDropZone>();
             CardDropZone startingDropZone = null;
-            CurveData curveData = new CurveData();
+            CurveData curveData = new CurveData(MathF.PI * 2, 2);
             CurveRenderer curve = null;
 
             var gameLayoutActor = gameScene.AddActor("GameLayout");
@@ -106,8 +106,8 @@ namespace gmtk2021
             startingDropZone.Consume(CreateCard(gameScene, dropZones, Functions.Sign), true);
             startingDropZone.Consume(CreateCard(gameScene, dropZones, Functions.Abs), true);
             startingDropZone.Consume(CreateCard(gameScene, dropZones, Functions.ModConstant(1)), true);
-            startingDropZone.Consume(CreateCard(gameScene, dropZones, Functions.MinConstant(0)), true);
             startingDropZone.Consume(CreateCard(gameScene, dropZones, Functions.Sin), true);
+            startingDropZone.Consume(CreateCard(gameScene, dropZones, Functions.Cos), true);
             startingDropZone.Consume(CreateCard(gameScene, dropZones, Functions.MultiplyConstant(2)), true);
         }
 

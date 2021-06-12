@@ -5,6 +5,7 @@ using Machina.Engine;
 using Machina.ThirdParty;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using MonoGame.Extended;
 using System;
 using System.Collections.Generic;
@@ -68,6 +69,14 @@ namespace gmtk2021.Components
             return new Vector2(vec.X, Math.Clamp(vec.Y, transform.Position.Y, transform.Position.Y + this.boundingRect.Height));
         }
 
+        public override void OnKey(Keys key, ButtonState state, ModifierKeys modifiers)
+        {
+            if (key == Keys.Q && Game1.DebugLevel >= DebugLevel.Passive && state == ButtonState.Pressed)
+            {
+                OnFunctionUpdated((i) => i);
+            }
+        }
+
         public void OnFunctionUpdated(Func<float, float> function)
         {
             if (this.points == null)
@@ -78,23 +87,30 @@ namespace gmtk2021.Components
             this.tween.SkipToEnd();
             this.tween.Clear();
             var multiTween = this.tween.AppendMulticastTween();
+            var results = new int[this.points.Length];
             for (int i = 0; i < this.points.Length; i++)
             {
                 var targetVal = ApplyFunction(function, this.points[i].x);
+                results[i] = targetVal;
                 var point = this.points[i];
                 var accessors = new TweenAccessors<int>(() => point.y, val => point.y = val);
                 multiTween.AddChannel().AppendIntTween(targetVal, 0.25f, EaseFuncs.CubicEaseOut, accessors);
             }
+
+            return;
         }
 
         public int ApplyFunction(Func<float, float> function, int x)
         {
             // Flip value because y is facing down
-            return -(int) (
-                    function(
-                        ((float) x / this.boundingRect.Width - 0.5f) * this.curveData.widthDomain * 2
-                    )
-                    * this.boundingRect.Height / 2 / this.curveData.heightDomain);
+            var arg = ((float) x / this.boundingRect.Width - 0.5f) * this.curveData.widthDomain * 2;
+            var scalar = this.boundingRect.Height / 2 / this.curveData.heightDomain;
+            var rawOutput = function(arg) * scalar;
+            if (rawOutput == float.NaN || rawOutput == -float.NaN)
+            {
+                MachinaGame.Print("nan at ", x);
+            }
+            return -(int) rawOutput;
         }
 
         private class CurvePoint
@@ -115,6 +131,11 @@ namespace gmtk2021.Components
 
             public Vector2 LocalPosition => new Vector2(this.x, this.y + this.boundingRect.Height / 2);
             public Vector2 WorldPosition => parent.Position + LocalPosition;
+
+            public override string ToString()
+            {
+                return "y: " + this.y;
+            }
         }
     }
 }

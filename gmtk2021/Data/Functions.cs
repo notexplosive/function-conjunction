@@ -56,6 +56,14 @@ namespace gmtk2021.Data
         public static Function Truncate = new Function("Trunc", MathF.Truncate);
         public static Function Sqrt = new Function("Sqrt", MathF.Sqrt);
 
+        [Obsolete("Logs do funky things!")]
+        public static Function Log10 = new Function("Log10", MathF.Log10);
+        [Obsolete("Logs do funky things!")]
+        public static Function Log2 = new Function("Log2", MathF.Log2);
+
+        public static Function Tan = new Function("Tan", MathF.Tan);
+        public static Function Atan = new Function("Atan", MathF.Atan);
+
         public static Function MaxConstant(int constant)
         {
             return new Function("Max " + constant, (i) => MathF.Max(i, constant));
