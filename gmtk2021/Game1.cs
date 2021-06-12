@@ -12,7 +12,7 @@ namespace gmtk2021
 {
     public class Game1 : MachinaGame
     {
-        public static Point CardSize = new Point(150, 100);
+        public static Point CardSize = new Point(200, 100);
 
         public Game1(string[] args) : base("Nested Functions", args, new Point(1920, 1080), new Point(1600, 900), ResizeBehavior.MaintainDesiredResolution)
         {
@@ -20,6 +20,7 @@ namespace gmtk2021
 
         protected override void OnGameLoad()
         {
+            Window.Title = "Nested Function";
             SceneLayers.SamplerState = SamplerState.LinearWrap;
             MachinaGame.SamplerState = SamplerState.LinearWrap;
 
@@ -61,7 +62,7 @@ namespace gmtk2021
             var dropZones = new List<CardDropZone>();
             CardDropZone startingDropZone = null;
             CardDropZone destinationZone = null;
-            CurveData curveData = new CurveData(currentLevel.Domain, currentLevel.Range);
+            DomainRange curveData = new DomainRange(currentLevel.Domain, currentLevel.Range);
             PrimaryCurve curve = null;
 
             var titleFont = MachinaGame.Assets.GetSpriteFont("UIFont");
@@ -191,8 +192,7 @@ namespace gmtk2021
                         .PixelSpacer(8)
                         .AddBothStretchedElement("CardText", cardTextActor =>
                         {
-                            new BoundedTextRenderer(cardTextActor, function.name, font, Color.White, HorizontalAlignment.Center, VerticalAlignment.Center, Overflow.Ignore)
-                                .EnableDropShadow(Color.Black);
+                            new StaticCurveRenderer(cardTextActor, function);
                         })
                         .PixelSpacer(8);
                 })

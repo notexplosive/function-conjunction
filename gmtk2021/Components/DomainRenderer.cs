@@ -14,7 +14,7 @@ namespace gmtk2021.Components
     class DomainRenderer : BaseComponent
     {
         private readonly Orientation orientation;
-        private readonly CurveData curveData;
+        private readonly DomainRange curveData;
         private readonly BoundingRect boundingRect;
         private BoundedTextRenderer minimumText;
         private BoundedTextRenderer maximumText;
@@ -35,7 +35,7 @@ namespace gmtk2021.Components
             }
         }
 
-        public DomainRenderer(Actor actor, CurveData curveData, Orientation orientation) : base(actor)
+        public DomainRenderer(Actor actor, DomainRange curveData, Orientation orientation) : base(actor)
         {
             this.orientation = orientation;
             this.curveData = curveData;

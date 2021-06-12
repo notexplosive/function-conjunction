@@ -16,16 +16,16 @@ namespace gmtk2021.Components
     class PrimaryCurve : BaseComponent
     {
         private readonly BoundingRect boundingRect;
-        private readonly CurveData curveData;
+        private readonly DomainRange domain;
         private readonly Func<float, float> objectiveFunction;
         private readonly TweenChain tween = new TweenChain();
         private CurvePoint[] points;
         private CurvePoint[] objectivePoints;
 
-        public PrimaryCurve(Actor actor, CurveData curveData, Function[] objective) : base(actor)
+        public PrimaryCurve(Actor actor, DomainRange curveData, Function[] objective) : base(actor)
         {
             this.boundingRect = RequireComponent<BoundingRect>();
-            this.curveData = curveData;
+            this.domain = curveData;
             this.objectiveFunction = Functions.Fold(objective);
         }
 
@@ -42,7 +42,7 @@ namespace gmtk2021.Components
             for (int i = 0; i < this.boundingRect.Width; i++)
             {
                 this.objectivePoints[i] = new CurvePoint(transform, boundingRect, i);
-                this.objectivePoints[i].y = ApplyFunction(this.objectiveFunction, this.objectivePoints[i].x);
+                this.objectivePoints[i].y = ApplyFunction(this.objectiveFunction, this.objectivePoints[i].x, this.domain, this.boundingRect);
             }
         }
 
@@ -55,8 +55,8 @@ namespace gmtk2021.Components
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            DrawPoints(spriteBatch, this.points, Color.Orange, Color.OrangeRed, transform.Depth);
-            DrawPoints(spriteBatch, this.objectivePoints, Color.Cyan, Color.Teal, transform.Depth + 1);
+            DrawPoints(spriteBatch, this.points, Color.Orange, Color.OrangeRed, transform.Depth, transform, this.boundingRect, 8f, 20);
+            DrawPoints(spriteBatch, this.objectivePoints, Color.Cyan, Color.Teal, transform.Depth + 1, transform, this.boundingRect, 8f, 20);
 
             // Draw zero lines
             var guidelineColor = new Color(100, 100, 100);
@@ -65,7 +65,7 @@ namespace gmtk2021.Components
             spriteBatch.DrawLine(new Vector2(transform.Position.X, center.Y), new Vector2(transform.Position.X + this.boundingRect.Width, center.Y), guidelineColor, 1f, transform.Depth + 10);
         }
 
-        private void DrawPoints(SpriteBatch spriteBatch, CurvePoint[] curvePoints, Color onColor, Color offColor, Depth depth)
+        public static void DrawPoints(SpriteBatch spriteBatch, CurvePoint[] curvePoints, Color onColor, Color offColor, Depth depth, Transform transform, BoundingRect boundingRect, float thickness, int sizzleFactor)
         {
             // I'm doing this clever trick and I wanna write it down:
             // Intuitively you'd go for each point draw a line from prevPoint -> currPoint
@@ -74,19 +74,25 @@ namespace gmtk2021.Components
             var prevPoint = curvePoints[1];
             for (int i = 2; i < curvePoints.Length - 2; i += 3)
             {
-                var adjustedPoint = Adjusted(curvePoints[i + 1].WorldPosition);
-                var adjustedPrevPoint = Adjusted(prevPoint.WorldPosition);
+                var adjustedPoint = Adjusted(curvePoints[i + 1].WorldPosition, transform, boundingRect);
+                var adjustedPrevPoint = Adjusted(prevPoint.WorldPosition, transform, boundingRect);
                 bool outOfBounds = (curvePoints[i + 1].WorldPosition != adjustedPoint);
-                var sizzle = i % 2 == 0 ? new Vector2(MachinaGame.Random.DirtyRandom.Next(-20, 20), 0) / 10 : Vector2.Zero;
 
-                spriteBatch.DrawLine(adjustedPrevPoint + sizzle, adjustedPoint + sizzle, outOfBounds ? offColor : onColor, 8f, depth);
+                var sizzle = Vector2.Zero;
+
+                if (sizzleFactor != 0 && i % 2 == 0)
+                {
+                    sizzle = new Vector2((float) MachinaGame.Random.DirtyRandom.Next(-sizzleFactor, sizzleFactor) * 2 / sizzleFactor, 0);
+                }
+
+                spriteBatch.DrawLine(adjustedPrevPoint + sizzle, adjustedPoint + sizzle, outOfBounds ? offColor : onColor, thickness, depth);
                 prevPoint = curvePoints[i];
             }
         }
 
-        private Vector2 Adjusted(Vector2 vec)
+        private static Vector2 Adjusted(Vector2 vec, Transform transform, BoundingRect boundingRect)
         {
-            return new Vector2(vec.X, Math.Clamp(vec.Y, transform.Position.Y, transform.Position.Y + this.boundingRect.Height));
+            return new Vector2(vec.X, Math.Clamp(vec.Y, transform.Position.Y, transform.Position.Y + boundingRect.Height));
         }
 
         public bool MatchWithObjective()
@@ -128,7 +134,7 @@ namespace gmtk2021.Components
 
             for (int i = 0; i < this.points.Length; i++)
             {
-                var targetVal = ApplyFunction(function, this.points[i].x);
+                var targetVal = ApplyFunction(function, this.points[i].x, this.domain, this.boundingRect);
                 var point = this.points[i];
                 var yAccessors = new TweenAccessors<int>(() => point.y, val => point.y = val);
                 multiTween.AddChannel().AppendIntTween(targetVal, 0.25f, EaseFuncs.EaseOutBack, yAccessors);
@@ -136,45 +142,20 @@ namespace gmtk2021.Components
                 results[i] = targetVal; // for debugging
             }
 
-            return;
+            return; // for debugging
         }
 
-        public int ApplyFunction(Func<float, float> function, int x)
+        public static int ApplyFunction(Func<float, float> function, int x, DomainRange domain, BoundingRect boundingRect)
         {
             // Flip value because y is facing down
-            var arg = ((float) x / this.boundingRect.Width - 0.5f) * this.curveData.widthDomain * 2;
-            var scalar = this.boundingRect.Height / 2 / this.curveData.heightDomain;
+            var arg = ((float) x / boundingRect.Width - 0.5f) * domain.widthDomain * 2;
+            var scalar = boundingRect.Height / 2 / domain.heightDomain;
             var rawOutput = function(arg);
             if (!float.IsNormal(rawOutput))
             {
                 rawOutput = 0;
             }
             return -(int) (rawOutput * scalar);
-        }
-
-        private class CurvePoint
-        {
-            public readonly int x;
-
-            public int y;
-            private readonly Transform parent;
-            private readonly BoundingRect boundingRect;
-
-            public CurvePoint(Transform parent, BoundingRect rect, int x)
-            {
-                this.parent = parent;
-                this.boundingRect = rect;
-                this.x = x;
-                this.y = 0;
-            }
-
-            public Vector2 LocalPosition => new Vector2(this.x, this.y + this.boundingRect.Height / 2);
-            public Vector2 WorldPosition => parent.Position + LocalPosition;
-
-            public override string ToString()
-            {
-                return "y: " + this.y;
-            }
         }
     }
 }
