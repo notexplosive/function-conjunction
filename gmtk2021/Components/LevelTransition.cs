@@ -33,6 +33,8 @@ namespace gmtk2021.Components
 
         public Level CurrentLevel => this.levels[currentLevelIndex];
 
+        public int CurrentLevelIndex => this.currentLevelIndex;
+
         public LevelTransition(Actor actor) : base(actor)
         {
 

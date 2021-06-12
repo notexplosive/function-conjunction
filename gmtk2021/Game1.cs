@@ -62,6 +62,8 @@ namespace gmtk2021
             CurveData curveData = new CurveData(MathF.PI * 2, 2);
             PrimaryCurve curve = null;
 
+            var titleFont = MachinaGame.Assets.GetSpriteFont("UIFont");
+
             var gameLayoutActor = gameScene.AddActor("GameLayout");
             new BoundingRect(gameLayoutActor, gameScene.camera.UnscaledViewportSize);
             new LayoutGroup(gameLayoutActor, Orientation.Horizontal)
@@ -91,6 +93,18 @@ namespace gmtk2021
                 {
                     int rangeBarThickness = 64;
                     new LayoutGroup(rightColumnActor, Orientation.Vertical)
+                        .AddHorizontallyStretchedElement("TitleBar", 64, titleBarActor =>
+                         {
+                             new LayoutGroup(titleBarActor, Orientation.Horizontal)
+                                .AddBothStretchedElement("Title", titleActor =>
+                                {
+                                    new BoundedTextRenderer(titleBarActor, "Level " + (levelTransition.CurrentLevelIndex + 1), titleFont, Color.White);
+                                })
+                                .AddBothStretchedElement("URL", urlActor =>
+                                {
+                                    new BoundedTextRenderer(urlActor, "// notexplosive.net", titleFont, Color.White, HorizontalAlignment.Right);
+                                });
+                         })
                         .AddBothStretchedElement("CurveWindow", curveWindowActor =>
                         {
                             curveWindowActor.transform.Depth += 5;
