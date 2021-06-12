@@ -14,7 +14,7 @@ namespace gmtk2021
     {
         public Point CardSize = new Point(150, 100);
 
-        public Game1(string[] args) : base("Nested Functions", args, new Point(1600, 900), new Point(1600, 900), ResizeBehavior.MaintainDesiredResolution)
+        public Game1(string[] args) : base("Nested Functions", args, new Point(1920, 1080), new Point(1600, 900), ResizeBehavior.MaintainDesiredResolution)
         {
         }
 
@@ -26,7 +26,7 @@ namespace gmtk2021
             var dropZones = new List<CardDropZone>();
             CardDropZone startingDropZone = null;
             CurveData curveData = new CurveData(MathF.PI * 2, 2);
-            CurveRenderer curve = null;
+            PrimaryCurve curve = null;
 
             var gameLayoutActor = gameScene.AddActor("GameLayout");
             new BoundingRect(gameLayoutActor, SceneLayers.gameCanvas.ViewportSize);
@@ -68,7 +68,7 @@ namespace gmtk2021
                                 })
                                 .AddBothStretchedElement("Curve", curveActor =>
                                 {
-                                    curve = new CurveRenderer(curveActor, curveData);
+                                    curve = new PrimaryCurve(curveActor, curveData, new Function[] { Functions.ModConstant(1), Functions.Abs });
                                 });
                         })
                         .AddHorizontallyStretchedElement("DomainContainer", 32, domainContainerActor =>
@@ -104,9 +104,8 @@ namespace gmtk2021
                 .transform.FlushBuffers(); // HACKY AF
 
             startingDropZone.Consume(CreateCard(gameScene, dropZones, Functions.Abs), true);
-            startingDropZone.Consume(CreateCard(gameScene, dropZones, Functions.Log2), true);
+            startingDropZone.Consume(CreateCard(gameScene, dropZones, Functions.Ceiling), true);
             startingDropZone.Consume(CreateCard(gameScene, dropZones, Functions.ModConstant(1)), true);
-            startingDropZone.Consume(CreateCard(gameScene, dropZones, Functions.Log10), true);
             startingDropZone.Consume(CreateCard(gameScene, dropZones, Functions.MultiplyConstant(2)), true);
         }
 

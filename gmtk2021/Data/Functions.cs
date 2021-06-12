@@ -75,6 +75,19 @@ namespace gmtk2021.Data
         {
             return new Function("Mod " + constant, (i) => MathF.IEEERemainder(i, constant));
         }
+
+        public static Func<float, float> Fold(Function[] functions)
+        {
+            Func<float, float> foldedFunction = NoOp;
+
+            foreach (var function in functions)
+            {
+                var innerFunction = foldedFunction;
+                foldedFunction = (i) => function.func(innerFunction(i));
+            }
+
+            return foldedFunction;
+        }
     }
 
     public class Function

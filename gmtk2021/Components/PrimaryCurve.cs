@@ -13,17 +13,22 @@ using System.Text;
 
 namespace gmtk2021.Components
 {
-    class CurveRenderer : BaseComponent
+    class PrimaryCurve : BaseComponent
     {
         private readonly BoundingRect boundingRect;
         private readonly CurveData curveData;
+        private readonly Function[] objective;
+        private readonly Func<float, float> objectiveFunction;
         private readonly TweenChain tween = new TweenChain();
         private CurvePoint[] points;
+        private CurvePoint[] objectivePoints;
 
-        public CurveRenderer(Actor actor, CurveData curveData) : base(actor)
+        public PrimaryCurve(Actor actor, CurveData curveData, Function[] objective) : base(actor)
         {
             this.boundingRect = RequireComponent<BoundingRect>();
             this.curveData = curveData;
+            this.objective = objective;
+            this.objectiveFunction = Functions.Fold(objective);
         }
 
         public override void Start()
@@ -34,6 +39,13 @@ namespace gmtk2021.Components
             {
                 this.points[i] = new CurvePoint(transform, boundingRect, i);
             }
+
+            this.objectivePoints = new CurvePoint[this.boundingRect.Width];
+            for (int i = 0; i < this.boundingRect.Width; i++)
+            {
+                this.objectivePoints[i] = new CurvePoint(transform, boundingRect, i);
+                this.objectivePoints[i].y = ApplyFunction(this.objectiveFunction, this.objectivePoints[i].x);
+            }
         }
 
         public override void Update(float dt)
@@ -43,25 +55,31 @@ namespace gmtk2021.Components
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            // I'm doing this clever trick and I wanna write it down:
-            // Intuitively you'd go for each point draw a line from prevPoint -> currPoint
-            // Instead I do foreach point draw a line from prevPoint -> nextPoint
-            // This is the same number of line segments as the former but draws a "fuller" line
-            var prevPoint = this.points[1];
-            for (int i = 2; i < this.points.Length - 2; i++)
-            {
-                var adjustedPoint = Adjusted(this.points[i + 1].WorldPosition);
-                var adjustedPrevPoint = Adjusted(prevPoint.WorldPosition);
-                bool outOfBounds = (this.points[i + 1].WorldPosition != adjustedPoint);
-                spriteBatch.DrawLine(adjustedPrevPoint, adjustedPoint, outOfBounds ? Color.OrangeRed : Color.Orange, 5f, transform.Depth);
-                prevPoint = this.points[i];
-            }
+            DrawPoints(spriteBatch, this.points, Color.Orange, Color.OrangeRed, transform.Depth);
+            DrawPoints(spriteBatch, this.objectivePoints, Color.Cyan, Color.Teal, transform.Depth + 1);
 
             // Draw zero lines
             var guidelineColor = new Color(100, 100, 100);
             var center = transform.Position + this.boundingRect.Rect.Size.ToVector2() / 2;
             spriteBatch.DrawLine(new Vector2(center.X, transform.Position.Y), new Vector2(center.X, transform.Position.Y + this.boundingRect.Height), guidelineColor, 1f, transform.Depth + 10);
             spriteBatch.DrawLine(new Vector2(transform.Position.X, center.Y), new Vector2(transform.Position.X + this.boundingRect.Width, center.Y), guidelineColor, 1f, transform.Depth + 10);
+        }
+
+        private void DrawPoints(SpriteBatch spriteBatch, CurvePoint[] curvePoints, Color onColor, Color offColor, Depth depth)
+        {
+            // I'm doing this clever trick and I wanna write it down:
+            // Intuitively you'd go for each point draw a line from prevPoint -> currPoint
+            // Instead I do foreach point draw a line from prevPoint -> nextPoint
+            // This is the same number of line segments as the former but draws a "fuller" line
+            var prevPoint = curvePoints[1];
+            for (int i = 2; i < curvePoints.Length - 2; i++)
+            {
+                var adjustedPoint = Adjusted(curvePoints[i + 1].WorldPosition);
+                var adjustedPrevPoint = Adjusted(prevPoint.WorldPosition);
+                bool outOfBounds = (curvePoints[i + 1].WorldPosition != adjustedPoint);
+                spriteBatch.DrawLine(adjustedPrevPoint, adjustedPoint, outOfBounds ? offColor : onColor, 5f, depth);
+                prevPoint = curvePoints[i];
+            }
         }
 
         private Vector2 Adjusted(Vector2 vec)
@@ -87,14 +105,17 @@ namespace gmtk2021.Components
             this.tween.SkipToEnd();
             this.tween.Clear();
             var multiTween = this.tween.AppendMulticastTween();
-            var results = new int[this.points.Length];
+
+            var results = new int[this.points.Length]; // for debugging
+
             for (int i = 0; i < this.points.Length; i++)
             {
                 var targetVal = ApplyFunction(function, this.points[i].x);
-                results[i] = targetVal;
                 var point = this.points[i];
-                var accessors = new TweenAccessors<int>(() => point.y, val => point.y = val);
-                multiTween.AddChannel().AppendIntTween(targetVal, 0.25f, EaseFuncs.CubicEaseOut, accessors);
+                var yAccessors = new TweenAccessors<int>(() => point.y, val => point.y = val);
+                multiTween.AddChannel().AppendIntTween(targetVal, 0.25f, EaseFuncs.CubicEaseOut, yAccessors);
+
+                results[i] = targetVal; // for debugging
             }
 
             return;
