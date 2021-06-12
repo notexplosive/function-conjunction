@@ -53,7 +53,7 @@ namespace gmtk2021.Components
 
             this.introTween
                 .AppendWaitTween(0.25f)
-                .AppendIntTween(this.objectivePoints.Length, 2, EaseFuncs.Linear, new TweenAccessors<int>(() => this.objectiveLastDrawIndex, val => this.objectiveLastDrawIndex = val))
+                .AppendIntTween(this.objectivePoints.Length, 2, EaseFuncs.QuadraticEaseIn, new TweenAccessors<int>(() => this.objectiveLastDrawIndex, val => this.objectiveLastDrawIndex = val))
                 .AppendWaitTween(0.25f)
                 .AppendIntTween(this.points.Length, 1, EaseFuncs.Linear, new TweenAccessors<int>(() => this.primaryLastDrawIndex, val => this.primaryLastDrawIndex = val));
         }

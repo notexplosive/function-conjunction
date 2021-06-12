@@ -36,7 +36,7 @@ namespace gmtk2021.Components
                 Domain = 3,
             },
 
-            new Level("Multiple Ways To Skin A Cat")
+            new Level("The Easy Way")
             {
                 // The idea of this level: There would be more solutions if you had more slots
                 Solution = new Function[] { Functions.MultiplyFraction(1,2), Functions.ModConstant(2) },
