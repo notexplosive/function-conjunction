@@ -21,21 +21,21 @@ namespace gmtk2021.Components
         private readonly Level[] levels =
         new Level[]
         {
-            new Level
+            new Level("Absolute")
             {
                 Solution = new Function[] { Functions.ModConstant(1), Functions.Abs },
                 CardFunctions = new Function[] { Functions.ModConstant(1), Functions.Abs },
                 Domain = 3,
             },
 
-            new Level
+            new Level("Phase Stretching")
             {
-                Solution = new Function[] { Functions.ModConstant(2) },
-                CardFunctions = new Function[] {Functions.ModConstant(1), Functions.MultiplyConstant(2), Functions.MultiplyFraction(1,2) },
+                Solution = new Function[] { Functions.MultiplyFraction(1, 2), Functions.ModConstant(1), Functions.MultiplyConstant(2) },
+                CardFunctions = new Function[] { Functions.ModConstant(1), Functions.MultiplyConstant(2), Functions.MultiplyFraction(1,2) },
                 Domain = 3,
             },
 
-            new Level
+            new Level(null)
             {
                 Solution = new Function[] { Functions.MultiplyConstant(2), Functions.Sin },
                 CardFunctions = new Function[] {Functions.ModConstant(1), Functions.MultiplyConstant(2) },

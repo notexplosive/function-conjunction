@@ -7,6 +7,11 @@ namespace gmtk2021.Data
 {
     public class Level
     {
+        public Level(string title)
+        {
+            Title = title;
+        }
+
         public Function[] Solution
         {
             get; set;
@@ -26,6 +31,13 @@ namespace gmtk2021.Data
             get;
             set;
         } = 2;
+        public int NumberOfSequenceSlots => Solution.Length;
+
+        public string Title
+        {
+            get;
+            set;
+        }
     }
 }
 

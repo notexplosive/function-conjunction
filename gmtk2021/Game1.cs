@@ -80,7 +80,7 @@ namespace gmtk2021
                                 .SetMargin(10)
                                 .SetPaddingBetweenElements(10);
 
-                            for (int i = 0; i < 6; i++)
+                            for (int i = 0; i < currentLevel.CardFunctions.Length; i++)
                             {
                                 group.AddElement("CardSlot", CardSize, cardSlotActor =>
                                 {
@@ -99,7 +99,9 @@ namespace gmtk2021
                              new LayoutGroup(titleBarActor, Orientation.Horizontal)
                                 .AddBothStretchedElement("Title", titleActor =>
                                 {
-                                    new BoundedTextRenderer(titleBarActor, "Level " + (levelTransition.CurrentLevelIndex + 1), titleFont, Color.White);
+                                    new BoundedTextRenderer(titleBarActor, "Level " + (levelTransition.CurrentLevelIndex + 1) +
+                                        (currentLevel.Title != null ? ": " + currentLevel.Title : ""),
+                                        titleFont, Color.White);
                                 })
                                 .AddBothStretchedElement("URL", urlActor =>
                                 {
@@ -138,7 +140,7 @@ namespace gmtk2021
                             var group = new LayoutGroup(dropZoneActor, Orientation.Horizontal)
                                 .SetMargin(10)
                                 .SetPaddingBetweenElements(10);
-                            for (int i = 0; i < 5; i++)
+                            for (int i = 0; i < currentLevel.NumberOfSequenceSlots; i++)
                             {
                                 group.AddElement("CardSlot", CardSize, cardSlotActor =>
                                 {
