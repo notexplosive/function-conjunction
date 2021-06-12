@@ -13,7 +13,8 @@ namespace gmtk2021.Components
     {
         public event Action<Func<float, float>> FunctionUpdated;
         private readonly CardDropZone dropZone;
-        private int pendingUp;
+        private int deltaCardCount;
+        private bool wasCardChange;
 
         public SequenceDropZone(Actor actor) : base(actor)
         {
@@ -29,15 +30,27 @@ namespace gmtk2021.Components
 
         public override void Update(float dt)
         {
-            if (this.pendingUp < 0)
+            if (this.wasCardChange)
             {
-                MachinaGame.Assets.GetSoundEffectInstance("downbend" + MachinaGame.Random.DirtyRandom.Next(1, 4)).Play();
+                if (this.deltaCardCount < 0)
+                {
+                    MachinaGame.Assets.GetSoundEffectInstance("downbend" + MachinaGame.Random.DirtyRandom.Next(1, 4)).Play();
+                }
+
+                if (this.deltaCardCount > 0)
+                {
+                    MachinaGame.Assets.GetSoundEffectInstance("upbend" + MachinaGame.Random.DirtyRandom.Next(1, 4)).Play();
+                }
+
+                if (this.deltaCardCount == 0)
+                {
+                    MachinaGame.Assets.GetSoundEffectInstance("middlebend" + MachinaGame.Random.DirtyRandom.Next(1, 4)).Play();
+                }
+
+                this.wasCardChange = false;
             }
-            if (this.pendingUp > 0)
-            {
-                MachinaGame.Assets.GetSoundEffectInstance("upbend" + MachinaGame.Random.DirtyRandom.Next(1, 4)).Play();
-            }
-            this.pendingUp = 0;
+
+            this.deltaCardCount = 0;
         }
 
         public void LockAll()
@@ -51,13 +64,15 @@ namespace gmtk2021.Components
 
         private void OnCardLost()
         {
-            this.pendingUp--;
+            this.wasCardChange = true;
+            this.deltaCardCount--;
             BuildFunction();
         }
 
         private void OnCardGain()
         {
-            this.pendingUp++;
+            this.wasCardChange = true;
+            this.deltaCardCount++;
             BuildFunction();
         }
 
