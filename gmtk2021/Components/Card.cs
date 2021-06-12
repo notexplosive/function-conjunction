@@ -66,11 +66,14 @@ namespace gmtk2021.Components
         {
             if (this.isDragging && this.targetDropZone != null)
             {
-                spriteBatch.DrawRectangle(this.targetDropZone.Rect, Color.White, 3f, this.targetDropZone.transform.Depth);
+                var isValid = IsValidDrop(FindCurrentZone());
 
-                if (this.subzoneIndex.HasValue)
+                spriteBatch.DrawRectangle(this.targetDropZone.Rect, isValid ? Color.White : Color.DarkBlue, 3f, this.targetDropZone.transform.Depth);
+
+                if (isValid)
                 {
-                    var rect = this.targetDropZone.SlotRectAt(this.subzoneIndex.Value);
+                    var subzoneIndex = this.subzoneIndex.GetValueOrDefault(-1);
+                    var rect = this.targetDropZone.SlotRectAt(subzoneIndex);
                     spriteBatch.DrawRectangle(rect, Color.White, 3f, this.targetDropZone.transform.Depth);
                 }
             }
@@ -124,6 +127,11 @@ namespace gmtk2021.Components
             transform.Depth = this.startingDepth - 50;
         }
 
+        private bool IsValidDrop(CardDropZone originalDropZone)
+        {
+            return this.targetDropZone != null && (!this.targetDropZone.IsFull() || this.targetDropZone == originalDropZone);
+        }
+
         private void OnDragEnd(Vector2 finalMousePosition)
         {
             this.isGrabbed = false;
@@ -134,16 +142,20 @@ namespace gmtk2021.Components
                 transform.Depth = this.startingDepth;
                 var originalDropZone = FindCurrentZone();
 
-                if (this.targetDropZone != null)
+                if (IsValidDrop(originalDropZone))
                 {
-                    if (this.targetDropZone != originalDropZone)
-                    {
-                        originalDropZone.Detach(this);
-                    }
+                    originalDropZone?.Detach(this);
                     this.targetDropZone.Consume(this, this.subzoneIndex.GetValueOrDefault(-1));
+                    this.targetDropZone.TweenCardsToLayout();
+                }
+                else
+                {
+                    originalDropZone?.Detach(this);
+                    this.defaultDropZone.Consume(this);
+                    this.defaultDropZone.TweenCardsToLayout();
                 }
 
-                originalDropZone.TweenCardsToLayout();
+
 
                 this.targetDropZone = null;
             }

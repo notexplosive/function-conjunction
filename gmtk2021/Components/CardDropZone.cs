@@ -59,9 +59,25 @@ namespace gmtk2021.Components
             }
         }
 
+        public bool IsFull()
+        {
+            return this.ownedCards.Count == this.slots.Count;
+        }
+
         public Rectangle SlotRectAt(int subzoneIndex)
         {
-            return this.slots[subzoneIndex].Rect;
+            var max = this.ownedCards.Count;
+
+            if (IsFull())
+            {
+                max = max - 1;
+            }
+
+            if (subzoneIndex < 0)
+            {
+                return this.slots[max].Rect;
+            }
+            return this.slots[Math.Min(subzoneIndex, max)].Rect;
         }
 
         public void AddCardSlot(Actor actor)
@@ -71,6 +87,11 @@ namespace gmtk2021.Components
 
         public void Consume(Card card, int index = -1, bool skipAnimation = false)
         {
+            if (IsFull())
+            {
+                return;
+            }
+
             this.ownedCards.Remove(card);
 
             if (index == -1)
