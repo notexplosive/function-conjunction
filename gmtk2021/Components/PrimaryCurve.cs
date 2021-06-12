@@ -127,7 +127,7 @@ namespace gmtk2021.Components
                 var targetVal = ApplyFunction(function, this.points[i].x);
                 var point = this.points[i];
                 var yAccessors = new TweenAccessors<int>(() => point.y, val => point.y = val);
-                multiTween.AddChannel().AppendIntTween(targetVal, 0.25f, EaseFuncs.CubicEaseOut, yAccessors);
+                multiTween.AddChannel().AppendIntTween(targetVal, 0.25f, EaseFuncs.EaseOutBack, yAccessors);
 
                 results[i] = targetVal; // for debugging
             }
