@@ -27,6 +27,9 @@
 /processorParam:TextureFormat=Compressed
 /build:fonts/DomainFont.spritefont
 
+#begin fonts/Roboto-Medium.ttf
+/copy:fonts/Roboto-Medium.ttf
+
 #begin fonts/UIFont.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
