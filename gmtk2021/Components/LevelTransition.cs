@@ -18,24 +18,27 @@ namespace gmtk2021.Components
         private bool clickDown;
         private Scene gameScene;
         private int currentLevelIndex = 0;
-        private readonly Level[] levels = new Level[]
+        private readonly Level[] levels =
+        new Level[]
         {
             new Level
             {
                 Solution = new Function[] { Functions.ModConstant(1), Functions.Abs },
-                CardFunctions = new Function[] { Functions.ModConstant(1), Functions.Abs }
+                CardFunctions = new Function[] { Functions.ModConstant(1), Functions.Abs },
+                Domain = 3,
             },
 
             new Level
             {
                 Solution = new Function[] { Functions.ModConstant(2) },
-                CardFunctions = new Function[] {Functions.ModConstant(1), Functions.MultiplyConstant(2), Functions.MultiplyFraction(1,2) }
+                CardFunctions = new Function[] {Functions.ModConstant(1), Functions.MultiplyConstant(2), Functions.MultiplyFraction(1,2) },
+                Domain = 3,
             },
 
             new Level
             {
                 Solution = new Function[] { Functions.MultiplyConstant(2), Functions.Sin },
-                CardFunctions = new Function[] {Functions.ModConstant(1), Functions.MultiplyConstant(2) }
+                CardFunctions = new Function[] {Functions.ModConstant(1), Functions.MultiplyConstant(2) },
             },
         };
 

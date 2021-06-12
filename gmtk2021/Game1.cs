@@ -60,7 +60,7 @@ namespace gmtk2021
             var currentLevel = levelTransition.CurrentLevel;
             var dropZones = new List<CardDropZone>();
             CardDropZone startingDropZone = null;
-            CurveData curveData = new CurveData(MathF.PI * 2, 2);
+            CurveData curveData = new CurveData(currentLevel.Domain, currentLevel.Range);
             PrimaryCurve curve = null;
 
             var titleFont = MachinaGame.Assets.GetSpriteFont("UIFont");

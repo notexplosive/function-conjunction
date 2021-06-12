@@ -16,6 +16,16 @@ namespace gmtk2021.Data
         {
             get; set;
         }
+        public float Domain
+        {
+            get;
+            set;
+        } = MathF.PI * 2;
+        public float Range
+        {
+            get;
+            set;
+        } = 2;
     }
 }
 
