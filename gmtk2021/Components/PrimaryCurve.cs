@@ -72,7 +72,7 @@ namespace gmtk2021.Components
             // Instead I do foreach point draw a line from prevPoint -> nextPoint
             // This is the same number of line segments as the former but draws a "fuller" line
             var prevPoint = curvePoints[1];
-            for (int i = 2; i < curvePoints.Length - 2; i++)
+            for (int i = 2; i < curvePoints.Length - 2; i += 3)
             {
                 var adjustedPoint = Adjusted(curvePoints[i + 1].WorldPosition);
                 var adjustedPrevPoint = Adjusted(prevPoint.WorldPosition);
