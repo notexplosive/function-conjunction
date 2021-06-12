@@ -124,6 +124,7 @@ namespace gmtk2021
             CardDropZone destinationZone = null;
             DomainRange curveData = new DomainRange(currentLevel.Domain, currentLevel.Range);
             PrimaryCurve curve = null;
+            SequenceDropZone sequenceDropZone = null;
 
             var titleFont = MachinaGame.Assets.GetSpriteFont("UIFont");
 
@@ -183,7 +184,8 @@ namespace gmtk2021
                                 .AddBothStretchedElement("Curve", curveActor =>
                                 {
                                     curve = new PrimaryCurve(curveActor, curveData, levelTransition.CurrentLevel.Solution);
-                                    new ObjectiveTracker(curveActor, levelTransition);
+                                    var objective = new ObjectiveTracker(curveActor, levelTransition);
+                                    objective.Win += () => sequenceDropZone.LockAll();
                                 });
                         })
                         .AddHorizontallyStretchedElement("DomainContainer", 32, domainContainerActor =>
@@ -218,7 +220,7 @@ namespace gmtk2021
                                 });
                             }
 
-                            var sequenceDropZone = new SequenceDropZone(dropZoneActor);
+                            sequenceDropZone = new SequenceDropZone(dropZoneActor);
                             sequenceDropZone.FunctionUpdated += curve.OnFunctionUpdated;
                         });
                 })

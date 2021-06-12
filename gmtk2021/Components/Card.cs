@@ -27,6 +27,12 @@ namespace gmtk2021.Components
 
         public Rectangle Rect => this.boundingRect.Rect;
 
+        public bool IsLocked
+        {
+            get;
+            private set;
+        }
+
         public Card(Actor actor, List<CardDropZone> dropZones, Function function, CardDropZone defaultDropZone, CardDropZone destinationZone) : base(actor)
         {
             this.dropZones = dropZones;
@@ -45,6 +51,14 @@ namespace gmtk2021.Components
             this.destinationZone = destinationZone;
 
             this.defaultDropZone.Consume(this, skipAnimation: true);
+        }
+
+        public void Lock()
+        {
+            IsLocked = true;
+            RequireComponent<MoveOnDrag>();
+            this.actor.RemoveComponent<MoveOnDrag>();
+            this.actor.RemoveComponent<Draggable>();
         }
 
         private void OnDoubleClick()

@@ -16,6 +16,7 @@ namespace gmtk2021.Components
         private readonly PrimaryCurve curve;
         private readonly LevelTransition transition;
         private bool isWon;
+        public event Action Win;
 
         public ObjectiveTracker(Actor actor, LevelTransition transition) : base(actor)
         {
@@ -31,6 +32,7 @@ namespace gmtk2021.Components
 
             if (this.curve.IsDoneTweening && this.curve.MatchWithObjective() && !this.isWon)
             {
+                Win?.Invoke();
                 this.isWon = true;
                 this.transition.FinishLevel();
             }

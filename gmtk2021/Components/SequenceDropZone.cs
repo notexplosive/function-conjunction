@@ -40,6 +40,15 @@ namespace gmtk2021.Components
             this.pendingUp = 0;
         }
 
+        public void LockAll()
+        {
+            foreach (var card in this.dropZone.OwnedCards)
+            {
+                if (!card.IsLocked)
+                    card.Lock();
+            }
+        }
+
         private void OnCardLost()
         {
             this.pendingUp--;
