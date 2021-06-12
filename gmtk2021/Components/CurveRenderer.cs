@@ -105,12 +105,12 @@ namespace gmtk2021.Components
             // Flip value because y is facing down
             var arg = ((float) x / this.boundingRect.Width - 0.5f) * this.curveData.widthDomain * 2;
             var scalar = this.boundingRect.Height / 2 / this.curveData.heightDomain;
-            var rawOutput = function(arg) * scalar;
-            if (rawOutput == float.NaN || rawOutput == -float.NaN)
+            var rawOutput = function(arg);
+            if (!float.IsNormal(rawOutput))
             {
-                MachinaGame.Print("nan at ", x);
+                rawOutput = 0;
             }
-            return -(int) rawOutput;
+            return -(int) (rawOutput * scalar);
         }
 
         private class CurvePoint

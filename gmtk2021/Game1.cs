@@ -103,11 +103,10 @@ namespace gmtk2021
                 .SetMargin(8)
                 .transform.FlushBuffers(); // HACKY AF
 
-            startingDropZone.Consume(CreateCard(gameScene, dropZones, Functions.Sign), true);
             startingDropZone.Consume(CreateCard(gameScene, dropZones, Functions.Abs), true);
+            startingDropZone.Consume(CreateCard(gameScene, dropZones, Functions.Log2), true);
             startingDropZone.Consume(CreateCard(gameScene, dropZones, Functions.ModConstant(1)), true);
-            startingDropZone.Consume(CreateCard(gameScene, dropZones, Functions.Sin), true);
-            startingDropZone.Consume(CreateCard(gameScene, dropZones, Functions.Cos), true);
+            startingDropZone.Consume(CreateCard(gameScene, dropZones, Functions.Log10), true);
             startingDropZone.Consume(CreateCard(gameScene, dropZones, Functions.MultiplyConstant(2)), true);
         }
 
