@@ -20,6 +20,9 @@ namespace gmtk2021
 
         protected override void OnGameLoad()
         {
+            SceneLayers.SamplerState = SamplerState.LinearWrap;
+            MachinaGame.SamplerState = SamplerState.LinearWrap;
+
             SceneLayers.BackgroundColor = Color.Black;
             var bgScene = SceneLayers.AddNewScene();
             var gameScene = SceneLayers.AddNewScene();
