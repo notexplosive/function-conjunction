@@ -22,6 +22,14 @@ namespace gmtk2021.Components
         private readonly Level[] levels =
         new Level[]
         {
+            new Level("Round Peg")
+            {
+                Solution = new Function[] { Functions.Sin },
+                CardFunctions = new Function[] { Functions.Sin },
+                Domain = MathF.PI,
+                Range = 1,
+            },
+
             new Level("Absolute Value")
             {
                 Solution = new Function[] { Functions.ModConstant(1), Functions.Abs },

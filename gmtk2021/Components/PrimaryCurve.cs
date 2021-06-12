@@ -105,7 +105,7 @@ namespace gmtk2021.Components
 
         public Func<bool> StartParticleAnimation()
         {
-            var particle = new ParticleAnimation(this.actor.scene.AddActor("ParticleActor"), this.points);
+            var particle = new ParticleAnimation(this.actor.scene.AddActor("ParticleActor"), this.points, this.boundingRect);
             return particle.IsDone;
         }
 
