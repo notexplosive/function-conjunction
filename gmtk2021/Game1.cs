@@ -25,13 +25,55 @@ namespace gmtk2021
             MachinaGame.SamplerState = SamplerState.LinearWrap;
 
             SceneLayers.BackgroundColor = Color.Black;
-            var bgScene = SceneLayers.AddNewScene();
 
-            var font = MachinaGame.Assets.GetSpriteFont("UIFont");
+            var titleFont = MachinaGame.Assets.GetSpriteFont("TitleFont");
+            var subtitleFont = MachinaGame.Assets.GetSpriteFont("CardFont");
+            var uiFont = MachinaGame.Assets.GetSpriteFont("UIFont");
+
 
             var atmos = MachinaGame.Assets.GetSoundEffectInstance("static_atmos");
             atmos.IsLooped = true;
             atmos.Play();
+
+            var menuScene = SceneLayers.AddNewScene();
+            var menuLayoutActor = menuScene.AddActor("GameLayout");
+            new BoundingRect(menuLayoutActor, menuScene.camera.UnscaledViewportSize);
+            new LayoutGroup(menuLayoutActor, Orientation.Horizontal)
+                .HorizontallyStretchedSpacer()
+                .AddBothStretchedElement("InnerColumn", menuInnerColumnActor =>
+                {
+                    new LayoutGroup(menuInnerColumnActor, Orientation.Vertical)
+                        .VerticallyStretchedSpacer()
+                        .AddBothStretchedElement("MenuContent", menuContentActor =>
+                        {
+                            new LayoutGroup(menuContentActor, Orientation.Vertical)
+                                .AddHorizontallyStretchedElement("Title", 80, titleActor =>
+                                {
+                                    new BoundedTextRenderer(titleActor, Window.Title, titleFont, Color.White, HorizontalAlignment.Center, VerticalAlignment.Top, Overflow.Ignore);
+                                })
+                                .AddHorizontallyStretchedElement("Subtitle", 80, subtitleActor =>
+                                {
+                                    new BoundedTextRenderer(subtitleActor, "Programmed & Designed by NotExplosive\nSound Design by Ryan Yoshikami", subtitleFont, Color.White, HorizontalAlignment.Center, VerticalAlignment.Top, Overflow.Ignore);
+                                })
+                                .PixelSpacer(32)
+                                .AddHorizontallyStretchedElement("StartGameButton", 64, startGameButton =>
+                                {
+                                    new Hoverable(startGameButton);
+                                    new Clickable(startGameButton).onClick += (mouseButton) => { if (mouseButton == MouseButton.Left) BuildFirstGameScene(SceneLayers); };
+                                    new ButtonRenderer(startGameButton);
+                                    new BoundedTextRenderer(startGameButton, "Start", uiFont, Color.Black, HorizontalAlignment.Center, VerticalAlignment.Center, Overflow.Ignore, new Machina.Data.Depth(-3)).EnableDropShadow(Color.OrangeRed);
+                                });
+                        })
+                        .VerticallyStretchedSpacer();
+                })
+                .HorizontallyStretchedSpacer();
+        }
+
+        public static void BuildFirstGameScene(SceneLayers sceneLayers)
+        {
+            var bgScene = sceneLayers.AddNewScene();
+
+            var font = MachinaGame.Assets.GetSpriteFont("UIFont");
 
             var viewSize = bgScene.camera.UnscaledViewportSize;
             var bgRoot = bgScene.AddActor("BGRoot", new Vector2(0, -viewSize.Y));
@@ -47,7 +89,8 @@ namespace gmtk2021
             if (DebugLevel >= DebugLevel.Passive)
                 new PanAndZoomCamera(bgRoot, Keys.LeftControl);
 
-            var gameScene = SceneLayers.AddNewScene();
+            var gameScene = sceneLayers.AddNewScene();
+
             BuildGameScene(gameScene, levelTransition);
         }
 
