@@ -12,12 +12,36 @@ namespace gmtk2021.Components
     class ButtonRenderer : BaseComponent
     {
         private readonly Hoverable hoverable;
+        private readonly Clickable clickable;
         private readonly BoundingRect boundingRect;
 
         public ButtonRenderer(Actor actor) : base(actor)
         {
             this.hoverable = RequireComponent<Hoverable>();
+            this.clickable = RequireComponent<Clickable>();
+
+            this.hoverable.OnHoverStart += PlayerHoverSound;
+            this.clickable.onClick += OnClick;
             this.boundingRect = RequireComponent<BoundingRect>();
+        }
+
+        private void OnClick(MouseButton mouseButton)
+        {
+            if (mouseButton == MouseButton.Left)
+            {
+                var sfx = MachinaGame.Assets.GetSoundEffectInstance("menu_click");
+                sfx.Pitch = 0f;
+                sfx.Stop();
+                sfx.Play();
+            }
+        }
+
+        private void PlayerHoverSound()
+        {
+            var sfx = MachinaGame.Assets.GetSoundEffectInstance("menu_click");
+            sfx.Pitch = 0.5f;
+            sfx.Stop();
+            sfx.Play();
         }
 
         public override void Update(float dt)
