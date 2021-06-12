@@ -144,8 +144,9 @@ namespace gmtk2021.Components
 
                 if (IsValidDrop(originalDropZone))
                 {
+                    var destIndex = this.subzoneIndex.GetValueOrDefault(-1);
                     originalDropZone?.Detach(this);
-                    this.targetDropZone.Consume(this, this.subzoneIndex.GetValueOrDefault(-1));
+                    this.targetDropZone.Consume(this, destIndex);
                     this.targetDropZone.TweenCardsToLayout();
                 }
                 else

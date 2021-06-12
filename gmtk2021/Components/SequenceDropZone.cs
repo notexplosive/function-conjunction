@@ -13,6 +13,7 @@ namespace gmtk2021.Components
     {
         public event Action<Func<float, float>> FunctionUpdated;
         private readonly CardDropZone dropZone;
+        private int pendingUp;
 
         public SequenceDropZone(Actor actor) : base(actor)
         {
@@ -26,16 +27,29 @@ namespace gmtk2021.Components
             BuildFunction();
         }
 
+        public override void Update(float dt)
+        {
+            if (this.pendingUp < 0)
+            {
+                MachinaGame.Assets.GetSoundEffectInstance("downbend" + MachinaGame.Random.DirtyRandom.Next(1, 4)).Play();
+            }
+            if (this.pendingUp > 0)
+            {
+                MachinaGame.Assets.GetSoundEffectInstance("upbend" + MachinaGame.Random.DirtyRandom.Next(1, 4)).Play();
+            }
+            this.pendingUp = 0;
+        }
+
         private void OnCardLost()
         {
-            MachinaGame.Assets.GetSoundEffectInstance("downbend" + MachinaGame.Random.DirtyRandom.Next(1, 4)).Play();
+            this.pendingUp--;
             BuildFunction();
         }
 
         private void OnCardGain()
         {
+            this.pendingUp++;
             BuildFunction();
-            MachinaGame.Assets.GetSoundEffectInstance("upbend" + MachinaGame.Random.DirtyRandom.Next(1, 4)).Play();
         }
 
         private void BuildFunction()

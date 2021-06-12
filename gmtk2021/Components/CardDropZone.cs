@@ -148,9 +148,11 @@ namespace gmtk2021.Components
             bool hadCard = this.ownedCards.Remove(card);
             if (hadCard)
             {
-                TweenCardsToLayout();
                 CardLost?.Invoke();
             }
+
+            TweenCardsToLayout();
+
         }
 
         public void TweenCardsToLayout(bool skipAnimation = false)
