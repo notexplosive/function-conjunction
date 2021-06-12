@@ -137,7 +137,10 @@ namespace gmtk2021.Components
         private void OnDragStart(Vector2 obj)
         {
             this.isGrabbed = true;
-            MachinaGame.Assets.GetSoundEffectInstance("pickup").Play();
+            var sfx = MachinaGame.Assets.GetSoundEffectInstance("pickup");
+            sfx.Volume = 0.5f;
+            sfx.Play();
+
             transform.Depth = this.startingDepth - 50;
         }
 
@@ -152,7 +155,10 @@ namespace gmtk2021.Components
             if (this.isDragging)
             {
                 this.isDragging = false;
-                MachinaGame.Assets.GetSoundEffectInstance("drop").Play();
+                var sfx = MachinaGame.Assets.GetSoundEffectInstance("drop");
+                sfx.Volume = 0.5f;
+                sfx.Play();
+
                 transform.Depth = this.startingDepth;
                 var originalDropZone = FindCurrentZone();
 

@@ -25,9 +25,13 @@ namespace gmtk2021.Components
             var xAcc = new TweenAccessors<int>(() => this.x, val => this.x = val);
             var sizeAcc = new TweenAccessors<float>(() => this.size, val => this.size = val);
             this.points = points;
-            this.tween.AppendFloatTween(1, 0.35f, EaseFuncs.EaseOutBack, sizeAcc);
-            this.tween.AppendIntTween(points.Length - 1, 1, EaseFuncs.Linear, xAcc);
-            this.tween.AppendFloatTween(0, 0.35f, EaseFuncs.EaseInBack, sizeAcc);
+            this.tween
+                .AppendCallback(() => { MachinaGame.Assets.GetSoundEffectInstance("particle_appear").Play(); })
+                .AppendFloatTween(1, 0.35f, EaseFuncs.EaseOutBack, sizeAcc)
+                .AppendIntTween(points.Length - 1, 1, EaseFuncs.Linear, xAcc)
+                .AppendCallback(() => { MachinaGame.Assets.GetSoundEffectInstance("particle_disappear").Play(); })
+                .AppendFloatTween(0, 0.35f, EaseFuncs.EaseInBack, sizeAcc)
+                ;
         }
 
         public override void Update(float dt)
