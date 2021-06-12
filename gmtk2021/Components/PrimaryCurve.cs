@@ -19,14 +19,20 @@ namespace gmtk2021.Components
         private readonly DomainRange domain;
         private readonly Func<float, float> objectiveFunction;
         private readonly TweenChain tween = new TweenChain();
+        private readonly TweenChain introTween = new TweenChain();
         private CurvePoint[] points;
         private CurvePoint[] objectivePoints;
+        private int objectiveLastDrawIndex;
+        private int primaryLastDrawIndex;
 
         public PrimaryCurve(Actor actor, DomainRange curveData, Function[] objective) : base(actor)
         {
             this.boundingRect = RequireComponent<BoundingRect>();
             this.domain = curveData;
             this.objectiveFunction = Functions.Fold(objective);
+
+            this.objectiveLastDrawIndex = 0;
+            this.primaryLastDrawIndex = 0;
         }
 
         public override void Start()
@@ -44,10 +50,17 @@ namespace gmtk2021.Components
                 this.objectivePoints[i] = new CurvePoint(transform, boundingRect, i);
                 this.objectivePoints[i].y = ApplyFunction(this.objectiveFunction, this.objectivePoints[i].x, this.domain, this.boundingRect);
             }
+
+            this.introTween
+                .AppendWaitTween(0.25f)
+                .AppendIntTween(this.objectivePoints.Length, 2, EaseFuncs.Linear, new TweenAccessors<int>(() => this.objectiveLastDrawIndex, val => this.objectiveLastDrawIndex = val))
+                .AppendWaitTween(0.25f)
+                .AppendIntTween(this.points.Length, 1, EaseFuncs.Linear, new TweenAccessors<int>(() => this.primaryLastDrawIndex, val => this.primaryLastDrawIndex = val));
         }
 
         public override void Update(float dt)
         {
+            this.introTween.Update(dt);
             this.tween.Update(dt);
         }
 
@@ -55,8 +68,8 @@ namespace gmtk2021.Components
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            DrawPoints(spriteBatch, this.points, Color.Orange, Color.OrangeRed, transform.Depth, transform, this.boundingRect, 8f, 20);
-            DrawPoints(spriteBatch, this.objectivePoints, Color.Cyan, Color.Teal, transform.Depth + 1, transform, this.boundingRect, 8f, 20);
+            DrawPoints(spriteBatch, this.points, Color.Orange, Color.OrangeRed, transform.Depth, transform, this.boundingRect, 8f, 20, this.primaryLastDrawIndex);
+            DrawPoints(spriteBatch, this.objectivePoints, Color.Cyan, Color.Teal, transform.Depth + 1, transform, this.boundingRect, 8f, 20, this.objectiveLastDrawIndex);
 
             // Draw zero lines
             var guidelineColor = new Color(100, 100, 100);
@@ -65,14 +78,14 @@ namespace gmtk2021.Components
             spriteBatch.DrawLine(new Vector2(transform.Position.X, center.Y), new Vector2(transform.Position.X + this.boundingRect.Width, center.Y), guidelineColor, 1f, transform.Depth + 10);
         }
 
-        public static void DrawPoints(SpriteBatch spriteBatch, CurvePoint[] curvePoints, Color onColor, Color offColor, Depth depth, Transform transform, BoundingRect boundingRect, float thickness, int sizzleFactor)
+        public static void DrawPoints(SpriteBatch spriteBatch, CurvePoint[] curvePoints, Color onColor, Color offColor, Depth depth, Transform transform, BoundingRect boundingRect, float thickness, int sizzleFactor, int lastDrawIndex)
         {
             // I'm doing this clever trick and I wanna write it down:
             // Intuitively you'd go for each point draw a line from prevPoint -> currPoint
             // Instead I do foreach point draw a line from prevPoint -> nextPoint
             // This is the same number of line segments as the former but draws a "fuller" line
             var prevPoint = curvePoints[1];
-            for (int i = 2; i < curvePoints.Length - 2; i += 3)
+            for (int i = 2; i < Math.Min(curvePoints.Length - 2, lastDrawIndex); i += 3)
             {
                 var adjustedPoint = Adjusted(curvePoints[i + 1].WorldPosition, transform, boundingRect);
                 var adjustedPrevPoint = Adjusted(prevPoint.WorldPosition, transform, boundingRect);
