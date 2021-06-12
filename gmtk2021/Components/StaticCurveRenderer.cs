@@ -3,6 +3,7 @@ using Machina.Components;
 using Machina.Engine;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using MonoGame.Extended;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -49,7 +50,13 @@ namespace gmtk2021.Components
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            PrimaryCurve.DrawPoints(spriteBatch, this.points, OnColor, OffColor, transform.Depth - 1, transform, this.boundingRect, 3f, 1, this.points.Length);
+            PrimaryCurve.DrawPoints(spriteBatch, this.points, OnColor, OffColor, transform.Depth - 5, transform, this.boundingRect, 3f, 1, this.points.Length);
+
+            var center = this.boundingRect.TopLeft + this.boundingRect.Size.ToVector2() / 2;
+            var topLeft = this.boundingRect.TopLeft;
+            var lineColor = new Color(Color.Black, 0.5f);
+            spriteBatch.DrawLine(new Vector2(center.X, topLeft.Y), new Vector2(center.X, topLeft.Y + this.boundingRect.Height), lineColor, 3f, transform.Depth - 1);
+            spriteBatch.DrawLine(new Vector2(topLeft.X, center.Y), new Vector2(topLeft.X + this.boundingRect.Width, center.Y), lineColor, 3f, transform.Depth - 1);
         }
     }
 }
