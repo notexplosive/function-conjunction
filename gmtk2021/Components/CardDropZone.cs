@@ -11,9 +11,24 @@ using System.Text;
 
 namespace gmtk2021.Components
 {
-    public class CardDropZone : BaseComponent
+    public interface IZone
     {
+        public Rectangle Rect
+        {
+            get;
+        }
+        public int Index
+        {
+            get;
+        }
+        public float PercentInZone(Rectangle rect);
+    }
+
+    public class CardDropZone : BaseComponent, IZone
+    {
+        public int Index => 0;
         private readonly List<Slot> slots = new List<Slot>();
+        private readonly List<InBetween> inBetweens = new List<InBetween>();
         private readonly List<Card> ownedCards = new List<Card>();
         private readonly BoundingRect boundingRect;
         private readonly TweenChain tween = new TweenChain();
@@ -44,27 +59,80 @@ namespace gmtk2021.Components
             }
         }
 
-        public void AddCardSlot(Actor actor)
+        public Rectangle SlotRectAt(int subzoneIndex)
         {
-            this.slots.Add(new Slot(actor));
+            return this.slots[subzoneIndex].Rect;
         }
 
-        public void Consume(Card card, bool skipAnimation = false)
+        public void AddCardSlot(Actor actor)
+        {
+            this.slots.Add(new Slot(actor, this.slots.Count));
+        }
+
+        public void Consume(Card card, int index = -1, bool skipAnimation = false)
         {
             this.ownedCards.Remove(card);
-            this.ownedCards.Add(card);
-            ComputeLayout(skipAnimation);
+
+            if (index == -1)
+            {
+                this.ownedCards.Add(card);
+            }
+            else
+            {
+                if (index < this.ownedCards.Count)
+                    this.ownedCards.Insert(index, card);
+                else
+                    this.ownedCards.Add(card);
+            }
+            TweenCardsToLayout(skipAnimation);
             CardGain?.Invoke();
+        }
+
+        public float PercentInZone(Rectangle card)
+        {
+            // DUPLICATE CODE ALERT
+            var intersect = GetIntersection(card, Rect);
+
+            float intersectArea = intersect.Width * intersect.Height;
+            float cardArea = card.Width * card.Height;
+            return intersectArea / cardArea;
+        }
+
+        public static Rectangle GetIntersection(Rectangle a, Rectangle b)
+        {
+            var left = Math.Max(a.X, b.X);
+            var right = Math.Min(a.X + a.Width, b.X + b.Width);
+            var top = Math.Max(a.Y, b.Y);
+            var bottom = Math.Min(a.Y + a.Height, b.Y + b.Height);
+
+            if (left < right && top < bottom)
+            {
+                return new Rectangle(left, top, right - left, bottom - top);
+            }
+            else
+            {
+                return new Rectangle();
+            }
+        }
+
+        public List<Zone> SubZones()
+        {
+            var list = new List<Zone>(this.inBetweens);
+            list.AddRange(this.slots);
+            return list;
         }
 
         public void Detach(Card card)
         {
-            this.ownedCards.Remove(card);
-            ComputeLayout();
-            CardLost?.Invoke();
+            bool hadCard = this.ownedCards.Remove(card);
+            if (hadCard)
+            {
+                TweenCardsToLayout();
+                CardLost?.Invoke();
+            }
         }
 
-        public void ComputeLayout(bool skipAnimation = false)
+        public void TweenCardsToLayout(bool skipAnimation = false)
         {
             this.tween.SkipToEnd();
             var multi = this.tween.AppendMulticastTween();
@@ -93,18 +161,73 @@ namespace gmtk2021.Components
             return this.ownedCards.Contains(card);
         }
 
-        private class Slot
+        public abstract class Zone : IZone
         {
-            private readonly Transform transform;
             private readonly BoundingRect boundingRect;
-
             public Rectangle Rect => this.boundingRect.Rect;
-            public Vector2 Position => transform.Position;
+            public int Index => this.index;
+            private readonly int index;
 
-            public Slot(Actor actor)
+            protected Zone(Actor actor, int index)
             {
                 this.boundingRect = actor.GetComponent<BoundingRect>();
+                this.index = index;
+            }
+
+            public float PercentInZone(Rectangle card)
+            {
+                // DUPLICATE CODE ALERT
+                var intersect = GetIntersection(card, Rect);
+
+                float intersectArea = intersect.Width * intersect.Height;
+                float cardArea = card.Width * card.Height;
+                return intersectArea / cardArea;
+            }
+
+            public static T FindBestZone<T>(Rectangle activeRect, List<T> zones) where T : class, IZone
+            {
+                T best = null;
+                foreach (var currentSubzone in zones)
+                {
+                    if (currentSubzone.PercentInZone(activeRect) > 0)
+                    {
+                        if (best == null)
+                        {
+                            best = currentSubzone;
+                        }
+                        else
+                        {
+                            if (currentSubzone.PercentInZone(activeRect) > best.PercentInZone(activeRect))
+                            {
+                                best = currentSubzone;
+                            }
+                        }
+                    }
+                }
+                return best;
+            }
+        }
+
+        private class Slot : Zone
+        {
+            private readonly Transform transform;
+            public Vector2 Position => transform.Position;
+
+            public Slot(Actor actor, int index) : base(actor, index)
+            {
                 this.transform = actor.transform;
+            }
+        }
+
+        public void AddInBetween(Actor cardInsertion, int i)
+        {
+            this.inBetweens.Add(new InBetween(cardInsertion, i));
+        }
+
+        private class InBetween : Zone
+        {
+            public InBetween(Actor actor, int index) : base(actor, index)
+            {
             }
         }
     }

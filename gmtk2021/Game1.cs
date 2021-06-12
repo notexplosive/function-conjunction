@@ -138,10 +138,16 @@ namespace gmtk2021
                             dropZones.Add(dropZone);
 
                             var group = new LayoutGroup(dropZoneActor, Orientation.Horizontal)
-                                .SetMargin(10)
-                                .SetPaddingBetweenElements(10);
+                                .SetMargin(10);
+
                             for (int i = 0; i < currentLevel.NumberOfSequenceSlots; i++)
                             {
+
+                                group.AddElement("CardInBetween", new Point(10, CardSize.Y), cardInsertion =>
+                                {
+                                    dropZone.AddInBetween(cardInsertion, i);
+                                });
+
                                 group.AddElement("CardSlot", CardSize, cardSlotActor =>
                                 {
                                     dropZone.AddCardSlot(cardSlotActor);
@@ -158,11 +164,11 @@ namespace gmtk2021
 
             foreach (var function in currentLevel.CardFunctions)
             {
-                startingDropZone.Consume(CreateCard(gameScene, dropZones, function), true);
+                CreateCard(gameScene, dropZones, function, startingDropZone);
             }
         }
 
-        public static Card CreateCard(Scene scene, List<CardDropZone> dropZones, Function function)
+        public static Card CreateCard(Scene scene, List<CardDropZone> dropZones, Function function, CardDropZone startingDropZone)
         {
             var actor = scene.AddActor("Card");
             new BoundingRect(actor, CardSize);
@@ -189,7 +195,7 @@ namespace gmtk2021
                 })
                 .PixelSpacer(8);
 
-            return new Card(actor, dropZones, function);
+            return new Card(actor, dropZones, function, startingDropZone);
         }
     }
 }
