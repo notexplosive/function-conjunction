@@ -26,9 +26,9 @@ namespace gmtk2021.Components
             #if DEBUG
             new Level("Experiment")
             {
-                Solution = new Function[] { Functions.MinConstant(0), Functions.Squared, Functions.MaxConstant(0), Functions.Sin, Functions.MultiplyConstant(-1) },
-                CardFunctions = new Function[] { Functions.Sin, Functions.AddConstant(-1), Functions.MinConstant(0), Functions.Squared, Functions.Squared },
-                LockedInCards = new Function[] { Functions.MinConstant(0), Functions.MaxConstant(0) },
+                Solution = new Function[] { Functions.Sin, Functions.ModConstant(1), Functions.Sign },
+                CardFunctions = new Function[] { Functions.Squared },
+                LockedInCards = new Function[] { Functions.Sign },
                 AdditionalSequenceSlots = 5,
             },
             #endif
@@ -66,23 +66,28 @@ namespace gmtk2021.Components
                 LockedInCards = new Function[] { Functions.Sin }
             },
 
-            new Level("Absolute Value")
+            new Level("Phase Stretching")
             {
-                Solution = new Function[] { Functions.ModConstant(1), Functions.Abs },
-                CardFunctions = new Function[] { Functions.ModConstant(1), Functions.Abs },
+                Solution = new Function[] { Functions.MultiplyFraction(1, 2), Functions.ModConstant(1), Functions.MultiplyConstant(2) },
+                CardFunctions = new Function[] { Functions.ModConstant(1), Functions.MultiplyConstant(2), Functions.MultiplyFraction(1,2) },
                 Domain = 3,
+            },
+
+            new Level("Mesa")
+            {
+                Solution = new Function[] { Functions.Cubed, Functions.Abs, Functions.AddConstant(-1), Functions.MultiplyConstant(-1), Functions.AddConstant(1), Functions.MinConstant(0) },
+                CardFunctions = new Function[] { Functions.AddConstant(-2), Functions.AddConstant(2) }
             },
 
             new Level("Fizzled Out")
             {
                 Solution = new Function[] { Functions.MinConstant(0), Functions.Squared, Functions.MaxConstant(0), Functions.Sin, Functions.MultiplyConstant(-1) },
-                LockedInCards = new Function[] { Functions.MinConstant(0), Functions.MaxConstant(0) },
             },
 
-            new Level("Phase Stretching")
+            new Level("Absolute Value")
             {
-                Solution = new Function[] { Functions.MultiplyFraction(1, 2), Functions.ModConstant(1), Functions.MultiplyConstant(2) },
-                CardFunctions = new Function[] { Functions.ModConstant(1), Functions.MultiplyConstant(2), Functions.MultiplyFraction(1,2) },
+                Solution = new Function[] { Functions.ModConstant(1), Functions.Abs },
+                CardFunctions = new Function[] { Functions.ModConstant(1), Functions.Abs },
                 Domain = 3,
             },
 
@@ -103,9 +108,16 @@ namespace gmtk2021.Components
                 ForceShuffle = true
             },
 
+            new Level("Square Teeth")
+            {
+                Solution = new Function[] { Functions.Sin, Functions.ModConstant(1), Functions.Sign },
+                CardFunctions = new Function[] { Functions.Squared },
+                LockedInCards = new Function[] { Functions.Sign },
+            },
+
             new Level("Bitcrunch")
             {
-                Solution = new Function[] { Functions.Ceiling, Functions.Sin },
+                Solution = new Function[] { Functions.Floor, Functions.Sin },
                 CardFunctions = new Function[] { Functions.Floor, Functions.Ceiling, Functions.Cos, Functions.ModConstant(2) },
                 ForceShuffle = true
             },
@@ -115,6 +127,13 @@ namespace gmtk2021.Components
                 Solution = new Function[] { Functions.ModConstant(1), Functions.Abs, Functions.MultiplyConstant(2), Functions.AddConstant(-0.5f) },
                 ForceShuffle = true,
                 CardFunctions = new Function[] { Functions.Floor },
+            },
+
+            new Level("W")
+            {
+                Solution = new Function[] { Functions.Squared, Functions.AddConstant(-2), Functions.Abs, Functions.Squared, Functions.AddConstant(-1) },
+                // These NEED to be here
+                CardFunctions = new Function[] { Functions.Squared, Functions.Squared, /*Red harrings:*/ Functions.MultiplyConstant(-1) },
             },
 
             new Level("Neon")

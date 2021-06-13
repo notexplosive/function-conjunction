@@ -33,6 +33,15 @@ namespace gmtk2021.Data
             return MathF.Sign(i);
         }, new DomainRange(MathF.PI, 2));
 
+        public static Function OneOverX = new Function("1 / X", (float i) =>
+        {
+            if (i == 0)
+            {
+                return 1000;
+            }
+            return 1 / i;
+        }, new DomainRange(MathF.PI, 2));
+
         public static Function AddConstant(float constant)
         {
             return new Function((constant > 0 ? "Add " : "Subtract ") + DomainRenderer.FloatAsString(MathF.Abs(constant)), (i) => i + constant, new DomainRange(MathF.PI, 2));
@@ -40,12 +49,12 @@ namespace gmtk2021.Data
 
         public static Function MultiplyConstant(int constant)
         {
-            return new Function(constant > 0 ? "Multiply " + constant : "Multiply (" + constant + ")", (i) => i * constant, new DomainRange(MathF.PI, 2));
+            return new Function(constant > 0 ? "Multiply " + constant : "Multiply (" + constant + ")", (i) => i * constant, new DomainRange(2, 2));
         }
 
         public static Function MultiplyFraction(int numerator, int denominator)
         {
-            return new Function("Multiply " + numerator + " / " + denominator, (i) => i * (float) numerator / (float) denominator, new DomainRange(MathF.PI, 2));
+            return new Function("Multiply " + numerator + " / " + denominator, (i) => i * (float) numerator / (float) denominator, new DomainRange(2, 2));
         }
 
         public static Function Floor = new Function("Floor", MathF.Floor, new DomainRange(MathF.PI, 2));
