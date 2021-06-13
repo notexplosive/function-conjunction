@@ -210,9 +210,10 @@ namespace gmtk2021
                             for (int i = 0; i < currentLevel.NumberOfSequenceSlots + currentLevel.AdditionalSequenceSlots; i++)
                             {
 
-                                group.AddElement("CardInBetween", new Point(20, CardSize.Y), cardInsertion =>
+                                group.AddElement("CardInBetween", new Point(40, CardSize.Y), cardInsertion =>
                                 {
                                     dropZone.AddInBetween(cardInsertion, i);
+                                    new InBetweenRenderer(cardInsertion);
                                 });
 
                                 group.AddElement("CardSlot", CardSize, cardSlotActor =>

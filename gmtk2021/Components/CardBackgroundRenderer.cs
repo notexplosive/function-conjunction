@@ -43,8 +43,8 @@ namespace gmtk2021.Components
             {
                 if (this.card.IsLocked || this.card.IsPartialLocked)
                 {
-                    this.curve.OnColor = Color.Black;
-                    this.curve.OffColor = Color.Gray;
+                    this.curve.OnColor = Color.DarkOrange;
+                    this.curve.OffColor = Color.OrangeRed;
                 }
                 else
                 {
