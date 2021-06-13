@@ -63,7 +63,7 @@ namespace gmtk2021
                                     new BoundedTextRenderer(subtitleActor, "Programmed & Designed by NotExplosive\nSound Design by Ryan Yoshikami", subtitleFont, Color.White, HorizontalAlignment.Center, VerticalAlignment.Top, Overflow.Ignore);
                                 })
                                 .PixelSpacer(32)
-                                .AddHorizontallyStretchedElement("StartGameButton", 64, startGameButton =>
+                                .AddHorizontallyStretchedElement("StartGameButton", 100, startGameButton =>
                                 {
                                     new Hoverable(startGameButton);
                                     new Clickable(startGameButton).onClick += (mouseButton) => { if (mouseButton == MouseButton.Left) fade.Activate(); };
@@ -72,7 +72,7 @@ namespace gmtk2021
                                         .EnableDropShadow(Color.DarkGray);
                                 })
                                 .PixelSpacer(16)
-                                .AddHorizontallyStretchedElement("FullscreenButton", 64, fullscreenButton =>
+                                .AddHorizontallyStretchedElement("FullscreenButton", 100, fullscreenButton =>
                                  {
                                      new Hoverable(fullscreenButton);
                                      new Clickable(fullscreenButton).onClick += (mouseButton) => { Fullscreen = !Fullscreen; };
@@ -94,13 +94,6 @@ namespace gmtk2021
 
             var viewSize = bgScene.camera.UnscaledViewportSize;
             var bgRoot = bgScene.AddActor("BGRoot", new Vector2(0, -viewSize.Y));
-            new BoundingRect(bgRoot, viewSize.X, viewSize.Y * 2);
-            new LayoutGroup(bgRoot, Orientation.Vertical)
-                .AddBothStretchedElement("BGTop", bgTopActor =>
-                {
-                    new BoundedTextRenderer(bgTopActor, "Level Complete!", font, Color.White, HorizontalAlignment.Center, VerticalAlignment.Center, Overflow.Ignore);
-                })
-                .VerticallyStretchedSpacer();
             var levelTransition = new LevelTransition(bgRoot);
 
             if (DebugLevel >= DebugLevel.Passive)
@@ -108,10 +101,10 @@ namespace gmtk2021
 
             var gameScene = sceneLayers.AddNewScene();
 
-            BuildGameScene(gameScene, levelTransition);
+            BuildGameScene(gameScene, levelTransition, true);
         }
 
-        public static void BuildGameScene(Scene gameScene, LevelTransition levelTransition)
+        public static void BuildGameScene(Scene gameScene, LevelTransition levelTransition, bool useTutorial = false)
         {
             foreach (var actor in gameScene.GetAllActors())
             {
@@ -228,6 +221,10 @@ namespace gmtk2021
                 .SetMargin(8)
                 .transform.FlushBuffers(); // HACKY AF
 
+            if (useTutorial)
+            {
+                curve.IntroFinished += () => { new Tutorial(gameScene.AddActor("TutorialActor"), startingDropZone, destinationZone); };
+            }
 
             foreach (var function in currentLevel.CardFunctions)
             {

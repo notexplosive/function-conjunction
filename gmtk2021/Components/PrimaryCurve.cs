@@ -27,6 +27,7 @@ namespace gmtk2021.Components
         private CurvePoint[] objectivePoints;
         private int objectiveLastDrawIndex;
         private int primaryLastDrawIndex;
+        public event Action IntroFinished;
 
         public PrimaryCurve(Actor actor, DomainRange curveData, Function[] objective) : base(actor)
         {
@@ -72,6 +73,7 @@ namespace gmtk2021.Components
                 .AppendCallback(() => { this.primaryTravelSound.Play(); })
                 .AppendIntTween(this.points.Length - 1, 1, EaseFuncs.Linear, new TweenAccessors<int>(() => this.primaryLastDrawIndex, val => this.primaryLastDrawIndex = val))
                 .AppendCallback(() => { this.primaryTravelSound.Stop(); })
+                .AppendCallback(() => { IntroFinished?.Invoke(); })
                 ;
         }
 

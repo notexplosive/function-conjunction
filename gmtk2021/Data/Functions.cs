@@ -32,7 +32,7 @@ namespace gmtk2021.Data
             return MathF.Sign(i);
         }, new DomainRange(MathF.PI, 2));
 
-        public static Function AddConstant(int constant)
+        public static Function AddConstant(float constant)
         {
             return new Function((constant > 0 ? "+ " : "- ") + constant.ToString(), (i) => i + constant, new DomainRange(MathF.PI, 2));
         }

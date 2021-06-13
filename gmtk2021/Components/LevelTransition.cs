@@ -29,6 +29,14 @@ namespace gmtk2021.Components
                 Range = 1,
             },
 
+            new Level("A Little to the Left")
+            {
+                Solution = new Function[] { Functions.AddConstant(MathF.PI / 2), Functions.Sin },
+                Domain = MathF.PI * 2,
+                Range = 2,
+                LockedInCards = new Function[] { Functions.Sin }
+            },
+
             new Level("Before and After")
             {
                 Solution = new Function[] { Functions.AddConstant(2), Functions.Sin, Functions.AddConstant(1) },
@@ -125,6 +133,8 @@ namespace gmtk2021.Components
             var camera = this.actor.scene.camera;
             var camPos = new TweenAccessors<Point>(() => camera.ScaledPosition, val => camera.ScaledPosition = val);
 
+            yield return new WaitSeconds(1);
+
             var isDone = this.primaryCurve.StartParticleAnimation();
             yield return new WaitUntil(isDone);
 
@@ -139,7 +149,7 @@ namespace gmtk2021.Components
             {
                 Game1.BuildGameScene(this.gameScene, this);
 
-                this.tween.AppendVectorTween(
+                this.tween.AppendPointTween(
                     new Point(0, 0),
                     1f, EaseFuncs.EaseInOutBack,
                     camPos);
