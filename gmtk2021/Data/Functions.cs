@@ -35,7 +35,7 @@ namespace gmtk2021.Data
 
         public static Function AddConstant(float constant)
         {
-            return new Function((constant > 0 ? "Add " : "") + DomainRenderer.FloatAsString(constant), (i) => i + constant, new DomainRange(MathF.PI, 2));
+            return new Function((constant > 0 ? "Add " : "Subtract ") + DomainRenderer.FloatAsString(MathF.Abs(constant)), (i) => i + constant, new DomainRange(MathF.PI, 2));
         }
 
         public static Function MultiplyConstant(int constant)

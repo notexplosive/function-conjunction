@@ -51,7 +51,6 @@ namespace gmtk2021.Components
             new Level("A Little to the Left")
             {
                 Solution = new Function[] { Functions.AddConstant(MathF.PI / 2), Functions.Sin },
-                CardFunctions = new Function[] { Functions.MultiplyFraction(1, 2), Functions.AddConstant(-MathF.PI / 2), Functions.AddConstant(MathF.PI / 2) },
                 Domain = MathF.PI * 2,
                 Range = 2,
                 LockedInCards = new Function[] { Functions.Sin }
