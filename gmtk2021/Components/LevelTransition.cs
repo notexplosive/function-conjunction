@@ -25,9 +25,17 @@ namespace gmtk2021.Components
             new Level("Round Peg")
             {
                 Solution = new Function[] { Functions.Sin },
-                CardFunctions = new Function[] { Functions.Sin },
                 Domain = MathF.PI,
                 Range = 1,
+            },
+
+            new Level("Before and After")
+            {
+                Solution = new Function[] { Functions.AddConstant(2), Functions.Sin, Functions.AddConstant(1) },
+                CardFunctions = new Function[] { Functions.AddConstant(1), Functions.AddConstant(2) },
+                Domain = MathF.PI * 2,
+                Range = 2,
+                LockedInCards = new Function[] { Functions.Sin }
             },
 
             new Level("Absolute Value")
@@ -64,6 +72,10 @@ namespace gmtk2021.Components
 
         public LevelTransition(Actor actor) : base(actor)
         {
+            foreach (var level in levels)
+            {
+                level.Validate();
+            }
         }
 
         public override void Update(float dt)

@@ -97,5 +97,19 @@ namespace gmtk2021.Data
             this.func = func;
             this.domain = domain;
         }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is Function func)
+            {
+                return func.name == name;
+            }
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return name.GetHashCode();
+        }
     }
 }

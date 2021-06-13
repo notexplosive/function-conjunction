@@ -1,6 +1,7 @@
 ﻿using gmtk2021.Components;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace gmtk2021.Data
@@ -20,7 +21,13 @@ namespace gmtk2021.Data
         public Function[] CardFunctions
         {
             get; set;
-        }
+        } = Array.Empty<Function>();
+
+        public Function[] LockedInCards
+        {
+            get; set;
+        } = Array.Empty<Function>();
+
         public float Domain
         {
             get;
@@ -37,6 +44,24 @@ namespace gmtk2021.Data
         {
             get;
             set;
+        }
+
+        public void Validate()
+        {
+            Debug.Assert(Solution != null);
+
+            var lockedIn = new List<Function>(LockedInCards);
+            var deck = new List<Function>(CardFunctions);
+
+            foreach (var function in Solution)
+            {
+                if (!lockedIn.Contains(function) && !deck.Contains(function))
+                {
+                    deck.Add(function);
+                }
+            }
+
+            CardFunctions = deck.ToArray();
         }
     }
 }

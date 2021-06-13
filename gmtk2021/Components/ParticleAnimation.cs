@@ -52,7 +52,7 @@ namespace gmtk2021.Components
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            var pos = this.points[this.x].WorldPosition;
+            var pos = PrimaryCurve.Adjusted(this.points[this.x].WorldPosition, curveBoundingRect.transform, curveBoundingRect);
             var random = MachinaGame.Random.DirtyRandom;
             spriteBatch.DrawCircle(new CircleF(pos, 10 * this.size + random.Next(0, 10)), 10, Color.OrangeRed, 3f, transform.Depth - 20);
             spriteBatch.DrawCircle(new CircleF(pos, 24 * this.size + random.Next(0, 10)), 10, Color.Orange, 3f, transform.Depth - 20);

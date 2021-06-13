@@ -233,6 +233,12 @@ namespace gmtk2021
             {
                 CreateCard(gameScene, dropZones, function, startingDropZone, destinationZone);
             }
+
+            foreach (var function in currentLevel.LockedInCards)
+            {
+                var card = CreateCard(gameScene, dropZones, function, destinationZone, destinationZone);
+                card.Lock();
+            }
         }
 
         public static Card CreateCard(Scene scene, List<CardDropZone> dropZones, Function function, CardDropZone startingDropZone, CardDropZone destinationZone)
