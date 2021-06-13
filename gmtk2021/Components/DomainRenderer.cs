@@ -108,7 +108,7 @@ namespace gmtk2021.Components
                 return ((val / MathF.PI)).ToString() + " PI";
             }
 
-            return val.ToString(".##");
+            return val.ToString("0.##");
         }
 
         private float Opposite(Vector2 position)

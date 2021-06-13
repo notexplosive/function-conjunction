@@ -14,7 +14,7 @@ namespace gmtk2021.Data
 
         public static Function Sin = new Function("Sine", MathF.Sin, new DomainRange(MathF.PI, 2));
 
-        public static Function Squared = new Function("Square", (float i) =>
+        public static Function Squared = new Function("Squared", (float i) =>
         {
             return i * i;
         }, new DomainRange(MathF.PI, 2));

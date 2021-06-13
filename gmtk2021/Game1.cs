@@ -12,7 +12,7 @@ namespace gmtk2021
 {
     public class Game1 : MachinaGame
     {
-        public static Point CardSize = new Point(200, 100);
+        public static Point CardSize = new Point(150, 150);
 
         public Game1(string[] args) : base("Nested Functions", args, new Point(1920, 1080), new Point(1600, 900), ResizeBehavior.MaintainDesiredResolution)
         {

@@ -26,9 +26,10 @@ namespace gmtk2021.Components
             #if DEBUG
             new Level("Experiment")
             {
-                Solution = new Function[] { Functions.Squared, Functions.MinConstant(1), Functions.ModConstant(1) },
-                CardFunctions = new Function[] { Functions.Floor, Functions.Ceiling, Functions.Squared, Functions.MinConstant(1), Functions.ModConstant(1) },
-                LockedInCards = new Function[] {  },
+                Solution = new Function[] { Functions.MinConstant(0), Functions.Squared, Functions.MaxConstant(0), Functions.Sin, Functions.MultiplyConstant(-1) },
+                CardFunctions = new Function[] { Functions.Sin, Functions.AddConstant(-1), Functions.MinConstant(0), Functions.Squared, Functions.Squared },
+                LockedInCards = new Function[] { Functions.MinConstant(0), Functions.MaxConstant(0) },
+                AdditionalSequenceSlots = 5,
             },
             #endif
 
@@ -72,9 +73,10 @@ namespace gmtk2021.Components
                 Domain = 3,
             },
 
-            new Level("Reverse Arches")
+            new Level("Fizzled Out")
             {
-                Solution = new Function[] { Functions.Sin, Functions.Abs, Functions.MultiplyConstant(-1)},
+                Solution = new Function[] { Functions.MinConstant(0), Functions.Squared, Functions.MaxConstant(0), Functions.Sin, Functions.MultiplyConstant(-1) },
+                LockedInCards = new Function[] { Functions.MinConstant(0), Functions.MaxConstant(0) },
             },
 
             new Level("Phase Stretching")
@@ -84,11 +86,14 @@ namespace gmtk2021.Components
                 Domain = 3,
             },
 
-            new Level("The Easy Way")
+            new Level("Reverse Arches")
             {
-                // The idea of this level: There would be more solutions if you had more slots
-                Solution = new Function[] { Functions.MultiplyFraction(1,2), Functions.ModConstant(2) },
-                CardFunctions = new Function[] { Functions.ModConstant(1), Functions.MultiplyConstant(2), Functions.ModConstant(2), Functions.MultiplyFraction(1,2) },
+                Solution = new Function[] { Functions.Sin, Functions.Abs, Functions.MultiplyConstant(-1)},
+            },
+
+            new Level("Spikes")
+            {
+                Solution = new Function[] { Functions.Sin, Functions.ModConstant(1), Functions.Squared, Functions.MultiplyConstant(4), Functions.AddConstant(-1) },
             },
 
             new Level("Flatline")
@@ -98,7 +103,7 @@ namespace gmtk2021.Components
                 ForceShuffle = true
             },
 
-            new Level("Blocky Sine")
+            new Level("Bitcrunch")
             {
                 Solution = new Function[] { Functions.Ceiling, Functions.Sin },
                 CardFunctions = new Function[] { Functions.Floor, Functions.Ceiling, Functions.Cos, Functions.ModConstant(2) },

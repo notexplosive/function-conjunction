@@ -90,9 +90,14 @@ namespace gmtk2021.Components
                 var adjustedPoint = PrimaryCurve.Adjusted(points[i + 1].WorldPosition, transform, boundingRect);
                 var adjustedPrevPoint = PrimaryCurve.Adjusted(prevPoint.WorldPosition, transform, boundingRect);
                 bool outOfBounds = (points[i + 1].WorldPosition != adjustedPoint);
+                var color = outOfBounds ? offColor : onColor;
 
-                spriteBatch.DrawLine(adjustedPrevPoint, adjustedPoint, outOfBounds ? offColor : onColor, thickness, depth);
+                spriteBatch.DrawLine(adjustedPrevPoint, adjustedPoint, color, thickness, depth);
                 prevPoint = points[i];
+                if (i == boundingRect.Width / 2 - 1)
+                {
+                    spriteBatch.DrawCircle(new CircleF(adjustedPoint, thickness + 2), 5, color, thickness + 2, depth);
+                }
             }
         }
 
@@ -108,7 +113,10 @@ namespace gmtk2021.Components
                 var baseY = PrimaryCurve.ApplyFunction(Functions.NoOp, point.x, this.domain, this.boundingRect);
 
                 var yAcc = new TweenAccessors<int>(() => point.y, val => point.y = val);
-                channel.AppendIntTween(baseY, 0.1f, EaseFuncs.CubicEaseIn, yAcc);
+                channel.AppendCallback(() =>
+                {
+                    point.y = baseY;
+                });
                 channel.AppendWaitTween(0.15f);
                 channel.AppendIntTween(destY, 0.25f, EaseFuncs.CubicEaseOut, yAcc);
             }
