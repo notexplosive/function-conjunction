@@ -242,7 +242,7 @@ namespace gmtk2021
         {
             var actor = scene.AddActor("Card");
             new BoundingRect(actor, CardSize);
-            new Hoverable(actor);
+            var hoverable = new Hoverable(actor);
             new Clickable(actor);
             new DoubleClickable(actor);
             new Draggable(actor);
@@ -261,6 +261,7 @@ namespace gmtk2021
                         .AddBothStretchedElement("CardText", cardTextActor =>
                         {
                             curveRenderer = new StaticCurveRenderer(cardTextActor, function);
+                            hoverable.OnHoverStart += curveRenderer.PlayTween;
                         })
                         .PixelSpacer(8);
                 })
