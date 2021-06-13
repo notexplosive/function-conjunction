@@ -237,7 +237,7 @@ namespace gmtk2021
                 {
                     new DropZoneBackgroundRenderer(rightEdgeActor);
                 })
-                .SetMargin(8)
+                .SetMargin(2)
                 .transform.FlushBuffers(); // HACKY AF
 
             if (useTutorial)
