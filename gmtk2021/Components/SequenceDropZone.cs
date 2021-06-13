@@ -2,6 +2,7 @@
 using Machina.Components;
 using Machina.Engine;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Audio;
 using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
@@ -15,9 +16,12 @@ namespace gmtk2021.Components
         private readonly CardDropZone dropZone;
         private int deltaCardCount;
         private bool wasCardChange;
+        private SoundEffectInstance lockSound;
 
         public SequenceDropZone(Actor actor) : base(actor)
         {
+            this.lockSound = MachinaGame.Assets.CreateSoundEffectInstance("drop");
+            this.lockSound.Pitch = -1;
             this.dropZone = RequireComponent<CardDropZone>();
             this.dropZone.CardGain += OnCardGain;
             this.dropZone.CardLost += OnCardLost;
@@ -55,6 +59,8 @@ namespace gmtk2021.Components
 
         public void LockAll()
         {
+            this.lockSound.Pitch = 1f;
+            this.lockSound.Play();
             foreach (var card in this.dropZone.OwnedCards)
             {
                 if (!card.IsLocked)

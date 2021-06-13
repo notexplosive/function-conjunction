@@ -64,6 +64,11 @@ namespace gmtk2021.Components
                 Domain = 3,
             },
 
+            new Level("Reverse Arches")
+            {
+                Solution = new Function[] { Functions.Sin, Functions.Abs, Functions.MultiplyConstant(-1)},
+            },
+
             new Level("Phase Stretching")
             {
                 Solution = new Function[] { Functions.MultiplyFraction(1, 2), Functions.ModConstant(1), Functions.MultiplyConstant(2) },
@@ -85,12 +90,32 @@ namespace gmtk2021.Components
                 ForceShuffle = true
             },
 
-            new Level("Flatline")
+            new Level("Blocky Sine")
             {
                 Solution = new Function[] { Functions.Ceiling, Functions.Sin },
-                CardFunctions = new Function[] { Functions.Floor, Functions.Ceiling, Functions.Cos },
+                CardFunctions = new Function[] { Functions.Floor, Functions.Ceiling, Functions.Cos, Functions.ModConstant(2) },
                 ForceShuffle = true
             },
+
+            new Level("Triangle Wave")
+            {
+                Solution = new Function[] { Functions.ModConstant(1), Functions.Abs, Functions.MultiplyConstant(2), Functions.AddConstant(-0.5f) },
+                ForceShuffle = true,
+                CardFunctions = new Function[] { Functions.Floor },
+            },
+
+            new Level("Neon")
+            {
+                Solution = new Function[] { Functions.Sin, Functions.ModConstant(1), Functions.MinConstant(0) },
+                CardFunctions = new Function[] { Functions.Floor, Functions.Ceiling, Functions.MinConstant(1) }
+            },
+
+            new Level("Lockout")
+            {
+                Solution = new Function[] { Functions.Sin, Functions.Abs, Functions.AddConstant(-1), Functions.MinConstant(0), Functions.AddConstant(2) },
+                LockedInCards = new Function[] { Functions.MinConstant(0) },
+                CardFunctions = new Function[] { Functions.MultiplyConstant(-1) },
+            }
         };
 
         public Level CurrentLevel => this.levels[currentLevelIndex];
@@ -123,8 +148,7 @@ namespace gmtk2021.Components
             {
                 if (key == Keys.W)
                 {
-                    this.FinishLevel();
-                    MachinaGame.Print("DBG: Skip Level");
+                    SkipLevel();
                 }
             }
         }
@@ -178,6 +202,15 @@ namespace gmtk2021.Components
             }
 
             yield return null;
+        }
+
+        public void SkipLevel()
+        {
+            IncrementLevel();
+            if (HasNextLevel())
+            {
+                Game1.BuildGameScene(this.gameScene, this);
+            }
         }
 
         public void FinishLevel()

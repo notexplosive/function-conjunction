@@ -1,4 +1,5 @@
-﻿using System;
+﻿using gmtk2021.Components;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -34,7 +35,7 @@ namespace gmtk2021.Data
 
         public static Function AddConstant(float constant)
         {
-            return new Function((constant > 0 ? "+ " : "- ") + constant.ToString(), (i) => i + constant, new DomainRange(MathF.PI, 2));
+            return new Function((constant > 0 ? "+ " : "") + DomainRenderer.FloatAsString(constant), (i) => i + constant, new DomainRange(MathF.PI, 2));
         }
 
         public static Function MultiplyConstant(int constant)

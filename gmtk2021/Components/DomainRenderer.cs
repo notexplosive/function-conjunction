@@ -91,21 +91,21 @@ namespace gmtk2021.Components
 
         public void UpdateTextToMatchDomain()
         {
-            this.minimumText.Text = AsString(Range.min);
-            this.middleText.Text = AsString(0);
-            this.maximumText.Text = AsString(Range.max);
+            this.minimumText.Text = FloatAsString(Range.min);
+            this.middleText.Text = FloatAsString(0);
+            this.maximumText.Text = FloatAsString(Range.max);
         }
 
-        private string AsString(float val)
+        public static string FloatAsString(float val)
         {
             if (((int) val) == val)
             {
                 return val.ToString();
             }
 
-            if (Math.Abs(Math.Abs(val) % MathF.PI) < 0.1f)
+            if (Math.Abs(Math.Abs(val) % (MathF.PI / 2)) < 0.1f)
             {
-                return ((int) (val / MathF.PI)).ToString() + " PI";
+                return ((val / MathF.PI)).ToString() + " PI";
             }
 
             return val.ToString(".##");

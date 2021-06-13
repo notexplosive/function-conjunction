@@ -46,6 +46,14 @@ namespace gmtk2021.Data
         } = 2;
         public int NumberOfSequenceSlots => Solution.Length;
 
+
+        public int AdditionalSequenceSlots
+        {
+            get;
+            [Obsolete("Probably don't want to use this in production")]
+            set;
+        }
+
         public string Title
         {
             get;
@@ -78,6 +86,7 @@ namespace gmtk2021.Data
             {
                 if (!lockedIn.Contains(function) && !deck.Contains(function))
                 {
+                    shouldShuffle = true;
                     deck.Add(function);
                 }
             }

@@ -51,11 +51,11 @@ namespace gmtk2021.Components
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.DrawRectangle(this.boundingRect.Rect, Color.White, 1f, transform.Depth);
+            spriteBatch.DrawRectangle(this.boundingRect.Rect, Color.White, 2f, transform.Depth);
 
             foreach (var slot in this.slots)
             {
-                spriteBatch.FillRectangle(slot.Rect, Color.Gray, transform.Depth + 10);
+                spriteBatch.FillRectangle(slot.Rect, slot.Index < this.ownedCards.Count ? Color.Teal : Color.Gray, transform.Depth + 10);
             }
         }
 

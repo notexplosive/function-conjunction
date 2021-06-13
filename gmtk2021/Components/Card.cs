@@ -32,6 +32,11 @@ namespace gmtk2021.Components
             get;
             private set;
         }
+        public bool IsPartialLocked
+        {
+            get;
+            private set;
+        }
 
         public Card(Actor actor, List<CardDropZone> dropZones, Function function, CardDropZone defaultDropZone, CardDropZone destinationZone) : base(actor)
         {
@@ -63,6 +68,11 @@ namespace gmtk2021.Components
             this.actor.RemoveComponent<Hoverable>();
         }
 
+        public void PartialLock()
+        {
+            IsPartialLocked = true;
+        }
+
         private void OnDoubleClick()
         {
             var currentZone = FindCurrentZone();
@@ -84,7 +94,7 @@ namespace gmtk2021.Components
             {
                 var isValid = IsValidDrop(FindCurrentZone());
 
-                spriteBatch.DrawRectangle(this.targetDropZone.Rect, isValid ? Color.White : Color.DarkBlue, 3f, this.targetDropZone.transform.Depth);
+                spriteBatch.DrawRectangle(this.targetDropZone.Rect, isValid ? Color.White : Color.OrangeRed, 3f, this.targetDropZone.transform.Depth);
 
                 if (isValid)
                 {
@@ -120,9 +130,18 @@ namespace gmtk2021.Components
 
         private void DuringDrag(Vector2 obj)
         {
+            CardDropZone bestZone = Zone.FindBestZone(Rect, this.dropZones);
+
+            if (IsPartialLocked)
+            {
+                if (bestZone != this.defaultDropZone || bestZone == null)
+                {
+                    return;
+                }
+            }
+
             this.targetDropZone = null;
             this.subzoneIndex = null;
-            CardDropZone bestZone = Zone.FindBestZone(Rect, this.dropZones);
 
             if (bestZone != null)
             {

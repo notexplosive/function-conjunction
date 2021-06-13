@@ -198,7 +198,7 @@ namespace gmtk2021
                             var group = new LayoutGroup(dropZoneActor, Orientation.Horizontal)
                                 .SetMargin(10);
 
-                            for (int i = 0; i < currentLevel.NumberOfSequenceSlots; i++)
+                            for (int i = 0; i < currentLevel.NumberOfSequenceSlots + currentLevel.AdditionalSequenceSlots; i++)
                             {
 
                                 group.AddElement("CardInBetween", new Point(10, CardSize.Y), cardInsertion =>
@@ -232,7 +232,7 @@ namespace gmtk2021
             foreach (var function in currentLevel.LockedInCards)
             {
                 var card = CreateCard(gameScene, dropZones, function, destinationZone, destinationZone);
-                card.Lock();
+                card.PartialLock();
             }
         }
 
@@ -247,7 +247,7 @@ namespace gmtk2021
             new MoveOnDrag(actor);
 
 
-            var font = MachinaGame.Assets.GetSpriteFont("CardFont");
+            var font = MachinaGame.Assets.GetSpriteFont("SmallTextFont");
             StaticCurveRenderer curveRenderer = null;
 
             new LayoutGroup(actor, Orientation.Horizontal)
@@ -256,12 +256,16 @@ namespace gmtk2021
                 {
                     new LayoutGroup(cardInnerColumn, Orientation.Vertical)
                         .PixelSpacer(8)
-                        .AddBothStretchedElement("CardText", cardTextActor =>
+                        .AddBothStretchedElement("CardCurve", cardCurveActor =>
                         {
-                            curveRenderer = new StaticCurveRenderer(cardTextActor, function);
+                            curveRenderer = new StaticCurveRenderer(cardCurveActor, function);
                             hoverable.OnHoverStart += curveRenderer.PlayTween;
                         })
-                        .PixelSpacer(8);
+                        .PixelSpacer(8)
+                        .AddHorizontallyStretchedElement("CardText", 8, cardTextActor =>
+                        {
+                            new BoundedTextRenderer(cardTextActor, function.name, font, Color.Black, HorizontalAlignment.Right, VerticalAlignment.Bottom, Overflow.Ignore, new Machina.Data.Depth(-50));
+                        });
                 })
                 .PixelSpacer(8);
 

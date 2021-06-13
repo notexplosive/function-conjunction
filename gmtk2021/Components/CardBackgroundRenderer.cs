@@ -29,9 +29,9 @@ namespace gmtk2021.Components
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.FillRectangle(this.boundingRect.Rect, this.card.IsLocked ? new Color(180, 100, 20) : Color.Orange, transform.Depth);
+            spriteBatch.FillRectangle(this.boundingRect.Rect, this.card.IsLocked || this.card.IsPartialLocked ? new Color(180, 100, 20) : Color.Orange, transform.Depth);
 
-            if (this.card.IsLocked)
+            if (this.card.IsLocked || this.card.IsPartialLocked)
             {
                 this.curve.OnColor = Color.White;
                 this.curve.OffColor = Color.Black;

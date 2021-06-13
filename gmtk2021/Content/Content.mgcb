@@ -30,6 +30,13 @@
 #begin fonts/Roboto-Medium.ttf
 /copy:fonts/Roboto-Medium.ttf
 
+#begin fonts/SmallTextFont.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:fonts/SmallTextFont.spritefont
+
 #begin fonts/TitleFont.spritefont
 /importer:FontDescriptionImporter
 /processor:FontDescriptionProcessor
