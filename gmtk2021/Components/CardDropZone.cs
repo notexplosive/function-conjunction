@@ -31,6 +31,7 @@ namespace gmtk2021.Components
         private readonly List<InBetween> inBetweens = new List<InBetween>();
         private readonly List<Card> ownedCards = new List<Card>();
         private readonly BoundingRect boundingRect;
+        private readonly bool isSequencer;
         private readonly TweenChain tween = new TweenChain();
         public Rectangle Rect => this.boundingRect.Rect;
 
@@ -39,9 +40,10 @@ namespace gmtk2021.Components
         public event Action CardGain;
         public event Action CardLost;
 
-        public CardDropZone(Actor actor) : base(actor)
+        public CardDropZone(Actor actor, bool isSequencer) : base(actor)
         {
             this.boundingRect = RequireComponent<BoundingRect>();
+            this.isSequencer = isSequencer;
         }
 
         public override void Update(float dt)
@@ -64,7 +66,7 @@ namespace gmtk2021.Components
             return this.ownedCards.Count == this.slots.Count;
         }
 
-        public Rectangle SlotRectAt(int subzoneIndex)
+        public Rectangle SlotRectAt(int subzoneIndex, bool forceActualRect = false)
         {
             var max = this.ownedCards.Count;
 
@@ -73,11 +75,26 @@ namespace gmtk2021.Components
                 max = max - 1;
             }
 
+            List<Zone> arr = new List<Zone>(this.slots);
+
+            if (subzoneIndex >= max)
+            {
+                forceActualRect = true;
+            }
+
+            if (!forceActualRect)
+            {
+                if (this.isSequencer)
+                {
+                    arr = new List<Zone>(this.inBetweens);
+                }
+            }
+
             if (subzoneIndex < 0)
             {
-                return this.slots[max].Rect;
+                return arr[max].Rect;
             }
-            return this.slots[Math.Min(subzoneIndex, max)].Rect;
+            return arr[Math.Min(subzoneIndex, max)].Rect;
         }
 
         public void AddCardSlot(Actor actor)

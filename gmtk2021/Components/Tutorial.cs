@@ -20,8 +20,8 @@ namespace gmtk2021.Components
 
         public Tutorial(Actor actor, CardDropZone startingDropZone, CardDropZone destinationZone) : base(actor)
         {
-            this.startSlot = startingDropZone.SlotRectAt(0);
-            this.destSlot = destinationZone.SlotRectAt(0);
+            this.startSlot = startingDropZone.SlotRectAt(0, true);
+            this.destSlot = destinationZone.SlotRectAt(0, true);
 
             this.startSlot.Inflate(10, 10);
             this.destSlot.Inflate(10, 10);

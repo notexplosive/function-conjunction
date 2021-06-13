@@ -11,13 +11,17 @@ namespace gmtk2021.Components
 {
     class CardBackgroundRenderer : BaseComponent
     {
-        private readonly Card card;
+        private readonly ICard card;
         private readonly BoundingRect boundingRect;
         private readonly StaticCurveRenderer curve;
+        public Color CustomBGColor
+        {
+            get; set;
+        }
 
         public CardBackgroundRenderer(Actor actor, StaticCurveRenderer curve) : base(actor)
         {
-            this.card = RequireComponent<Card>();
+            this.card = this.actor.GetComponentUnsafe<ICard>();
             this.boundingRect = RequireComponent<BoundingRect>();
             this.curve = curve;
         }
@@ -29,18 +33,29 @@ namespace gmtk2021.Components
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.FillRectangle(this.boundingRect.Rect, this.card.IsLocked || this.card.IsPartialLocked ? new Color(180, 100, 20) : Color.Orange, transform.Depth);
+            var bgColor = this.card.IsLocked || this.card.IsPartialLocked ? new Color(180, 100, 20) : Color.Orange;
 
-            if (this.card.IsLocked || this.card.IsPartialLocked)
+            if (this.card.UseCustomColor)
             {
-                this.curve.OnColor = Color.White;
-                this.curve.OffColor = Color.Black;
+                bgColor = this.CustomBGColor;
             }
             else
             {
-                this.curve.OnColor = Color.Black;
-                this.curve.OffColor = Color.Gray;
+                if (this.card.IsLocked || this.card.IsPartialLocked)
+                {
+                    this.curve.OnColor = Color.White;
+                    this.curve.OffColor = Color.Black;
+                }
+                else
+                {
+                    this.curve.OnColor = Color.Black;
+                    this.curve.OffColor = Color.Gray;
+                }
             }
+
+            spriteBatch.FillRectangle(this.boundingRect.Rect, bgColor, transform.Depth);
+
+
         }
     }
 }

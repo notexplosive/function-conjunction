@@ -128,7 +128,7 @@ namespace gmtk2021
                     new LayoutGroup(leftColumnActor, Orientation.Vertical)
                         .AddBothStretchedElement("Extra CardDropZone", extraDropZoneActor =>
                         {
-                            var dropZone = new CardDropZone(extraDropZoneActor);
+                            var dropZone = new CardDropZone(extraDropZoneActor, false);
                             startingDropZone = dropZone;
                             dropZones.Add(dropZone);
                             var group = new LayoutGroup(extraDropZoneActor, Orientation.Vertical)
@@ -191,17 +191,26 @@ namespace gmtk2021
                         })
                         .AddHorizontallyStretchedElement("Chain CardDropZone", CardSize.Y + 20, dropZoneActor =>
                         {
-                            var dropZone = new CardDropZone(dropZoneActor);
+                            var dropZone = new CardDropZone(dropZoneActor, true);
                             destinationZone = dropZone;
                             dropZones.Add(dropZone);
 
                             var group = new LayoutGroup(dropZoneActor, Orientation.Horizontal)
                                 .SetMargin(10);
 
+                            group.AddElement("FakeCard", CardSize, fakeCard =>
+                            {
+                                var curve = new StaticCurveRenderer(fakeCard, Functions.X);
+                                new FakeCard(fakeCard);
+                                var background = new CardBackgroundRenderer(fakeCard, curve);
+                                background.CustomBGColor = Color.White;
+                                curve.OnColor = Color.Black;
+                            });
+
                             for (int i = 0; i < currentLevel.NumberOfSequenceSlots + currentLevel.AdditionalSequenceSlots; i++)
                             {
 
-                                group.AddElement("CardInBetween", new Point(10, CardSize.Y), cardInsertion =>
+                                group.AddElement("CardInBetween", new Point(20, CardSize.Y), cardInsertion =>
                                 {
                                     dropZone.AddInBetween(cardInsertion, i);
                                 });

@@ -12,6 +12,8 @@ namespace gmtk2021.Data
             return i;
         }
 
+        public static Function X = new Function("X", NoOp, new DomainRange(1, 1));
+
         public static Function Sin = new Function("Sine", MathF.Sin, new DomainRange(MathF.PI, 2));
 
         public static Function Squared = new Function("Squared", (float i) =>
@@ -26,7 +28,7 @@ namespace gmtk2021.Data
 
         public static Function Cos = new Function("Cosine", MathF.Cos, new DomainRange(MathF.PI, 2));
 
-        public static Function Abs = new Function("Abs", MathF.Abs, new DomainRange(MathF.PI, 2));
+        public static Function Abs = new Function("Abs", MathF.Abs, new DomainRange(2, 2));
 
         public static Function Sign = new Function("Sign", (float i) =>
         {
@@ -44,7 +46,7 @@ namespace gmtk2021.Data
 
         public static Function AddConstant(float constant)
         {
-            return new Function((constant > 0 ? "Add " : "Subtract ") + DomainRenderer.FloatAsString(MathF.Abs(constant)), (i) => i + constant, new DomainRange(MathF.PI, 2));
+            return new Function((constant > 0 ? "Add " : "Subtract ") + DomainRenderer.FloatAsString(MathF.Abs(constant)), (i) => i + constant, new DomainRange(3, 3));
         }
 
         public static Function MultiplyConstant(int constant)
@@ -67,17 +69,17 @@ namespace gmtk2021.Data
 
         public static Function MaxConstant(int constant)
         {
-            return new Function("Max " + constant, (i) => MathF.Max(i, constant), new DomainRange(MathF.PI, 2));
+            return new Function("Max " + constant, (i) => MathF.Max(i, constant), new DomainRange(2, 2));
         }
 
         public static Function MinConstant(int constant)
         {
-            return new Function("Min " + constant, (i) => MathF.Min(i, constant), new DomainRange(MathF.PI, 2));
+            return new Function("Min " + constant, (i) => MathF.Min(i, constant), new DomainRange(2, 2));
         }
 
         public static Function ModConstant(int constant)
         {
-            return new Function("Mod " + constant, (i) => MathF.IEEERemainder(i, constant), new DomainRange(constant * 2, 2));
+            return new Function("Mod " + constant, (i) => MathF.IEEERemainder(i, constant), new DomainRange(3, 3));
         }
 
         public static Func<float, float> Fold(Function[] functions)

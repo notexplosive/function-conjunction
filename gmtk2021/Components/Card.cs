@@ -12,7 +12,23 @@ using static gmtk2021.Components.CardDropZone;
 
 namespace gmtk2021.Components
 {
-    public class Card : BaseComponent
+    public interface ICard
+    {
+        public bool IsLocked
+        {
+            get;
+        }
+        public bool IsPartialLocked
+        {
+            get;
+        }
+        public bool UseCustomColor
+        {
+            get;
+        }
+    }
+
+    public class Card : BaseComponent, ICard
     {
         private readonly List<CardDropZone> dropZones;
         private readonly Depth startingDepth;
@@ -36,6 +52,10 @@ namespace gmtk2021.Components
         {
             get;
             private set;
+        }
+        public bool UseCustomColor
+        {
+            get => false;
         }
 
         public Card(Actor actor, List<CardDropZone> dropZones, Function function, CardDropZone defaultDropZone, CardDropZone destinationZone) : base(actor)
