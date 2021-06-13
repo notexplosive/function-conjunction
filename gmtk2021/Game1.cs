@@ -14,13 +14,13 @@ namespace gmtk2021
     {
         public static Point CardSize = new Point(150, 150);
 
-        public Game1(string[] args) : base("Nested Functions", args, new Point(1920, 1080), new Point(1600, 900), ResizeBehavior.MaintainDesiredResolution)
+        public Game1(string[] args) : base("Function Conjunction", args, new Point(1920, 1080), new Point(1600, 900), ResizeBehavior.MaintainDesiredResolution)
         {
         }
 
         protected override void OnGameLoad()
         {
-            Window.Title = "Nested Function";
+            Window.Title = "Function Conjunction";
             SceneLayers.SamplerState = SamplerState.LinearWrap;
             SamplerState = SamplerState.LinearWrap;
 

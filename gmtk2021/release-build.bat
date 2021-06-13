@@ -7,6 +7,7 @@ dotnet publish -c Release -r win-x64 /p:PublishReadyToRun=false /p:TieredCompila
 del .\bin\Release\netcoreapp3.1\win-x64\publish\*.pdb
 
 7z a -r .\%1.zip .\bin\Release\netcoreapp3.1\win-x64\publish\*
+butler push .\bin\Release\netcoreapp3.1\win-x64\publish notexplosive/functions:continuous
 goto :eof
 
 
