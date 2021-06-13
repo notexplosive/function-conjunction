@@ -10,6 +10,7 @@ namespace gmtk2021.Data
     {
         private List<SoundEffectInstance> sounds = new List<SoundEffectInstance>();
         private int index;
+        public readonly SoundEffectInstance music;
 
         public Atmosphere()
         {
@@ -21,6 +22,11 @@ namespace gmtk2021.Data
             }
             this.index = 0;
             PlayNext();
+
+            this.music = MachinaGame.Assets.GetSoundEffectInstance("function_music");
+            this.music.IsLooped = true;
+            this.music.Volume = 0.5f;
+            this.music.Play();
         }
 
         public void PlayNext()

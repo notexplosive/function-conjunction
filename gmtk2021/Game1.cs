@@ -24,7 +24,7 @@ namespace gmtk2021
             SceneLayers.SamplerState = SamplerState.LinearWrap;
             SamplerState = SamplerState.LinearWrap;
 
-            SceneLayers.BackgroundColor = Color.Black;
+            SceneLayers.BackgroundColor = new Color(0, 0, 20);
 
             var titleFont = Assets.GetSpriteFont("TitleFont");
             var subtitleFont = Assets.GetSpriteFont("CardFont");
@@ -175,7 +175,7 @@ namespace gmtk2021
                                 })
                                 .AddBothStretchedElement("Curve", curveActor =>
                                 {
-                                    curve = new PrimaryCurve(curveActor, curveData, levelTransition.CurrentLevel);
+                                    curve = new PrimaryCurve(curveActor, curveData, levelTransition.CurrentLevel, levelTransition.atmosphere);
                                     var objective = new ObjectiveTracker(curveActor, levelTransition);
                                     objective.Win += () => sequenceDropZone.LockAll();
                                 });

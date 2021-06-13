@@ -64,7 +64,7 @@ namespace gmtk2021.Components
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            var fadeOverlay = new Color(Color.Black, this.opacityVal);
+            var fadeOverlay = new Color(this.actor.scene.sceneLayers.BackgroundColor, this.opacityVal);
             // Draw rect in absolute foreground
             spriteBatch.FillRectangle(new Rectangle(Point.Zero, this.actor.scene.camera.UnscaledViewportSize), fadeOverlay, new Depth(0));
         }

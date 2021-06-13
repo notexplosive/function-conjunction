@@ -16,14 +16,16 @@ namespace gmtk2021.Components
     class ParticleAnimation : BaseComponent
     {
         private readonly TweenChain tween = new TweenChain();
+        private SoundEffectInstance music;
         private int x;
         private float size;
         private readonly SoundEffectInstance travelSound;
         private readonly CurvePoint[] points;
         private readonly BoundingRect curveBoundingRect;
 
-        public ParticleAnimation(Actor actor, CurvePoint[] points, BoundingRect curveBoundingRect, SoundEffectInstance travelSoundOverride) : base(actor)
+        public ParticleAnimation(Actor actor, CurvePoint[] points, BoundingRect curveBoundingRect, SoundEffectInstance travelSoundOverride, SoundEffectInstance music) : base(actor)
         {
+            this.music = music;
             this.x = 1;
             var xAcc = new TweenAccessors<int>(() => this.x, val => this.x = val);
             var sizeAcc = new TweenAccessors<float>(() => this.size, val => this.size = val);
@@ -33,6 +35,7 @@ namespace gmtk2021.Components
             this.points = points;
             this.curveBoundingRect = curveBoundingRect;
             this.tween
+                .AppendCallback(() => { this.music.Pause(); })
                 .AppendCallback(() => { MachinaGame.Assets.GetSoundEffectInstance("particle_appear").Play(); })
                 .AppendFloatTween(1, 0.35f, EaseFuncs.EaseOutBack, sizeAcc)
                 .AppendCallback(() => { travelSound.Play(); })
@@ -40,7 +43,7 @@ namespace gmtk2021.Components
                 .AppendCallback(() => { MachinaGame.Assets.GetSoundEffectInstance("particle_disappear").Play(); })
                 .AppendCallback(() => { travelSound.Stop(); })
                 .AppendFloatTween(0, 0.35f, EaseFuncs.EaseInBack, sizeAcc)
-                .AppendWaitTween(0.15f)
+                // particle animation does not hit play on the music, wait until the next level
                 ;
         }
 

@@ -75,6 +75,12 @@
 /processorParam:Quality=Best
 /build:sounds/drop.ogg
 
+#begin sounds/function_music.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/function_music.ogg
+
 #begin sounds/menu_click.ogg
 /importer:OggImporter
 /processor:SoundEffectProcessor

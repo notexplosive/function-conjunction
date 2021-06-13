@@ -16,6 +16,7 @@ namespace gmtk2021.Components
 {
     public class PrimaryCurve : BaseComponent
     {
+        private readonly SoundEffectInstance music;
         private readonly Level level;
         private readonly BoundingRect boundingRect;
         private readonly DomainRange domain;
@@ -30,8 +31,9 @@ namespace gmtk2021.Components
         private int primaryLastDrawIndex;
         public event Action IntroFinished;
 
-        public PrimaryCurve(Actor actor, DomainRange curveData, Level level) : base(actor)
+        public PrimaryCurve(Actor actor, DomainRange curveData, Level level, Atmosphere atmos) : base(actor)
         {
+            this.music = atmos.music;
             this.level = level;
             this.boundingRect = RequireComponent<BoundingRect>();
             this.domain = curveData;
@@ -67,6 +69,7 @@ namespace gmtk2021.Components
 
             this.introTween.Clear();
             this.introTween
+                .AppendCallback(() => { music.Pause(); })
                 .AppendWaitTween(0.25f)
                 .AppendCallback(() => { this.objectiveTravelSound.Play(); })
                 .AppendIntTween(this.objectivePoints.Length - 1, 1, EaseFuncs.Linear, new TweenAccessors<int>(() => this.objectiveLastDrawIndex, val => this.objectiveLastDrawIndex = val))
@@ -76,6 +79,8 @@ namespace gmtk2021.Components
                 .AppendIntTween(this.points.Length - 1, 1, EaseFuncs.Linear, new TweenAccessors<int>(() => this.primaryLastDrawIndex, val => this.primaryLastDrawIndex = val))
                 .AppendCallback(() => { this.primaryTravelSound.Stop(); })
                 .AppendCallback(() => { IntroFinished?.Invoke(); })
+                .AppendWaitTween(0.25f)
+                .AppendCallback(() => { music.Play(); })
                 ;
         }
 
@@ -136,7 +141,7 @@ namespace gmtk2021.Components
 
         public Func<bool> StartParticleAnimation()
         {
-            var particle = new ParticleAnimation(this.actor.scene.AddActor("ParticleActor"), this.points, this.boundingRect, this.level.CustomSound);
+            var particle = new ParticleAnimation(this.actor.scene.AddActor("ParticleActor"), this.points, this.boundingRect, this.level.CustomSound, this.music);
             return particle.IsDone;
         }
 

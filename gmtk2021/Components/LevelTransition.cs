@@ -19,16 +19,16 @@ namespace gmtk2021.Components
         private Scene gameScene;
         private int currentLevelIndex = 0;
         private PrimaryCurve primaryCurve;
-        private Atmosphere atmosphere;
+        public readonly Atmosphere atmosphere;
         private readonly Level[] levels =
         new Level[]
         {
             #if DEBUG
             new Level("Experiment")
             {
-                Solution = new Function[] { Functions.Sin, Functions.MaxConstant(1), Functions.Squared, Functions.ModConstant(1) },
-                CardFunctions = new Function[] { Functions.Squared, Functions.MultiplyFraction(1,2), Functions.Sin, Functions.MaxConstant(0) },
-                LockedInCards = new Function[] { Functions.Sin },
+                Solution = new Function[] { Functions.Squared, Functions.MinConstant(1), Functions.ModConstant(1) },
+                CardFunctions = new Function[] { Functions.Floor, Functions.Ceiling, Functions.Squared, Functions.MinConstant(1), Functions.ModConstant(2) },
+                LockedInCards = new Function[] { Functions.ModConstant(1) },
                 AdditionalSequenceSlots = 5,
             },
             #endif
@@ -77,46 +77,43 @@ namespace gmtk2021.Components
                 Domain = 2 * MathF.PI,
             },
 
-            new Level("Absolute Value")
+            new Level("Reverse Arches")
+            {
+                // Introduce absolute value
+                Solution = new Function[] { Functions.Sin, Functions.Abs, Functions.MultiplyConstant(-1)},
+            },
+
+            new Level("Rolling Hills")
             {
                 // (medium) Test knowledge on multiply/add at different times
                 Solution = new Function[] { Functions.Sin, Functions.MultiplyConstant(2), Functions.AddConstant(-1), Functions.Abs },
+                CardFunctions = new Function[] { Functions.AddConstant(1) },
                 Range = 4,
-            },
-
-            new Level("Reverse Arches")
-            {
-                Solution = new Function[] { Functions.Sin, Functions.Abs, Functions.MultiplyConstant(-1)},
             },
 
             new Level("Spikes")
             {
+                // Intermediate skill check
                 Solution = new Function[] { Functions.Sin, Functions.ModConstant(1), Functions.Squared, Functions.MultiplyConstant(4), Functions.AddConstant(-1) },
             },
 
             new Level("Flatline")
             {
-                Solution = new Function[] { Functions.Ceiling, Functions.ModConstant(1) },
-                CardFunctions = new Function[] { Functions.Floor, Functions.Ceiling, Functions.ModConstant(2) },
+                Solution = new Function[] { Functions.Sin, Functions.Squared, Functions.Ceiling, Functions.AddConstant(-1) },
                 ForceShuffle = true
-            },
-
-            new Level("Square Teeth")
-            {
-                Solution = new Function[] { Functions.Sin, Functions.ModConstant(1), Functions.Sign },
-                CardFunctions = new Function[] { Functions.Squared },
-                LockedInCards = new Function[] { Functions.Sign },
             },
 
             new Level("Bitcrunch")
             {
+                // Introduce ceiling/floor
                 Solution = new Function[] { Functions.Floor, Functions.Sin },
-                CardFunctions = new Function[] { Functions.Floor, Functions.Ceiling, Functions.Cos, Functions.ModConstant(2) },
+                CardFunctions = new Function[] { Functions.Floor, Functions.Ceiling, Functions.ModConstant(2) },
                 ForceShuffle = true
             },
 
             new Level("Triangle Wave")
             {
+                // Skill check with absolute value (and phase manipulation)
                 Solution = new Function[] { Functions.ModConstant(1), Functions.Abs, Functions.MultiplyConstant(2), Functions.AddConstant(-0.5f) },
                 ForceShuffle = true,
                 CardFunctions = new Function[] { Functions.Floor },
@@ -124,14 +121,16 @@ namespace gmtk2021.Components
 
             new Level("W")
             {
+                // Skill check for squared
                 Solution = new Function[] { Functions.Squared, Functions.AddConstant(-2), Functions.Squared, Functions.AddConstant(-1) },
                 CardFunctions = new Function[] { /*The validator won't notice we need to 2 square funcs:*/ Functions.Squared, Functions.Squared, /*Red harrings:*/ Functions.MultiplyConstant(-1) },
             },
 
             new Level("Neon")
             {
+                // Introduce Min
                 Solution = new Function[] { Functions.Sin, Functions.ModConstant(1), Functions.MinConstant(0) },
-                CardFunctions = new Function[] { Functions.Floor, Functions.Ceiling, Functions.MinConstant(1) }
+                CardFunctions = new Function[] { Functions.Floor, Functions.MinConstant(1) }
             },
 
             new Level("Fizzled Out")
@@ -141,15 +140,26 @@ namespace gmtk2021.Components
 
             new Level("Mesa")
             {
-                Solution = new Function[] { Functions.Cubed, Functions.Abs, Functions.AddConstant(-1), Functions.MultiplyConstant(-1), Functions.AddConstant(1), Functions.MinConstant(0) },
-                CardFunctions = new Function[] { Functions.AddConstant(-2), Functions.AddConstant(2), Functions.Squared },
+                // Tick: Cubed -> Abs -> Sub 1 -> Multiply -1 -> Add 1 ALMOST works, but you need one more slot for the min
+                Solution = new Function[] { Functions.Cubed, Functions.Abs, Functions.MultiplyConstant(-1), Functions.AddConstant(2), Functions.MinConstant(0) },
+                CardFunctions = new Function[] { Functions.AddConstant(-1), Functions.AddConstant(1), Functions.Squared },
                 LockedInCards = new Function[] { Functions.MultiplyConstant(-1) }
             },
 
+            /*
             new Level("Repeat")
             {
+                //Broken?
                 Solution = new Function[] { Functions.Sin, Functions.MaxConstant(1), Functions.Squared, Functions.ModConstant(1) },
                 LockedInCards = new Function[] { Functions.Sin },
+            },
+            */
+
+            new Level("Cityscape")
+            {
+                Solution = new Function[] { Functions.Ceiling, Functions.Squared, Functions.AddConstant(1), Functions.Sin },
+                Range = 4,
+                Domain = MathF.PI * 2
             },
 
             new Level("Morshu Wave")
@@ -259,6 +269,9 @@ namespace gmtk2021.Components
                 new Fade(creditsRoot, false).Activate();
                 new BoundingRect(creditsRoot, camera.UnscaledViewportSize);
                 new BoundedTextRenderer(creditsRoot, "Thanks for playing!\n\nProgrammed & Designed by NotExplosive\nSound Design by Ryan Yoshikami\nTested by lectvs and soomy\nPlayed by you <3", MachinaGame.Assets.GetSpriteFont("UIFont"), Color.White, HorizontalAlignment.Center, VerticalAlignment.Center);
+
+                // Make sure music plays during the credits
+                atmosphere.music.Play();
             }
 
             yield return null;
