@@ -19,6 +19,7 @@ namespace gmtk2021.Components
         private Scene gameScene;
         private int currentLevelIndex = 0;
         private PrimaryCurve primaryCurve;
+        private Atmosphere atmosphere;
         private readonly Level[] levels =
         new Level[]
         {
@@ -77,10 +78,18 @@ namespace gmtk2021.Components
                 CardFunctions = new Function[] { Functions.ModConstant(1), Functions.MultiplyConstant(2), Functions.ModConstant(2), Functions.MultiplyFraction(1,2) },
             },
 
-            new Level(null)
+            new Level("Flatline")
             {
-                Solution = new Function[] { Functions.MultiplyConstant(2), Functions.Sin },
-                CardFunctions = new Function[] { Functions.ModConstant(1), Functions.MultiplyConstant(2) },
+                Solution = new Function[] { Functions.Ceiling, Functions.ModConstant(1) },
+                CardFunctions = new Function[] { Functions.Floor, Functions.Ceiling, Functions.ModConstant(2) },
+                ForceShuffle = true
+            },
+
+            new Level("Flatline")
+            {
+                Solution = new Function[] { Functions.Ceiling, Functions.Sin },
+                CardFunctions = new Function[] { Functions.Floor, Functions.Ceiling, Functions.Cos },
+                ForceShuffle = true
             },
         };
 
@@ -88,8 +97,9 @@ namespace gmtk2021.Components
 
         public int CurrentLevelIndex => this.currentLevelIndex;
 
-        public LevelTransition(Actor actor) : base(actor)
+        public LevelTransition(Actor actor, Atmosphere atmos) : base(actor)
         {
+            this.atmosphere = atmos;
             foreach (var level in levels)
             {
                 level.Validate();
@@ -178,6 +188,7 @@ namespace gmtk2021.Components
         public void IncrementLevel()
         {
             this.currentLevelIndex++;
+            this.atmosphere.PlayNext();
         }
 
         public bool HasNextLevel()

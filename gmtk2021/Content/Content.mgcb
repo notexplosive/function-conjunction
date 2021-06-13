@@ -134,11 +134,11 @@
 /processorParam:Quality=Best
 /build:sounds/square.ogg
 
-#begin sounds/static_atmos.ogg
+#begin sounds/static_atmos1.ogg
 /importer:OggImporter
 /processor:SoundEffectProcessor
 /processorParam:Quality=Best
-/build:sounds/static_atmos.ogg
+/build:sounds/static_atmos1.ogg
 
 #begin sounds/static_atmos2.ogg
 /importer:OggImporter

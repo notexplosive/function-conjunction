@@ -98,7 +98,7 @@ namespace gmtk2021.Components
         public override void Draw(SpriteBatch spriteBatch)
         {
             DrawPoints(spriteBatch, this.points, Color.Orange, Color.OrangeRed, transform.Depth, transform, this.boundingRect, 8f, 20, this.primaryLastDrawIndex);
-            DrawPoints(spriteBatch, this.objectivePoints, Color.Cyan, Color.Teal, transform.Depth + 1, transform, this.boundingRect, 8f, 20, this.objectiveLastDrawIndex);
+            DrawPoints(spriteBatch, this.objectivePoints, Color.Cyan, Color.Teal, transform.Depth + 1, transform, this.boundingRect, 10f, 20, this.objectiveLastDrawIndex);
 
             // Draw zero lines
             var guidelineColor = new Color(100, 100, 100);

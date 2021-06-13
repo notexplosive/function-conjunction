@@ -14,6 +14,11 @@ namespace gmtk2021.Data
             Title = title;
         }
 
+        public bool ForceShuffle
+        {
+            get; set;
+        }
+
         public Function[] Solution
         {
             get; set;
@@ -67,7 +72,7 @@ namespace gmtk2021.Data
             var lockedIn = new List<Function>(LockedInCards);
             var deck = new List<Function>(CardFunctions);
 
-            var shouldShuffle = CardFunctions.Length == 0;
+            var shouldShuffle = CardFunctions.Length == 0 || ForceShuffle;
 
             foreach (var function in Solution)
             {

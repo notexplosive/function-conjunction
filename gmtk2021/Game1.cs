@@ -31,9 +31,7 @@ namespace gmtk2021
             var uiFont = Assets.GetSpriteFont("UIFont");
 
 
-            var atmos = Assets.GetSoundEffectInstance("static_atmos");
-            atmos.IsLooped = true;
-            atmos.Play();
+            var atmosphere = new Atmosphere();
 
             var menuScene = SceneLayers.AddNewScene();
             var menuLayoutActor = menuScene.AddActor("GameLayout");
@@ -41,7 +39,7 @@ namespace gmtk2021
             var fade = new Fade(menuLayoutActor, true);
             fade.Finish += () =>
             {
-                BuildFirstGameScene(SceneLayers);
+                BuildFirstGameScene(SceneLayers, atmosphere);
                 SceneLayers.RemoveScene(menuScene);
             };
 
@@ -86,7 +84,7 @@ namespace gmtk2021
                 .HorizontallyStretchedSpacer();
         }
 
-        public static void BuildFirstGameScene(SceneLayers sceneLayers)
+        public static void BuildFirstGameScene(SceneLayers sceneLayers, Atmosphere atmos)
         {
             var bgScene = sceneLayers.AddNewScene();
 
@@ -94,7 +92,7 @@ namespace gmtk2021
 
             var viewSize = bgScene.camera.UnscaledViewportSize;
             var bgRoot = bgScene.AddActor("BGRoot", new Vector2(0, -viewSize.Y));
-            var levelTransition = new LevelTransition(bgRoot);
+            var levelTransition = new LevelTransition(bgRoot, atmos);
 
             if (DebugLevel >= DebugLevel.Passive)
                 new PanAndZoomCamera(bgRoot, Keys.LeftControl);

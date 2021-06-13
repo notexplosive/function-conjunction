@@ -59,6 +59,8 @@ namespace gmtk2021.Components
             RequireComponent<MoveOnDrag>();
             this.actor.RemoveComponent<MoveOnDrag>();
             this.actor.RemoveComponent<Draggable>();
+            this.actor.RemoveComponent<Clickable>();
+            this.actor.RemoveComponent<Hoverable>();
         }
 
         private void OnDoubleClick()
