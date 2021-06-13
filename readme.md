@@ -1,4 +1,4 @@
-# Cunjunction Function
+# Function Conjunction
 
 ## By NotExplosive & Ryan Yoshikami
 
