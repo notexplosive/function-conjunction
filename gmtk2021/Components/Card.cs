@@ -112,7 +112,8 @@ namespace gmtk2021.Components
         {
             if (this.isDragging && this.targetDropZone != null)
             {
-                var isValid = IsValidDrop(FindCurrentZone());
+                var myZone = FindCurrentZone();
+                var isValid = IsValidDrop(myZone);
 
                 spriteBatch.DrawRectangle(this.targetDropZone.Rect, isValid ? Color.White : Color.OrangeRed, 3f, this.targetDropZone.transform.Depth);
 
@@ -120,7 +121,7 @@ namespace gmtk2021.Components
                 {
                     var subzoneIndex = this.subzoneIndex.GetValueOrDefault(-1);
                     var rect = this.targetDropZone.SlotRectAt(subzoneIndex);
-                    spriteBatch.DrawRectangle(rect, Color.White, 3f, this.targetDropZone.transform.Depth);
+                    spriteBatch.FillRectangle(rect, Color.Orange, this.targetDropZone.transform.Depth);
                 }
             }
         }

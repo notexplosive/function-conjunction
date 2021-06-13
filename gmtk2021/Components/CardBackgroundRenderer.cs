@@ -33,7 +33,7 @@ namespace gmtk2021.Components
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            var bgColor = this.card.IsLocked || this.card.IsPartialLocked ? new Color(180, 100, 20) : Color.Orange;
+            var bgColor = this.card.IsLocked || this.card.IsPartialLocked ? new Color(100, 100, 100) : Color.Black;
 
             if (this.card.UseCustomColor)
             {
@@ -43,17 +43,18 @@ namespace gmtk2021.Components
             {
                 if (this.card.IsLocked || this.card.IsPartialLocked)
                 {
-                    this.curve.OnColor = Color.White;
-                    this.curve.OffColor = Color.Black;
+                    this.curve.OnColor = Color.Black;
+                    this.curve.OffColor = Color.Gray;
                 }
                 else
                 {
-                    this.curve.OnColor = Color.Black;
-                    this.curve.OffColor = Color.Gray;
+                    this.curve.OnColor = Color.Orange;
+                    this.curve.OffColor = Color.OrangeRed;
                 }
             }
 
             spriteBatch.FillRectangle(this.boundingRect.Rect, bgColor, transform.Depth);
+            spriteBatch.DrawRectangle(this.boundingRect.Rect, new Color(200, 200, 200), 5, transform.Depth - 1);
 
 
         }

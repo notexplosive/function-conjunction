@@ -269,11 +269,11 @@ namespace gmtk2021
                             curveRenderer = new StaticCurveRenderer(cardCurveActor, function);
                             hoverable.OnHoverStart += curveRenderer.PlayTween;
                         })
-                        .PixelSpacer(8)
                         .AddHorizontallyStretchedElement("CardText", 8, cardTextActor =>
                         {
-                            new BoundedTextRenderer(cardTextActor, function.name, font, Color.Black, HorizontalAlignment.Right, VerticalAlignment.Bottom, Overflow.Ignore, new Machina.Data.Depth(-50));
-                        });
+                            new BoundedTextRenderer(cardTextActor, function.name, font, Color.White, HorizontalAlignment.Right, VerticalAlignment.Bottom, Overflow.Ignore, new Machina.Data.Depth(-50));
+                        })
+                        .PixelSpacer(8);
                 })
                 .PixelSpacer(8);
 
