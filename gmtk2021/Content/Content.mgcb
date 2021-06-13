@@ -99,6 +99,12 @@
 /processorParam:Quality=Best
 /build:sounds/middlebend3.ogg
 
+#begin sounds/morshu.ogg
+/importer:OggImporter
+/processor:SoundEffectProcessor
+/processorParam:Quality=Best
+/build:sounds/morshu.ogg
+
 #begin sounds/particle_appear.ogg
 /importer:OggImporter
 /processor:SoundEffectProcessor

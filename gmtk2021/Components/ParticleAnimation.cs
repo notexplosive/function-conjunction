@@ -22,12 +22,13 @@ namespace gmtk2021.Components
         private readonly CurvePoint[] points;
         private readonly BoundingRect curveBoundingRect;
 
-        public ParticleAnimation(Actor actor, CurvePoint[] points, BoundingRect curveBoundingRect) : base(actor)
+        public ParticleAnimation(Actor actor, CurvePoint[] points, BoundingRect curveBoundingRect, SoundEffectInstance travelSoundOverride) : base(actor)
         {
             this.x = 1;
             var xAcc = new TweenAccessors<int>(() => this.x, val => this.x = val);
             var sizeAcc = new TweenAccessors<float>(() => this.size, val => this.size = val);
-            this.travelSound = MachinaGame.Assets.GetSoundEffectInstance("particle_travel");
+            var normalTravelSound = MachinaGame.Assets.GetSoundEffectInstance("particle_travel");
+            this.travelSound = travelSoundOverride ?? normalTravelSound;
             this.travelSound.IsLooped = true;
             this.points = points;
             this.curveBoundingRect = curveBoundingRect;

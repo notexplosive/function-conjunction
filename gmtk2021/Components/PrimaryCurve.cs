@@ -16,6 +16,7 @@ namespace gmtk2021.Components
 {
     public class PrimaryCurve : BaseComponent
     {
+        private readonly Level level;
         private readonly BoundingRect boundingRect;
         private readonly DomainRange domain;
         private readonly Func<float, float> objectiveFunction;
@@ -29,11 +30,12 @@ namespace gmtk2021.Components
         private int primaryLastDrawIndex;
         public event Action IntroFinished;
 
-        public PrimaryCurve(Actor actor, DomainRange curveData, Function[] objective) : base(actor)
+        public PrimaryCurve(Actor actor, DomainRange curveData, Level level) : base(actor)
         {
+            this.level = level;
             this.boundingRect = RequireComponent<BoundingRect>();
             this.domain = curveData;
-            this.objectiveFunction = Functions.Fold(objective);
+            this.objectiveFunction = Functions.Fold(level.Solution);
 
             this.objectiveTravelSound = MachinaGame.Assets.GetSoundEffectInstance("sin");
             this.objectiveTravelSound.Volume = 0.75f;
@@ -134,7 +136,7 @@ namespace gmtk2021.Components
 
         public Func<bool> StartParticleAnimation()
         {
-            var particle = new ParticleAnimation(this.actor.scene.AddActor("ParticleActor"), this.points, this.boundingRect);
+            var particle = new ParticleAnimation(this.actor.scene.AddActor("ParticleActor"), this.points, this.boundingRect, this.level.CustomSound);
             return particle.IsDone;
         }
 

@@ -23,6 +23,15 @@ namespace gmtk2021.Components
         private readonly Level[] levels =
         new Level[]
         {
+            #if DEBUG
+            new Level("Experiment")
+            {
+                Solution = new Function[] { Functions.Squared, Functions.MinConstant(1), Functions.ModConstant(1) },
+                CardFunctions = new Function[] { Functions.Floor, Functions.Ceiling, Functions.Squared, Functions.MinConstant(1), Functions.ModConstant(1) },
+                LockedInCards = new Function[] {  },
+            },
+            #endif
+
             new Level("Round Peg")
             {
                 Solution = new Function[] { Functions.Sin },
@@ -51,7 +60,7 @@ namespace gmtk2021.Components
             new Level("Before and After")
             {
                 Solution = new Function[] { Functions.AddConstant(2), Functions.Sin, Functions.AddConstant(1) },
-                CardFunctions = new Function[] { Functions.AddConstant(1), Functions.AddConstant(2) },
+                CardFunctions = new Function[] { Functions.AddConstant(-1), Functions.AddConstant(3) },
                 Domain = MathF.PI * 2,
                 Range = 2,
                 LockedInCards = new Function[] { Functions.Sin }
@@ -108,6 +117,14 @@ namespace gmtk2021.Components
             {
                 Solution = new Function[] { Functions.Sin, Functions.ModConstant(1), Functions.MinConstant(0) },
                 CardFunctions = new Function[] { Functions.Floor, Functions.Ceiling, Functions.MinConstant(1) }
+            },
+
+            new Level("Morshu Wave")
+            {
+                Solution = new Function[] { Functions.Squared, Functions.MinConstant(1), Functions.ModConstant(1) },
+                CardFunctions = new Function[] { Functions.Floor, Functions.Ceiling, Functions.Squared, Functions.MinConstant(1) },
+                LockedInCards = new Function[] { Functions.ModConstant(1) },
+                CustomSound = MachinaGame.Assets.GetSoundEffectInstance("morshu"),
             },
 
             new Level("Lockout")

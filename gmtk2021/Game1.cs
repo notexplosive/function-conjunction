@@ -175,7 +175,7 @@ namespace gmtk2021
                                 })
                                 .AddBothStretchedElement("Curve", curveActor =>
                                 {
-                                    curve = new PrimaryCurve(curveActor, curveData, levelTransition.CurrentLevel.Solution);
+                                    curve = new PrimaryCurve(curveActor, curveData, levelTransition.CurrentLevel);
                                     var objective = new ObjectiveTracker(curveActor, levelTransition);
                                     objective.Win += () => sequenceDropZone.LockAll();
                                 });
@@ -245,7 +245,6 @@ namespace gmtk2021
             new DoubleClickable(actor);
             new Draggable(actor);
             new MoveOnDrag(actor);
-
 
             var font = MachinaGame.Assets.GetSpriteFont("SmallTextFont");
             StaticCurveRenderer curveRenderer = null;

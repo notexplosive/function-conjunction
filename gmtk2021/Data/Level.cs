@@ -1,5 +1,6 @@
 ﻿using gmtk2021.Components;
 using Machina.Engine;
+using Microsoft.Xna.Framework.Audio;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -20,6 +21,11 @@ namespace gmtk2021.Data
         }
 
         public Function[] Solution
+        {
+            get; set;
+        }
+
+        public SoundEffectInstance CustomSound
         {
             get; set;
         }
