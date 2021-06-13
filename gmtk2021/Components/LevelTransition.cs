@@ -232,13 +232,19 @@ namespace gmtk2021.Components
             if (HasNextLevel())
             {
                 Game1.BuildGameScene(this.gameScene, this);
+            }
+            else
+            {
+                foreach (var actor in gameScene.GetAllActors())
+                {
+                    actor.Delete();
+                }
 
-                this.tween.AppendPointTween(
-                    new Point(0, 0),
-                    1f, EaseFuncs.EaseInOutBack,
-                    camPos);
-
-                yield return new WaitUntil(this.tween.IsDone);
+                var creditsRoot = this.gameScene.AddActor("CreditsRoot");
+                new Fade(creditsRoot, false).Activate();
+                new BoundingRect(creditsRoot, camera.UnscaledViewportSize);
+                new BoundedTextRenderer(creditsRoot, "Thanks for playing!", MachinaGame.Assets.GetSpriteFont("UIFont"), Color.White, HorizontalAlignment.Center, VerticalAlignment.Center);
+                new AdHoc(creditsRoot).onKey += () => { }
             }
 
             yield return null;
@@ -250,6 +256,10 @@ namespace gmtk2021.Components
             if (HasNextLevel())
             {
                 Game1.BuildGameScene(this.gameScene, this);
+            }
+            else
+            {
+                FinishLevel();
             }
         }
 
