@@ -121,7 +121,7 @@ namespace gmtk2021.Components
                 {
                     var subzoneIndex = this.subzoneIndex.GetValueOrDefault(-1);
                     var rect = this.targetDropZone.SlotRectAt(subzoneIndex);
-                    spriteBatch.FillRectangle(rect, Color.Orange, this.targetDropZone.transform.Depth);
+                    spriteBatch.FillRectangle(rect, new Color(Color.Orange, 0.5f), this.targetDropZone.transform.Depth);
                 }
             }
         }

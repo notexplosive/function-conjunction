@@ -26,8 +26,8 @@ namespace gmtk2021.Components
             #if DEBUG
             new Level("Experiment")
             {
-                Solution = new Function[] { Functions.Squared, Functions.MinConstant(1), Functions.ModConstant(1) },
-                CardFunctions = new Function[] { Functions.Floor, Functions.Ceiling, Functions.Squared, Functions.MinConstant(1), Functions.ModConstant(2) },
+                Solution = new Function[] { Functions.ModConstant(1), Functions.Floor, Functions.Squared, Functions.AddConstant(-0.5f) },
+                CardFunctions = new Function[] { Functions.Floor, Functions.Ceiling, Functions.Squared, Functions.MinConstant(1), Functions.ModConstant(2), Functions.Sign },
                 LockedInCards = new Function[] { Functions.ModConstant(1) },
                 AdditionalSequenceSlots = 5,
             },
@@ -45,9 +45,9 @@ namespace gmtk2021.Components
             {
                 // Teach how multiply works
                 Solution = new Function[] { Functions.Sin, Functions.MultiplyConstant(2) },
-                CardFunctions = new Function[] { Functions.MultiplyFraction(1, 2), Functions.MultiplyConstant(2) },
+                CardFunctions = new Function[] { Functions.AddConstant(2), Functions.MultiplyConstant(2) },
                 Domain = MathF.PI * 2,
-                Range = 2,
+                Range = 3,
                 LockedInCards = new Function[] { Functions.Sin }
             },
 
@@ -91,16 +91,22 @@ namespace gmtk2021.Components
                 Range = 4,
             },
 
-            new Level("Spikes")
+            new Level("Square Wave")
             {
-                // Intermediate skill check
-                Solution = new Function[] { Functions.Sin, Functions.ModConstant(1), Functions.Squared, Functions.MultiplyConstant(4), Functions.AddConstant(-1) },
+                Solution = new Function[] { Functions.ModConstant(1), Functions.Floor, Functions.Squared, Functions.AddConstant(-0.5f) },
+                CardFunctions = new Function[] { Functions.Sign },
             },
 
             new Level("Flatline")
             {
                 Solution = new Function[] { Functions.Sin, Functions.Squared, Functions.Ceiling, Functions.AddConstant(-1) },
                 ForceShuffle = true
+            },
+
+            new Level("Spikes")
+            {
+                // Intermediate skill check
+                Solution = new Function[] { Functions.Sin, Functions.ModConstant(1), Functions.Squared, Functions.MultiplyConstant(4), Functions.AddConstant(-1) },
             },
 
             new Level("Bitcrunch")
@@ -216,6 +222,11 @@ namespace gmtk2021.Components
                     SkipLevel();
                 }
             }
+
+            if (state == ButtonState.Pressed && modifiers.ControlAlt && key == Keys.T)
+            {
+                SkipLevel();
+            }
         }
 
         public override void OnMouseButton(MouseButton button, Vector2 currentPosition, ButtonState state)
@@ -268,7 +279,7 @@ namespace gmtk2021.Components
                 var creditsRoot = this.gameScene.AddActor("CreditsRoot");
                 new Fade(creditsRoot, false).Activate();
                 new BoundingRect(creditsRoot, camera.UnscaledViewportSize);
-                new BoundedTextRenderer(creditsRoot, "Thanks for playing!\n\nProgrammed & Designed by NotExplosive\nSound Design by Ryan Yoshikami\nTested by lectvs and soomy\nPlayed by you <3", MachinaGame.Assets.GetSpriteFont("UIFont"), Color.White, HorizontalAlignment.Center, VerticalAlignment.Center);
+                new BoundedTextRenderer(creditsRoot, "Thanks for playing!\n\nProgrammed & Designed by NotExplosive\nSound Design by Ryan Yoshikami\nTested by lectvs and soomy\nPlayed by you <3\n\nMade with MonoGame in 48 hours\nGraphics drawn entirely with MonoGame.Extended Primitives", MachinaGame.Assets.GetSpriteFont("UIFont"), Color.White, HorizontalAlignment.Center, VerticalAlignment.Center);
 
                 // Make sure music plays during the credits
                 atmosphere.music.Play();

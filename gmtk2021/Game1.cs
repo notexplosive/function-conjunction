@@ -30,7 +30,6 @@ namespace gmtk2021
             var subtitleFont = Assets.GetSpriteFont("CardFont");
             var uiFont = Assets.GetSpriteFont("UIFont");
 
-
             var atmosphere = new Atmosphere();
 
             var menuScene = SceneLayers.AddNewScene();
@@ -128,6 +127,7 @@ namespace gmtk2021
                     new LayoutGroup(leftColumnActor, Orientation.Vertical)
                         .AddBothStretchedElement("Extra CardDropZone", extraDropZoneActor =>
                         {
+                            new DropZoneBackgroundRenderer(extraDropZoneActor);
                             var dropZone = new CardDropZone(extraDropZoneActor, false);
                             startingDropZone = dropZone;
                             dropZones.Add(dropZone);
@@ -147,32 +147,35 @@ namespace gmtk2021
                 })
                 .AddBothStretchedElement("RightColumn", rightColumnActor =>
                 {
-                    int rangeBarThickness = 64;
                     new LayoutGroup(rightColumnActor, Orientation.Vertical)
                         .AddHorizontallyStretchedElement("TitleBar", 64, titleBarActor =>
                          {
+                             new DropZoneBackgroundRenderer(titleBarActor);
                              new LayoutGroup(titleBarActor, Orientation.Horizontal)
-                                .PixelSpacer(64)
+                                .PixelSpacer(16)
                                 .AddBothStretchedElement("Title", titleActor =>
                                 {
                                     new BoundedTextRenderer(titleActor, "Level " + (levelTransition.CurrentLevelIndex + 1) +
                                         (currentLevel.Title != null ? ": " + currentLevel.Title : ""),
-                                        titleFont, Color.White);
+                                        titleFont, Color.White).EnableDropShadow(Color.Black);
                                 })
                                 .AddBothStretchedElement("URL", urlActor =>
                                 {
-                                    new BoundedTextRenderer(urlActor, "// notexplosive.net", titleFont, Color.White, HorizontalAlignment.Right);
+                                    new BoundedTextRenderer(urlActor, "// notexplosive.net", titleFont, Color.White, HorizontalAlignment.Right).EnableDropShadow(Color.Black);
                                 });
                          })
+                        .PixelSpacer(32)
                         .AddBothStretchedElement("CurveWindow", curveWindowActor =>
                         {
                             curveWindowActor.transform.Depth += 5;
 
                             new LayoutGroup(curveWindowActor, Orientation.Horizontal)
+                            /*
                                 .AddVerticallyStretchedElement("Range", rangeBarThickness, rangeActor =>
                                 {
                                     new DomainRenderer(rangeActor, curveData, Orientation.Vertical);
                                 })
+                            */
                                 .AddBothStretchedElement("Curve", curveActor =>
                                 {
                                     curve = new PrimaryCurve(curveActor, curveData, levelTransition.CurrentLevel, levelTransition.atmosphere);
@@ -180,6 +183,8 @@ namespace gmtk2021
                                     objective.Win += () => sequenceDropZone.LockAll();
                                 });
                         })
+                        .PixelSpacer(32)
+                        /*
                         .AddHorizontallyStretchedElement("DomainContainer", 32, domainContainerActor =>
                         {
                             new LayoutGroup(domainContainerActor, Orientation.Horizontal)
@@ -189,8 +194,10 @@ namespace gmtk2021
                                     new DomainRenderer(domainActor, curveData, Orientation.Horizontal);
                                 });
                         })
+                        */
                         .AddHorizontallyStretchedElement("Chain CardDropZone", CardSize.Y + 20, dropZoneActor =>
                         {
+                            new DropZoneBackgroundRenderer(dropZoneActor);
                             var dropZone = new CardDropZone(dropZoneActor, true);
                             destinationZone = dropZone;
                             dropZones.Add(dropZone);
@@ -225,6 +232,10 @@ namespace gmtk2021
                             sequenceDropZone = new SequenceDropZone(dropZoneActor);
                             sequenceDropZone.FunctionUpdated += curve.OnFunctionUpdated;
                         });
+                })
+                .AddVerticallyStretchedElement("RightEdge", 64, rightEdgeActor =>
+                {
+                    new DropZoneBackgroundRenderer(rightEdgeActor);
                 })
                 .SetMargin(8)
                 .transform.FlushBuffers(); // HACKY AF

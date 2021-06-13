@@ -25,7 +25,7 @@ namespace gmtk2021.Data
 
             this.music = MachinaGame.Assets.GetSoundEffectInstance("function_music");
             this.music.IsLooped = true;
-            this.music.Volume = 0.5f;
+            this.music.Volume = 0.6f;
             this.music.Play();
         }
 

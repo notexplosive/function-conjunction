@@ -53,7 +53,7 @@ namespace gmtk2021.Components
                 }
             }
 
-            spriteBatch.FillRectangle(this.boundingRect.Rect, bgColor, transform.Depth);
+            spriteBatch.FillRectangle(this.boundingRect.Rect, bgColor, transform.Depth + 1);
             spriteBatch.DrawRectangle(this.boundingRect.Rect, new Color(200, 200, 200), 5, transform.Depth - 1);
 
 

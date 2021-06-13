@@ -78,8 +78,8 @@ namespace gmtk2021.Components
             var center = this.boundingRect.TopLeft + this.boundingRect.Size.ToVector2() / 2;
             var topLeft = this.boundingRect.TopLeft;
             var lineColor = new Color(Color.Black, 0.5f);
-            spriteBatch.DrawLine(new Vector2(center.X, topLeft.Y), new Vector2(center.X, topLeft.Y + this.boundingRect.Height), lineColor, 3f, transform.Depth - 1);
-            spriteBatch.DrawLine(new Vector2(topLeft.X, center.Y), new Vector2(topLeft.X + this.boundingRect.Width, center.Y), lineColor, 3f, transform.Depth - 1);
+            spriteBatch.DrawLine(new Vector2(center.X, topLeft.Y), new Vector2(center.X, topLeft.Y + this.boundingRect.Height), lineColor, 3f, transform.Depth - 10);
+            spriteBatch.DrawLine(new Vector2(topLeft.X, center.Y), new Vector2(topLeft.X + this.boundingRect.Width, center.Y), lineColor, 3f, transform.Depth - 10);
         }
 
         private static void DrawCurve(SpriteBatch spriteBatch, CurvePoint[] points, Transform transform, Depth depth, Color onColor, Color offColor, BoundingRect boundingRect, float thickness)
