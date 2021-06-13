@@ -166,6 +166,38 @@ namespace gmtk2021.Components
                     OnFunctionUpdated((i) => i);
                     MachinaGame.Print("DBG: Curve reset");
                 }
+
+                if (key == Keys.R)
+                {
+                    var funcs = new List<Function>();
+                    var lib = new List<Function>()
+                    {
+                        Functions.MinConstant(0),
+                        Functions.MaxConstant(0),
+                        Functions.MultiplyConstant(2),
+                        Functions.MultiplyFraction(1,2),
+                        Functions.AddConstant(1),
+                        Functions.AddConstant(-1),
+                        Functions.Floor,
+                        Functions.Ceiling,
+                        Functions.Sin,
+                        Functions.ModConstant(1),
+                        Functions.Tan,
+                        Functions.Squared,
+                        Functions.Cubed
+                    };
+
+                    Level.CleanShuffle(lib);
+
+                    for (int i = 0; i < 5; i++)
+                    {
+                        funcs.Add(lib[i]);
+                    }
+
+                    var function = Functions.Fold(funcs.ToArray());
+                    OnFunctionUpdated(function);
+                    MachinaGame.Print(string.Join(",", funcs));
+                }
             }
         }
 

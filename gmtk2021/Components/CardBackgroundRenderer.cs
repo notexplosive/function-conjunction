@@ -33,7 +33,7 @@ namespace gmtk2021.Components
 
         public override void Draw(SpriteBatch spriteBatch)
         {
-            var bgColor = this.card.IsLocked || this.card.IsPartialLocked ? new Color(100, 100, 100) : Color.Black;
+            var bgColor = this.card.IsLocked || this.card.IsPartialLocked ? new Color(50, 50, 50) : Color.Black;
 
             if (this.card.UseCustomColor)
             {

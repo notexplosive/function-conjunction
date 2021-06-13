@@ -26,9 +26,9 @@ namespace gmtk2021.Components
             #if DEBUG
             new Level("Experiment")
             {
-                Solution = new Function[] { Functions.Sin, Functions.ModConstant(1), Functions.Sign },
-                CardFunctions = new Function[] { Functions.Squared },
-                LockedInCards = new Function[] { Functions.Sign },
+                Solution = new Function[] { Functions.Sin, Functions.MaxConstant(1), Functions.Squared, Functions.ModConstant(1) },
+                CardFunctions = new Function[] { Functions.Squared, Functions.MultiplyFraction(1,2), Functions.Sin, Functions.MaxConstant(0) },
+                LockedInCards = new Function[] { Functions.Sin },
                 AdditionalSequenceSlots = 5,
             },
             #endif
@@ -74,14 +74,14 @@ namespace gmtk2021.Components
             {
                 // Teach how multiply works at different times
                 Solution = new Function[] { Functions.MultiplyFraction(1, 2), Functions.Sin, Functions.MultiplyConstant(2) },
-                Domain = 3,
+                Domain = 2 * MathF.PI,
             },
 
             new Level("Absolute Value")
             {
                 // (medium) Test knowledge on multiply/add at different times
                 Solution = new Function[] { Functions.Sin, Functions.MultiplyConstant(2), Functions.AddConstant(-1), Functions.Abs },
-                Domain = 3,
+                Range = 4,
             },
 
             new Level("Reverse Arches")
@@ -124,8 +124,14 @@ namespace gmtk2021.Components
 
             new Level("W")
             {
-                Solution = new Function[] { Functions.Squared, Functions.AddConstant(-2), Functions.Abs, Functions.Squared, Functions.AddConstant(-1) },
+                Solution = new Function[] { Functions.Squared, Functions.AddConstant(-2), Functions.Squared, Functions.AddConstant(-1) },
                 CardFunctions = new Function[] { /*The validator won't notice we need to 2 square funcs:*/ Functions.Squared, Functions.Squared, /*Red harrings:*/ Functions.MultiplyConstant(-1) },
+            },
+
+            new Level("Neon")
+            {
+                Solution = new Function[] { Functions.Sin, Functions.ModConstant(1), Functions.MinConstant(0) },
+                CardFunctions = new Function[] { Functions.Floor, Functions.Ceiling, Functions.MinConstant(1) }
             },
 
             new Level("Fizzled Out")
@@ -140,10 +146,10 @@ namespace gmtk2021.Components
                 LockedInCards = new Function[] { Functions.MultiplyConstant(-1) }
             },
 
-            new Level("Neon")
+            new Level("Repeat")
             {
-                Solution = new Function[] { Functions.Sin, Functions.ModConstant(1), Functions.MinConstant(0) },
-                CardFunctions = new Function[] { Functions.Floor, Functions.Ceiling, Functions.MinConstant(1) }
+                Solution = new Function[] { Functions.Sin, Functions.MaxConstant(1), Functions.Squared, Functions.ModConstant(1) },
+                LockedInCards = new Function[] { Functions.Sin },
             },
 
             new Level("Morshu Wave")

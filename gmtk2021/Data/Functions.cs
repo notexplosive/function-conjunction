@@ -46,7 +46,7 @@ namespace gmtk2021.Data
 
         public static Function AddConstant(float constant)
         {
-            return new Function((constant > 0 ? "Add " : "Subtract ") + DomainRenderer.FloatAsString(MathF.Abs(constant)), (i) => i + constant, new DomainRange(3, 3));
+            return new Function((constant > 0 ? "Add " : "Subtract ") + DomainRenderer.FloatAsString(MathF.Abs(constant)), (i) => i + constant, new DomainRange(4, 4));
         }
 
         public static Function MultiplyConstant(int constant)
@@ -101,6 +101,11 @@ namespace gmtk2021.Data
         public readonly DomainRange domain;
         public readonly string name;
         public readonly Func<float, float> func;
+
+        public override string ToString()
+        {
+            return name;
+        }
 
         public Function(string name, Func<float, float> func, DomainRange domain)
         {
