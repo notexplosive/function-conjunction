@@ -179,6 +179,11 @@ namespace gmtk2021.Components
 
         public override void OnKey(Keys key, ButtonState state, ModifierKeys modifiers)
         {
+            if (key == Keys.Escape && modifiers.None && MachinaGame.Fullscreen)
+            {
+                MachinaGame.Fullscreen = false;
+            }
+
             if (key == Keys.Space && modifiers.None)
             {
                 this.clickDown = state == ButtonState.Pressed;
@@ -243,8 +248,7 @@ namespace gmtk2021.Components
                 var creditsRoot = this.gameScene.AddActor("CreditsRoot");
                 new Fade(creditsRoot, false).Activate();
                 new BoundingRect(creditsRoot, camera.UnscaledViewportSize);
-                new BoundedTextRenderer(creditsRoot, "Thanks for playing!", MachinaGame.Assets.GetSpriteFont("UIFont"), Color.White, HorizontalAlignment.Center, VerticalAlignment.Center);
-                new AdHoc(creditsRoot).onKey += () => { }
+                new BoundedTextRenderer(creditsRoot, "Thanks for playing!\n\nProgrammed & Designed by NotExplosive\nSound Design by Ryan Yoshikami\nTested by lectvs and soomy\nPlayed by you <3", MachinaGame.Assets.GetSpriteFont("UIFont"), Color.White, HorizontalAlignment.Center, VerticalAlignment.Center);
             }
 
             yield return null;
