@@ -16,7 +16,7 @@ namespace gmtk2021.Components
         private readonly Rectangle startSlot;
         private readonly Rectangle destSlot;
         private Point travelingRectPos;
-        private TweenChain tween = new TweenChain();
+        private readonly TweenChain tween = new TweenChain();
 
         public Tutorial(Actor actor, CardDropZone startingDropZone, CardDropZone destinationZone) : base(actor)
         {
