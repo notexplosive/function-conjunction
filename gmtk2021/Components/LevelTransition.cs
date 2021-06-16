@@ -29,7 +29,6 @@ namespace gmtk2021.Components
                 Solution = new Function[] { Functions.ModConstant(1), Functions.Floor, Functions.Squared, Functions.AddConstant(-0.5f) },
                 CardFunctions = new Function[] { Functions.Floor, Functions.Ceiling, Functions.Squared, Functions.MinConstant(1), Functions.ModConstant(2), Functions.Sign },
                 LockedInCards = new Function[] { Functions.ModConstant(1) },
-                AdditionalSequenceSlots = 5,
             },
             #endif
 
