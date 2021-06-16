@@ -57,7 +57,7 @@ namespace gmtk2021
                                 })
                                 .AddHorizontallyStretchedElement("Subtitle", 80, subtitleActor =>
                                 {
-                                    new BoundedTextRenderer(subtitleActor, "Programmed & Designed by NotExplosive\nSound Design & Music by Ryan Yoshikami", subtitleFont, Color.White, HorizontalAlignment.Center, VerticalAlignment.Top, Overflow.Ignore);
+                                    new BoundedTextRenderer(subtitleActor, "Programmed & Designed by NotExplosive\nMusic & Sound Design by Ryan Yoshikami", subtitleFont, Color.White, HorizontalAlignment.Center, VerticalAlignment.Top, Overflow.Ignore);
                                 })
                                 .PixelSpacer(32)
                                 .AddHorizontallyStretchedElement("StartGameButton", 100, startGameButton =>

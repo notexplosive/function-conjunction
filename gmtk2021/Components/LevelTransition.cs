@@ -278,7 +278,7 @@ namespace gmtk2021.Components
                 var creditsRoot = this.gameScene.AddActor("CreditsRoot");
                 new Fade(creditsRoot, false).Activate();
                 new BoundingRect(creditsRoot, camera.UnscaledViewportSize);
-                new BoundedTextRenderer(creditsRoot, "Thanks for playing!\n\nProgrammed & Designed by NotExplosive\nSound Design & Music by Ryan Yoshikami\nTested by lectvs and soomy\nPlayed by you <3\n\nMade with MonoGame in 48 hours\nGraphics drawn entirely with MonoGame.Extended Primitives", MachinaGame.Assets.GetSpriteFont("UIFont"), Color.White, HorizontalAlignment.Center, VerticalAlignment.Center);
+                new BoundedTextRenderer(creditsRoot, "Thanks for playing!\n\nProgrammed & Designed by NotExplosive\nMusic & Sound Design by Ryan Yoshikami\nTested by lectvs and soomy\nPlayed by you <3\n\nMade with MonoGame in 48 hours\nGraphics drawn entirely with MonoGame.Extended Primitives", MachinaGame.Assets.GetSpriteFont("UIFont"), Color.White, HorizontalAlignment.Center, VerticalAlignment.Center);
 
                 // Make sure music plays during the credits
                 atmosphere.music.Play();
