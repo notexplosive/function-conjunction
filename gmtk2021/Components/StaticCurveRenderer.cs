@@ -77,7 +77,7 @@ namespace gmtk2021.Components
             // draw axis lines
             var center = this.boundingRect.TopLeft + this.boundingRect.Size.ToVector2() / 2;
             var topLeft = this.boundingRect.TopLeft;
-            var lineColor = new Color(Color.Black, 0.5f);
+            var lineColor = new Color(Color.Gray, 0.25f);
             spriteBatch.DrawLine(new Vector2(center.X, topLeft.Y), new Vector2(center.X, topLeft.Y + this.boundingRect.Height), lineColor, 3f, transform.Depth - 10);
             spriteBatch.DrawLine(new Vector2(topLeft.X, center.Y), new Vector2(topLeft.X + this.boundingRect.Width, center.Y), lineColor, 3f, transform.Depth - 10);
         }
