@@ -21,19 +21,24 @@ namespace gmtk2021.Data
                 this.sounds.Add(atmos);
             }
             this.index = 0;
-            PlayNext();
+            PlayNextAtmos();
 
             this.music = MachinaGame.Assets.GetSoundEffectInstance("function_music");
             this.music.IsLooped = true;
             this.music.Volume = 0.6f;
-            this.music.Play();
+            this.music.Stop();
         }
 
-        public void PlayNext()
+        public void PlayNextAtmos()
         {
             this.sounds[this.index % this.sounds.Count].Stop();
             this.index++;
             this.sounds[this.index % this.sounds.Count].Play();
+        }
+
+        public void PlayMusic()
+        {
+            this.music.Play();
         }
     }
 }

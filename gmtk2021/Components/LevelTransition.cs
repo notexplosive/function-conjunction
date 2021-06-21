@@ -96,12 +96,6 @@ namespace gmtk2021.Components
                 CardFunctions = new Function[] { Functions.Sign },
             },
 
-            new Level("Flatline")
-            {
-                Solution = new Function[] { Functions.Sin, Functions.Squared, Functions.Ceiling, Functions.AddConstant(-1) },
-                ForceShuffle = true
-            },
-
             new Level("Spikes")
             {
                 // Intermediate skill check
@@ -308,7 +302,7 @@ namespace gmtk2021.Components
         public void IncrementLevel()
         {
             this.currentLevelIndex++;
-            this.atmosphere.PlayNext();
+            this.atmosphere.PlayNextAtmos();
         }
 
         public bool HasNextLevel()
